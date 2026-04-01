@@ -1,17 +1,116 @@
----
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Almep Trading</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Raleway:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/styles/global.css" />
+</head>
+<body>
 
----
+<section class="hero">
+  <div class="hero-bg"></div>
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-top">
+
+      <!-- Левая часть: логотип + кнопка каталога -->
+      <div class="header-left">
+        <a href="#" class="logo">
+          <svg class="logo-icon" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="0,38 10,6 22,30 34,6 44,38" fill="none" stroke="white" stroke-width="3" stroke-linejoin="round"/>
+            <circle cx="22" cy="30" r="3" fill="white"/>
+          </svg>
+          <div class="logo-text">
+            <span class="brand">ALMEP</span>
+            <span class="sub">Trading</span>
+          </div>
+        </a>
+        <a href="#" class="btn-catalog-header">Каталог</a>
+      </div>
+
+      <!-- Правая часть: поиск + язык + телефон -->
+      <div class="header-right">
+        <button class="search-btn" aria-label="Поиск">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="7"/>
+            <line x1="16.5" y1="16.5" x2="22" y2="22"/>
+          </svg>
+        </button>
+
+        <div class="lang-selector">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M2 12h20M12 2a15 15 0 010 20M12 2a15 15 0 000 20"/>
+          </svg>
+          <span>RU</span>
+          <span class="lang-arrow"></span>
+        </div>
+
+        <a class="phone" href="tel:+994501111111">+994 50 111 11 11</a>
+      </div>
+    </div>
+
+    <!-- Навигация -->
+    <nav class="nav-row">
+      <ul class="nav">
+        <li class="active"><a href="#">Главная</a></li>
+        <li>
+          <span class="nav-dropdown">
+            <a href="#">О компании</a>
+            <span class="arrow"></span>
+          </span>
+        </li>
+        <li><a href="#">Услуги</a></li>
+        <li><a href="#">Партнёры</a></li>
+        <li><a href="#">Продукция</a></li>
+        <li><a href="#">Портфолио</a></li>
+        <li><a href="#">Отзывы</a></li>
+        <li><a href="#">Новости</a></li>
+        <li><a href="#">Контакты</a></li>
+      </ul>
+
+      <div class="socials">
+        <!-- Instagram -->
+        <a href="#" class="social-link" aria-label="Instagram">
+          <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="3" y="3" width="22" height="22" rx="6" stroke="white" stroke-width="2"/>
+            <circle cx="14" cy="14" r="5.5" stroke="white" stroke-width="2"/>
+            <circle cx="20.5" cy="7.5" r="1.5" fill="white"/>
+          </svg>
+        </a>
+        <!-- Facebook -->
+        <a href="#" class="social-link" aria-label="Facebook">
+          <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="3" y="3" width="22" height="22" rx="6" stroke="white" stroke-width="2"/>
+            <path d="M15.5 10H17V7.5H15C13.07 7.5 12 8.93 12 10.5V12H10V14.5H12V21H14.5V14.5H16.5L17 12H14.5V10.5C14.5 10.22 14.72 10 15 10H15.5Z" fill="white"/>
+          </svg>
+        </a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Центральный контент hero -->
+  <div class="hero-content">
+    <div class="hero-inner">
+      <h1 class="hero-title">
+        Almep Trading — не просто поставщик оборудования, а стратегический партнёр для вашего проекта
+      </h1>
+      <p class="hero-desc">
+        Almep Trading занимается организацией поставок и дистрибуции высококачественных технических и электротехнических решений для бизнеса. Мы обеспечиваем стабильность, надёжность и комплексную поддержку нашим партнёрам на всех этапах сотрудничества.
+      </p>
+      <div class="hero-btns">
+        <a href="#" class="btn-primary">Запросить консультацию</a>
+        <a href="#" class="btn-secondary">Перейти в каталог</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="/scripts/main.js" is:inline></script>
+</body>
 </html>

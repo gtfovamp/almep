@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 40" width="120" height="40">
+  <rect width="120" height="40" rx="4" fill="#d32f2f"/>
+  <text x="60" y="26" font-family="Arial Black, Arial" font-weight="900" font-size="20" fill="white" text-anchor="middle" letter-spacing="2">EKF</text>
+  <rect x="2" y="2" width="116" height="36" rx="3" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+</svg>
