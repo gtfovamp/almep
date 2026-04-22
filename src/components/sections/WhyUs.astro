@@ -1,0 +1,308 @@
+---
+// src/components/WhyUs.astro
+
+const features = [
+  {
+    icon: 'assets/icons/whyus-1.svg',
+    title: 'Правильный выбор',
+    description: 'Анализируя технические требования проекта, мы выбираем оптимальный продукт.',
+  },
+  {
+    icon: 'assets/icons/whyus-2.svg',
+    title: 'Оптимизация бюджета',
+    description: 'Создаём эффективные альтернативы с сохранением качества и соблюдением бюджета.',
+  },
+  {
+    icon: 'assets/icons/whyus-3.svg',
+    title: 'Экономия времени',
+    description: 'Благодаря быстрой логистике и точному планированию мы минимизируем потерю времени.',
+  },
+  {
+    icon: 'assets/icons/whyus-4.svg',
+    title: 'Контроль рисков',
+    description: 'Безопасная цепочка поставок благодаря управлению рисками.',
+  },
+];
+
+const stats = [
+  { label: 'Довольные клиенты',      value: '98%', percent: 98 },
+  { label: 'Команда проффесионалов', value: '100%', percent: 100 },
+  { label: 'Успех в работе',         value: '99%',  percent: 99 },
+];
+---
+
+<section class="whyus">
+  <div class="whyus__inner">
+
+    <h2 class="whyus__title">Почему выбирают нас</h2>
+
+    <!-- Верхний ряд: иконки -->
+    <div class="whyus__features">
+      {features.map((f) => (
+        <div class="whyus__feature">
+          <div class="whyus__icon-wrap">
+            <img src={f.icon} alt={f.title} class="whyus__icon" />
+          </div>
+          <h3 class="whyus__feature-title">{f.title}</h3>
+          <p class="whyus__feature-desc">{f.description}</p>
+        </div>
+      ))}
+    </div>
+
+    <!-- Нижний блок: прогрессбары + фото -->
+    <div class="whyus__bottom">
+
+      <!-- Левая часть -->
+      <div class="whyus__left">
+
+        <!-- Прогрессбары -->
+        <div class="whyus__stats">
+          {stats.map((s) => (
+            <div class="whyus__stat">
+              <div class="whyus__stat-header">
+                <span class="whyus__stat-label">{s.label}</span>
+                <span class="whyus__stat-value">{s.value}</span>
+              </div>
+              <div class="whyus__bar-track">
+                <div
+                  class="whyus__bar-fill"
+                  style={`width: ${s.percent}%`}
+                ></div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <!-- Кнопка -->
+        <a href="/contact" class="whyus__btn">Запросить консультацию</a>
+
+      </div>
+
+      <!-- Правая часть: фото -->
+      <div class="whyus__photo-wrap">
+        <img
+          src="assets/images/why-us.png"
+          alt="Почему выбирают нас"
+          class="whyus__photo"
+        />
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<style>
+  .whyus {
+    width: 100%;
+    background: #fff;
+    padding: 80px 0;
+  }
+
+  .whyus__inner {
+    display: flex;
+    flex-direction: column;
+    gap: 60px;
+    width: 1410px;
+    margin: 0 auto;
+  }
+
+  /* ── Заголовок ── */
+  .whyus__title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    font-size: 48px;
+    line-height: 110%;
+    color: #000;
+    margin: 0;
+  }
+
+  /* ── Верхний ряд иконок ── */
+  .whyus__features {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 19px;
+    width: 100%;
+  }
+
+  .whyus__feature {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 338px;
+    gap: 0;
+  }
+
+  /* Круглая иконка */
+  .whyus__icon-wrap {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-bottom: 29px;
+  }
+
+  .whyus__icon {
+    width: 57px;
+    height: 57px;
+    object-fit: contain;
+  }
+
+  .whyus__feature-title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 110%;
+    letter-spacing: -0.01em;
+    color: #000;
+    margin: 0 0 20px;
+    width: 100%;
+  }
+
+  .whyus__feature-desc {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 130%;
+    letter-spacing: -0.01em;
+    color: #000;
+    margin: 0;
+    width: 100%;
+  }
+
+  /* ── Нижний блок ── */
+  .whyus__bottom {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 120px;
+    width: 100%;
+  }
+
+  /* ── Левая часть ── */
+  .whyus__left {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+    width: 720px;
+    flex-shrink: 0;
+  }
+
+  /* ── Прогрессбары ── */
+  .whyus__stats {
+    display: flex;
+    flex-direction: column;
+    gap: 38px;
+    width: 100%;
+  }
+
+  .whyus__stat {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+  }
+
+  .whyus__stat-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+
+  .whyus__stat-label {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 110%;
+    letter-spacing: -0.01em;
+    color: #000;
+  }
+
+  .whyus__stat-value {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 110%;
+    letter-spacing: -0.01em;
+    color: #000;
+  }
+
+  /* Трек (серый фон) */
+  .whyus__bar-track {
+    position: relative;
+    width: 100%;
+    height: 10px;
+    background: #E1E1E1;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+
+  /* Заполнение (синее) */
+  .whyus__bar-fill {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    background: #1C508F;
+    border-radius: 5px;
+
+    /* Анимация при загрузке */
+    animation: barGrow 1.2s ease forwards;
+    transform-origin: left;
+  }
+
+  @keyframes barGrow {
+    from { width: 0 !important; }
+    to   { /* width задан inline */ }
+  }
+
+  /* ── Кнопка ── */
+  .whyus__btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 330px;
+    height: 85px;
+    background: #1C508F;
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.3);
+    border-radius: 9px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 130%;
+    letter-spacing: -0.01em;
+    color: #fff;
+    text-decoration: none;
+    transition: background 0.2s ease;
+    flex-shrink: 0;
+  }
+
+  .whyus__btn:hover {
+    background: #174480;
+  }
+
+  /* ── Фото ── */
+  .whyus__photo-wrap {
+    width: 570px;
+    height: 485px;
+    border-radius: 8px;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: #dfdfdf;
+  }
+
+  .whyus__photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+</style>

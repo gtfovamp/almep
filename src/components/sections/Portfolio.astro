@@ -1,0 +1,375 @@
+---
+const portfolioItems = [
+  { image: 'assets/images/portfolio-1.jpg',  title: 'Азербайджанский технический университет', year: '2011' },
+  { image: 'assets/images/portfolio-2.jpg',  title: 'Metro',                                   year: '2015' },
+  { image: 'assets/images/portfolio-3.jpg',  title: 'Əmlak Xidmətləri Məkanı',                 year: '2017' },
+  { image: 'assets/images/portfolio-4.jpg',  title: 'Школа №47',                               year: '2018' },
+  { image: 'assets/images/portfolio-5.jpg',  title: 'UNEC',                                    year: '2019' },
+  { image: 'assets/images/portfolio-6.jpg',  title: 'Seaside Resort',                          year: '2020' },
+  { image: 'assets/images/portfolio-7.jpg',  title: 'Baku White City',                         year: '2020' },
+  { image: 'assets/images/portfolio-8.jpg',  title: 'Heydar Aliyev Center',                    year: '2021' },
+  { image: 'assets/images/portfolio-9.jpg',  title: 'Port Baku Mall',                          year: '2021' },
+  { image: 'assets/images/portfolio-10.jpg', title: 'SOCAR Tower',                             year: '2022' },
+  { image: 'assets/images/portfolio-11.jpg', title: 'Flame Towers',                            year: '2022' },
+  { image: 'assets/images/portfolio-12.jpg', title: 'Crystal Hall',                            year: '2023' },
+];
+
+const slides = [];
+for (let i = 0; i < portfolioItems.length; i += 6) {
+  slides.push(portfolioItems.slice(i, i + 6));
+}
+---
+
+<section class="portfolio">
+  <div class="portfolio__inner">
+
+    <h2 class="portfolio__title">Портфолио</h2>
+
+    <div class="portfolio__slider-wrap">
+
+      <div class="portfolio__slider" id="portfolioSlider">
+        {slides.map((slide, slideIndex) => (
+          <div class={`portfolio__slide ${slideIndex === 0 ? 'portfolio__slide--active' : ''}`}>
+            <div class="portfolio__grid">
+              {slide.map((item) => (
+                <div class="portfolio__card">
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    class="portfolio__card-img"
+                  />
+                  <!-- ✅ Caption теперь у каждой карточки -->
+                  <div class="portfolio__card-caption">
+                    <span class="portfolio__card-title">{item.title}</span>
+                    <span class="portfolio__card-year">{item.year}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <button class="portfolio__arrow portfolio__arrow--right" id="arrowRight" aria-label="Следующий слайд">
+        <svg width="23" height="30" viewBox="0 0 23 30" fill="none">
+          <path d="M3 3L20 15L3 27" stroke="#000000" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+
+      <button class="portfolio__arrow portfolio__arrow--left" id="arrowLeft" aria-label="Предыдущий слайд">
+        <svg width="23" height="30" viewBox="0 0 23 30" fill="none">
+          <path d="M20 3L3 15L20 27" stroke="#000000" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+
+    </div>
+
+    <div class="portfolio__bottom">
+
+      <div></div>
+
+      <div class="portfolio__dots" id="portfolioDots">
+        {slides.map((_, i) => (
+          <button
+            class={`portfolio__dot ${i === 0 ? 'portfolio__dot--active' : ''}`}
+            data-index={i}
+            aria-label={`Слайд ${i + 1}`}
+          />
+        ))}
+      </div>
+
+      <a href="/portfolio" class="portfolio__more">
+        Узнать больше
+        <svg width="27" height="20" viewBox="0 0 27 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0.013702 10.394L26.1767 9.68691M26.1767 9.68691L16.8428 0.353097M26.1767 9.68691L16.9401 18.9235" stroke="#1C508F"/>
+        </svg>
+      </a>
+
+    </div>
+
+    <div class="portfolio__cta">
+      <a href="/contacts" class="portfolio__btn">Запросить консультацию</a>
+    </div>
+
+  </div>
+</section>
+
+<style>
+  .portfolio {
+    width: 100%;
+    background: #FFFFFF;
+    padding: 80px 0;
+  }
+
+  .portfolio__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 46px;
+    width: 1448px;
+    margin: 0 auto;
+  }
+
+  .portfolio__title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    font-size: 48px;
+    line-height: 110%;
+    color: #000000;
+    width: 100%;
+  }
+
+  .portfolio__slider-wrap {
+    position: relative;
+    width: 1410px;
+  }
+
+  .portfolio__slider {
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .portfolio__slide {
+    display: none;
+  }
+
+  .portfolio__slide--active {
+    display: block;
+  }
+
+  .portfolio__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 450px);
+    grid-template-rows: repeat(2, 330px);
+    gap: 30px;
+  }
+
+  /* === Карточка === */
+  .portfolio__card {
+    position: relative;
+    width: 450px;
+    height: 330px;
+    background: #FFFFFF;
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .portfolio__card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    /* ✅ Плавное увеличение при hover */
+    transition: transform 0.3s ease;
+  }
+
+  .portfolio__card:hover .portfolio__card-img {
+    transform: scale(1.03);
+  }
+
+  /* === Caption: скрыт по умолчанию, появляется при hover === */
+  .portfolio__card-caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 111px;
+    background: rgba(255, 255, 255, 0.88);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 26px 15px 0;
+    gap: 42px;
+    box-sizing: border-box;
+
+    /* ✅ Скрыт по умолчанию */
+    opacity: 0;
+    transform: translateY(100%);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+
+  /* ✅ Появляется при наведении на карточку */
+  .portfolio__card:hover .portfolio__card-caption {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .portfolio__card-title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 110%;
+    letter-spacing: -0.01em;
+    color: #1C508F;
+    flex: 1;
+  }
+
+  .portfolio__card-year {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 110%;
+    letter-spacing: -0.01em;
+    color: #1C508F;
+    white-space: nowrap;
+  }
+
+  /* === Стрелки === */
+  .portfolio__arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 76px;
+    height: 76px;
+    background: #F1F1F1;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease;
+    z-index: 10;
+  }
+
+  .portfolio__arrow:hover {
+    background: #E0E0E0;
+  }
+
+  .portfolio__arrow--right {
+    right: -38px;
+  }
+
+  .portfolio__arrow--left {
+    left: -38px;
+  }
+
+  .portfolio__arrow--left.is-hidden,
+  .portfolio__arrow--right.is-hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /* === Нижняя панель === */
+  .portfolio__bottom {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 1410px;
+    position: relative;
+  }
+
+  .portfolio__dots {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .portfolio__dot {
+    width: 17px;
+    height: 17px;
+    border-radius: 50%;
+    border: none;
+    background: #D9D9D9;
+    cursor: pointer;
+    padding: 0;
+    transition: background 0.2s ease;
+  }
+
+  .portfolio__dot--active {
+    background: #1C508F;
+  }
+
+  .portfolio__more {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 11px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 110%;
+    color: #1C508F;
+    transition: opacity 0.2s;
+  }
+
+  .portfolio__more:hover {
+    opacity: 0.75;
+  }
+
+  .portfolio__more svg {
+    flex-shrink: 0;
+  }
+
+  .portfolio__cta {
+    width: 100%;
+  }
+
+  .portfolio__btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 330px;
+    height: 85px;
+    background: #1C508F;
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.3);
+    border-radius: 9px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 130%;
+    letter-spacing: -0.01em;
+    color: #FFFFFF;
+    transition: background 0.2s ease;
+  }
+
+  .portfolio__btn:hover {
+    background: #174480;
+  }
+</style>
+
+<script>
+  const slides = document.querySelectorAll('.portfolio__slide');
+  const dots = document.querySelectorAll('.portfolio__dot');
+  const arrowRight = document.getElementById('arrowRight');
+  const arrowLeft = document.getElementById('arrowLeft');
+
+  let current = 0;
+  const total = slides.length;
+
+  function goTo(index: number) {
+    slides[current].classList.remove('portfolio__slide--active');
+    dots[current].classList.remove('portfolio__dot--active');
+
+    current = index;
+
+    slides[current].classList.add('portfolio__slide--active');
+    dots[current].classList.add('portfolio__dot--active');
+
+    arrowLeft?.classList.toggle('is-hidden', current === 0);
+    arrowRight?.classList.toggle('is-hidden', current === total - 1);
+  }
+
+  arrowLeft?.classList.add('is-hidden');
+  if (total <= 1) arrowRight?.classList.add('is-hidden');
+
+  arrowRight?.addEventListener('click', () => {
+    if (current < total - 1) goTo(current + 1);
+  });
+
+  arrowLeft?.addEventListener('click', () => {
+    if (current > 0) goTo(current - 1);
+  });
+
+  dots.forEach((dot, i) => {
+    dot.addEventListener('click', () => goTo(i));
+  });
+</script>

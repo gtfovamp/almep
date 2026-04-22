@@ -1,0 +1,268 @@
+---
+const stats = [
+  {
+    number: '1',
+    text: 'Качество мирового уровня.',
+  },
+  {
+    number: '2',
+    text: 'Оперативность и стабильность поставок.',
+  },
+  {
+    number: '3',
+    text: 'Профессиональная команда и техническая поддержка.',
+  },
+];
+---
+
+<section class="mission">
+  <div class="mission__inner">
+
+    <!-- Миссия + Цели -->
+    <div class="mission__top">
+
+      <!-- Левый блок: Миссия -->
+      <div class="mission__block mission__block--left">
+        <h2 class="mission__title">Миссия</h2>
+        <p class="mission__text">
+          Обеспечивать азербайджанский рынок долговечными, безопасными
+          и профессиональными строительными изделиями
+        </p>
+      </div>
+
+      <!-- Правый блок: Цели -->
+      <div class="mission__block mission__block--right">
+        <h2 class="mission__title mission__title--right">Цели</h2>
+        <p class="mission__text mission__text--right">
+          Стать вашим долгосрочным стратегическим партнером, обеспечивая
+          комплексное снабжение и экспертную поддержку на каждом этапе.
+        </p>
+      </div>
+
+    </div>
+
+    <!-- Три блока со скобками -->
+    <div class="mission__stats">
+      {stats.map((item) => (
+        <div class="mission__stat">
+
+          <!-- Угловые скобки через CSS -->
+          <div class="mission__brackets">
+            <span class="mission__bracket mission__bracket--tl"></span>
+            <span class="mission__bracket mission__bracket--tr"></span>
+          </div>
+
+          <div class="mission__stat-body">
+            <span class="mission__stat-number">{item.number}</span>
+            <p class="mission__stat-text">{item.text}</p>
+          </div>
+
+          <div class="mission__brackets mission__brackets--bottom">
+            <span class="mission__bracket mission__bracket--bl"></span>
+            <span class="mission__bracket mission__bracket--br"></span>
+          </div>
+
+        </div>
+      ))}
+    </div>
+
+    <!-- Кнопка -->
+    <div class="mission__cta">
+      <a href="/products" class="mission__btn">Перейти в каталог</a>
+    </div>
+
+  </div>
+</section>
+
+<style>
+  .mission {
+    width: 100%;
+    background: #FFFFFF;
+    padding: 80px 0;
+  }
+
+  .mission__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 50px;
+    width: 1409px;
+    margin: 0 auto;
+  }
+
+  /* === Верхний блок: Миссия + Цели === */
+  .mission__top {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .mission__block {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+
+  .mission__block--left {
+    align-items: flex-start;
+    width: 470px;
+  }
+
+  .mission__block--right {
+    align-items: flex-end;
+    width: 368px;
+  }
+
+  .mission__title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    font-size: 48px;
+    line-height: 110%;
+    color: #000000;
+  }
+
+  .mission__title--right {
+    text-align: right;
+    width: 100%;
+  }
+
+  .mission__text {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 130%;
+    letter-spacing: -0.01em;
+    color: #000000;
+  }
+
+  .mission__text--right {
+    text-align: right;
+    width: 482px;
+  }
+
+  /* === Три блока со скобками === */
+  .mission__stats {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 210px;
+    width: 100%;
+  }
+
+  .mission__stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    position: relative;
+    width: 330px;
+  }
+
+  /* Угловые скобки — верхние */
+  .mission__brackets {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 38px;
+  }
+
+  .mission__brackets--bottom {
+    margin-top: 0;
+  }
+
+  /* Базовый стиль уголка */
+  .mission__bracket {
+    display: block;
+    width: 38px;
+    height: 38px;
+    border-color: #000000;
+    border-style: solid;
+    border-width: 0;
+  }
+
+  /* Верхний левый */
+  .mission__bracket--tl {
+    border-top-width: 1px;
+    border-left-width: 1px;
+  }
+
+  /* Верхний правый */
+  .mission__bracket--tr {
+    border-top-width: 1px;
+    border-right-width: 1px;
+  }
+
+  /* Нижний левый */
+  .mission__bracket--bl {
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+  }
+
+  /* Нижний правый */
+  .mission__bracket--br {
+    border-bottom-width: 1px;
+    border-right-width: 1px;
+  }
+
+  /* Тело блока: цифра + текст */
+  .mission__stat-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 25px;
+    padding: 10px 0;
+    width: 100%;
+  }
+
+  .mission__stat-number {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 45px;
+    line-height: 110%;
+    text-align: center;
+    color: #1C508F;
+    width: 100%;
+  }
+
+  .mission__stat-text {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 130%;
+    letter-spacing: -0.01em;
+    text-align: center;
+    color: #000000;
+    max-width: 271px;
+  }
+
+  /* === Кнопка === */
+  .mission__cta {
+    width: 100%;
+  }
+
+  .mission__btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 330px;
+    height: 85px;
+    background: #1C508F;
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.3);
+    border-radius: 9px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 130%;
+    letter-spacing: -0.01em;
+    color: #FFFFFF;
+    transition: background 0.2s ease;
+  }
+
+  .mission__btn:hover {
+    background: #174480;
+  }
+</style>

@@ -1,0 +1,102 @@
+---
+const features = [
+  {
+    icon: '/assets/icons/briefcase.svg',
+    title: 'Профессиональный поставщик',
+    text: 'Надёжный партнёр в высококачественных решениях для строительного и промышленного секторов.',
+  },
+  {
+    icon: '/assets/icons/problem-solving-skills.svg',
+    title: 'Сторона, предлагающая решения',
+    text: 'Мы не просто продаём продукцию, мы предлагаем оптимальные решения, соответствующие требованиям проекта и техническим спецификациям.',
+  },
+  {
+    icon: '/assets/icons/structure.svg',
+    title: 'Интегрированная структура',
+    text: 'Гибкая система управления, одновременно удовлетворяющая потребности как крупных B2B-проектов, так и розничного рынка (B2C).',
+  },
+];
+---
+
+<section class="features">
+  <div class="features__inner">
+    {features.map((item) => (
+      <div class="features__card">
+        <div class="features__icon-wrap">
+          <img src={item.icon} alt={item.title} width="57" height="57" />
+        </div>
+        <h3 class="features__title">{item.title}</h3>
+        <p class="features__text">{item.text}</p>
+      </div>
+    ))}
+  </div>
+</section>
+
+<style>
+  .features {
+    width: 100%;
+    background: #FFFFFF;
+    padding: 80px 0;
+  }
+
+  .features__inner {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 37px;
+    width: 1410px;
+    margin: 0 auto;
+  }
+
+  /* === Карточка === */
+  .features__card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+    flex: 1;
+    text-align: center;
+  }
+
+  /* === Иконка === */
+  .features__icon-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 90px;
+    height: 90px;
+    background: #FFFFFF;
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.3);
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .features__icon-wrap img {
+    width: 57px;
+    height: 57px;
+    object-fit: contain;
+    /* Иконки синие по дизайну */
+  }
+
+  /* === Заголовок === */
+  .features__title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    font-size: 30px;
+    line-height: 110%;
+    letter-spacing: -0.01em;
+    color: #000000;
+    text-align: center;
+  }
+
+  /* === Текст === */
+  .features__text {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 130%;
+    letter-spacing: -0.01em;
+    color: #000000;
+    text-align: center;
+  }
+</style>

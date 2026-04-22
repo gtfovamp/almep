@@ -1,0 +1,188 @@
+---
+// Blog.astro
+---
+
+<section class="blog">
+
+  <!-- Фоновое изображение -->
+  <div class="blog__bg"></div>
+
+  <!-- Белая карточка -->
+  <div class="blog__card">
+    <div class="blog__card-inner">
+
+      <!-- Заголовок секции -->
+      <h2 class="blog__title">Блог</h2>
+
+      <!-- Контент -->
+      <div class="blog__content">
+
+        <div class="blog__text-wrap">
+          <!-- Заголовок статьи -->
+          <h3 class="blog__post-title">Almep Trading — Точка опоры вашего проекта</h3>
+
+          <!-- Текст -->
+          <p class="blog__post-text">
+            За каждым успешным проектом стоят правильные партнеры.
+            Мы, компания Almep Trading, не просто поставляем профессиональные
+            инструменты для строительства и производства — мы становимся частью вашего успеха.
+            С брендами Berent, Harden, Sensh и EKF мы делаем ваши проекты быстрее,
+            надежнее и эффективнее...
+          </p>
+        </div>
+
+        <!-- Ссылка "Читать дальше" -->
+        <a href="/blog/1" class="blog__read-more">
+          <span class="blog__read-more-text">Читать дальше...</span>
+          <span class="blog__read-more-line"></span>
+        </a>
+
+      </div>
+
+    </div>
+  </div>
+
+</section>
+
+<style>
+  /* ===== Секция ===== */
+  .blog {
+    position: relative;
+    width: 100%;
+    height: 750px;
+    background: #000000;
+    overflow: hidden;
+  }
+
+  /* ===== Фон ===== */
+  .blog__bg {
+    position: absolute;
+    inset: 0;
+    background-image: url('assets/images/blog-bg.png');
+    background-size: cover;
+    background-position: center right;
+    background-repeat: no-repeat;
+  }
+
+  /* Тёмный оверлей слева */
+  .blog__bg::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to right,
+      rgba(0, 0, 0, 0.84) 0%,
+      rgba(0, 0, 0, 0.76) 40%,
+      rgba(0, 0, 0, 0.0) 70%
+    );
+  }
+
+  /* ===== Белая карточка ===== */
+  .blog__card {
+    position: absolute;
+    width: 932px;
+    height: 460px;
+    left: 93px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #FFFFFF;
+    border-radius: 17px;
+  }
+
+  /* ===== Внутренний контейнер карточки ===== */
+  .blog__card-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 50px;
+    position: absolute;
+    width: 764px;
+    left: 55px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  /* ===== Заголовок "Блог" ===== */
+  .blog__title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    font-size: 48px;
+    line-height: 110%;
+    color: #0E0E0E;
+    margin: 0;
+    width: 100%;
+  }
+
+  /* ===== Блок контента ===== */
+  .blog__content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 50px;
+    width: 790px;
+  }
+
+  /* ===== Текстовый блок ===== */
+  .blog__text-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+    width: 100%;
+  }
+
+  /* ===== Заголовок статьи ===== */
+  .blog__post-title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 110%;
+    letter-spacing: -0.01em;
+    color: #0E0E0E;
+    margin: 0;
+    width: 100%;
+  }
+
+  /* ===== Текст статьи ===== */
+  .blog__post-text {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 130%;
+    letter-spacing: -0.01em;
+    color: #0E0E0E;
+    margin: 0;
+    width: 100%;
+  }
+
+  /* ===== Ссылка "Читать дальше" ===== */
+  .blog__read-more {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+  }
+
+  .blog__read-more:hover {
+    opacity: 0.7;
+  }
+
+  .blog__read-more-text {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 130%;
+    letter-spacing: -0.01em;
+    color: #0E0E0E;
+    white-space: nowrap;
+  }
+
+  .blog__read-more-line {
+    display: block;
+    width: 149px;
+    height: 1px;
+    background: #0E0E0E;
+  }
+</style>

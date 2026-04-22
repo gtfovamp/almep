@@ -1,0 +1,353 @@
+---
+const products = [
+  {
+    image: 'assets/images/product-1.png',
+    title: 'Инструменты для ремонта и строительства',
+    description: 'Сертифицированные электрические материалы и оборудование для обеспечения электроснабжения и безопасности проектов.',
+    href: '/products/tools',
+  },
+  {
+    image: 'assets/images/product-2.png',
+    title: 'Крепежные элементы',
+    description: 'Сертифицированные электрические материалы и оборудование для обеспечения электроснабжения и безопасности проектов.',
+    href: '/products/fasteners',
+  },
+  {
+    image: 'assets/images/product-3.png',
+    title: 'Источники питания',
+    description: 'Сертифицированные электрические материалы и оборудование для обеспечения электроснабжения и безопасности проектов.',
+    href: '/products/power',
+  },
+  {
+    image: 'assets/images/product-4.png',
+    title: 'Оборудования и устройства',
+    description: 'Сертифицированные электрические материалы и оборудование для обеспечения электроснабжения и безопасности проектов.',
+    href: '/products/equipment',
+  },
+  {
+    image: 'assets/images/product-5.png',
+    title: 'Расходные материалы',
+    description: 'Сертифицированные электрические материалы и оборудование для обеспечения электроснабжения и безопасности проектов.',
+    href: '/products/consumables',
+  },
+  {
+    image: 'assets/images/product-6.png',
+    title: 'Материалы для безопасности и эксплуатации',
+    description: 'Сертифицированные электрические материалы и оборудование для обеспечения электроснабжения и безопасности проектов.',
+    href: '/products/safety',
+  },
+];
+---
+
+<section class="products">
+  <div class="products__inner">
+
+    <h2 class="products__title">Продукция</h2>
+
+    <div class="products__content">
+
+      <!-- Скачать каталог -->
+      <a href="/catalog.pdf" class="products__download" download>
+        Скачать каталог
+        <svg width="18" height="19" viewBox="0 0 18 19" fill="none">
+          <path d="M9 1V14M9 14L3 8M9 14L15 8"
+            stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+
+      <!-- Сетка -->
+      <div class="products__grid">
+        {products.map((product) => (
+          <a href={product.href} class="products__card">
+
+            <!-- Фото (всегда видно) -->
+            <div class="products__card-img-wrap">
+              <img
+                src={product.image}
+                alt={product.title}
+                class="products__card-img"
+              />
+            </div>
+
+            <!-- Тёмный оверлей поверх фото (появляется на hover) -->
+            <div class="products__card-overlay"></div>
+
+            <!-- Дефолтная подпись (снизу, скрывается на hover) -->
+            <div class="products__card-caption">
+              <span class="products__card-title">{product.title}</span>
+              <svg width="27" height="29" viewBox="0 0 27 29" fill="none">
+                <path d="M3 26L24 5M24 5H8M24 5V21"
+                  stroke="#003F8D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+
+            <!-- Hover контент (появляется на hover) -->
+            <div class="products__card-hover-body">
+              <div class="products__card-hover-top">
+                <h3 class="products__card-hover-title">{product.title}</h3>
+                <p class="products__card-hover-desc">{product.description}</p>
+              </div>
+              <div class="products__card-hover-footer">
+                <span class="products__card-hover-link">Узнать больше</span>
+                <!-- Стрелка диагональная (ромб) -->
+                <svg class="products__card-hover-arrow" width="27" height="29" viewBox="0 0 27 29" fill="none">
+                  <path d="M3 26L24 5M24 5H8M24 5V21"
+                    stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            </div>
+
+          </a>
+        ))}
+      </div>
+
+      <!-- Кнопка -->
+      <div class="products__cta">
+        <a href="/products" class="products__btn">Перейти в каталог</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<style>
+  .products {
+    width: 100%;
+    background: #FFFFFF;
+    padding: 80px 0;
+  }
+
+  .products__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 60px;
+    width: 1410px;
+    margin: 0 auto;
+  }
+
+  /* === Заголовок === */
+  .products__title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    font-size: 48px;
+    line-height: 110%;
+    color: #000000;
+    width: 100%;
+  }
+
+  /* === Контент === */
+  .products__content {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+    width: 100%;
+  }
+
+  /* === Скачать каталог === */
+  .products__download {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 11px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 110%;
+    letter-spacing: -0.01em;
+    color: #000000;
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+
+  .products__download:hover {
+    opacity: 0.7;
+  }
+
+  /* === Сетка === */
+  .products__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 450px);
+    grid-template-rows: repeat(2, 410px);
+    gap: 30px;
+    width: 100%;
+  }
+
+  /* === Карточка === */
+  .products__card {
+    position: relative;
+    width: 450px;
+    height: 410px;
+    border-radius: 7px;
+    overflow: hidden;
+    display: block;
+    cursor: pointer;
+    text-decoration: none;
+  }
+
+  /* === Фото === */
+  .products__card-img-wrap {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  .products__card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+  }
+
+  .products__card:hover .products__card-img {
+    transform: scale(1.04);
+  }
+
+  /* === Тёмный оверлей (скрыт по умолчанию, виден на hover) === */
+  .products__card-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: rgba(0, 0, 0, 0.61);
+    opacity: 0;
+    transition: opacity 0.35s ease;
+  }
+
+  .products__card:hover .products__card-overlay {
+    opacity: 1;
+  }
+
+  /* === Дефолтная подпись (внизу карточки) === */
+  .products__card-caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 123px;
+    background: rgba(255, 255, 255, 0.86);
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 20px 28px;
+    box-sizing: border-box;
+    z-index: 2;
+
+    /* анимация скрытия */
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+
+  .products__card:hover .products__card-caption {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  .products__card-title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 110%;
+    letter-spacing: -0.01em;
+    color: #003F8D;
+    max-width: 253px;
+  }
+
+  /* === Hover контент === */
+  .products__card-hover-body {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 65px 30px 45px;
+    box-sizing: border-box;
+
+    /* скрыт по умолчанию */
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.35s ease 0.05s, transform 0.35s ease 0.05s;
+  }
+
+  .products__card:hover .products__card-hover-body {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .products__card-hover-top {
+    display: flex;
+    flex-direction: column;
+    gap: 27px;
+  }
+
+  .products__card-hover-title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 110%;
+    letter-spacing: -0.01em;
+    color: #FFFFFF;
+    margin: 0;
+  }
+
+  .products__card-hover-desc {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 130%;
+    letter-spacing: -0.01em;
+    color: #FFFFFF;
+    margin: 0;
+  }
+
+  .products__card-hover-footer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .products__card-hover-link {
+    font-family: 'Raleway', sans-serif;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 110%;
+    color: #FFFFFF;
+  }
+
+  .products__card-hover-arrow {
+    flex-shrink: 0;
+  }
+
+  /* === Кнопка === */
+  .products__cta {
+    width: 100%;
+  }
+
+  .products__btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 330px;
+    height: 85px;
+    background: #1C508F;
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.3);
+    border-radius: 9px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 130%;
+    letter-spacing: -0.01em;
+    color: #FFFFFF;
+    text-decoration: none;
+    transition: background 0.2s ease;
+  }
+
+  .products__btn:hover {
+    background: #174480;
+  }
+</style>

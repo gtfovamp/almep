@@ -1,0 +1,357 @@
+---
+// Footer.astro
+
+const navLinks = [
+  { label: 'Главная', href: '/', active: true },
+  { label: 'О компании', href: '/about' },
+  { label: 'Услуги', href: '/services' },
+  { label: 'Продукция', href: '/products' },
+  { label: 'Партнёры', href: '/partners' },
+  { label: 'Портфолио', href: '/portfolio' },
+  { label: 'Новости', href: '/news' },
+  { label: 'Отзывы', href: '/reviews' },
+  { label: 'Контакты', href: '/contacts' },
+];
+
+const navColumns = [
+  [
+    { label: 'Главная', href: '/', active: true },
+    { label: 'О компании', href: '/about' },
+  ],
+  [
+    { label: 'Услуги', href: '/services' },
+    { label: 'Продукция', href: '/products' },
+  ],
+  [
+    { label: 'Партнёры', href: '/partners' },
+    { label: 'Портфолио', href: '/portfolio' },
+  ],
+  [
+    { label: 'Новости', href: '/news' },
+    { label: 'Отзывы', href: '/reviews' },
+  ],
+  [
+    { label: 'Контакты', href: '/contacts' },
+  ],
+];
+---
+
+<footer class="footer">
+  <!-- Фоновое изображение с затемнением -->
+  <div class="footer__bg"></div>
+
+  <div class="footer__inner">
+
+    <!-- Лого -->
+    <div class="footer__logo">
+      <a href="/">
+        <img src="/assets/icons/logo.svg" alt="Almep Trading" width="162" height="40" />
+      </a>
+    </div>
+
+    <!-- Основной контент -->
+    <div class="footer__content">
+
+      <!-- Навигация + контакты -->
+      <div class="footer__nav-row">
+
+        <!-- Колонки навигации -->
+        <nav class="footer__nav">
+          {navColumns.map((col) => (
+            <div class="footer__nav-col">
+              {col.map((link) => (
+                <a
+                  href={link.href}
+                  class={`footer__nav-link ${link.active ? 'footer__nav-link--active' : ''}`}
+                >
+                  {link.active && (
+                    <span class="footer__nav-link-inner">
+                      {link.label}
+                      <span class="footer__nav-underline"></span>
+                    </span>
+                  )}
+                  {!link.active && link.label}
+                </a>
+              ))}
+            </div>
+          ))}
+        </nav>
+
+        <!-- Контакты + соцсети -->
+        <div class="footer__contacts">
+          <div class="footer__contacts-info">
+            <a href="tel:+994102419910" class="footer__phone">+994 10 241 99 10</a>
+            <a href="mailto:info@almeptrading.az" class="footer__email">info@almeptrading.az</a>
+          </div>
+
+          <div class="footer__socials">
+            <a href="#" class="footer__social-link" aria-label="Instagram">
+              <img src="/assets/icons/instagram.svg" alt="Instagram" width="35" height="35" />
+            </a>
+            <a href="#" class="footer__social-link" aria-label="YouTube">
+              <img src="/assets/icons/youtube.svg" alt="YouTube" width="37" height="37" />
+            </a>
+            <a href="#" class="footer__social-link" aria-label="Facebook">
+              <img src="/assets/icons/facebook.svg" alt="Facebook" width="37" height="37" />
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Разделитель -->
+      <div class="footer__divider"></div>
+
+      <!-- Нижняя строка -->
+      <div class="footer__bottom">
+        <div class="footer__bottom-left">
+          <span class="footer__copyright">2026 © Все права защищены</span>
+          <a href="/privacy" class="footer__privacy">Политика конфиденциальности</a>
+        </div>
+
+        <!-- Кнопка "Наверх" -->
+        <button class="footer__scroll-top" aria-label="Наверх" id="scrollTopBtn">
+          <svg width="23" height="52" viewBox="0 0 23 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M10.5762 51.8437L10.5762 0.84375M10.5762 0.84375L0.422362 16.8438M10.5762 0.84375L22.4224 14.8437" stroke="white"/>
+</svg>
+
+        </button>
+      </div>
+
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    position: relative;
+    width: 100%;
+    min-height: 604px;
+    overflow: hidden;
+    background: #C6C6C6;
+  }
+
+  /* Фон с затемнением */
+  .footer__bg {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.71), rgba(0, 0, 0, 0.71)),
+      url('/assets/images/footer-bg.png') center center / cover no-repeat;
+    z-index: 0;
+  }
+
+  /* Внутренний контейнер */
+  .footer__inner {
+    position: relative;
+    z-index: 1;
+    width: 1422px;
+    margin: 0 auto;
+    padding: 118px 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  /* Лого */
+  .footer__logo {
+    margin-bottom: 60px;
+  }
+
+  .footer__logo img {
+    display: block;
+    width: 162px;
+    height: auto;
+    object-fit: contain;
+    /* Логотип белый */
+    filter: brightness(0) invert(1);
+  }
+
+  /* Основной блок контента */
+  .footer__content {
+    display: flex;
+    flex-direction: column;
+    gap: 60px;
+  }
+
+  /* Строка: навигация + контакты */
+  .footer__nav-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 100%;
+  }
+
+  /* Навигация */
+  .footer__nav {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 120px;
+  }
+
+  .footer__nav-col {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+
+  .footer__nav-link {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 110%;
+    color: #FFFFFF;
+    white-space: nowrap;
+    transition: opacity 0.2s;
+  }
+
+  .footer__nav-link:hover {
+    opacity: 0.75;
+  }
+
+  /* Активная ссылка — жирная + подчёркивание */
+  .footer__nav-link--active {
+    font-weight: 500;
+  }
+
+  .footer__nav-link-inner {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 5px;
+  }
+
+  .footer__nav-underline {
+    display: block;
+    width: 42px;
+    height: 1px;
+    background: #FFFFFF;
+  }
+
+  /* Контакты */
+  .footer__contacts {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    gap: 40px;
+  }
+
+  .footer__contacts-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 30px;
+  }
+
+  .footer__phone,
+  .footer__email {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 110%;
+    color: #FFFFFF;
+    white-space: nowrap;
+    transition: opacity 0.2s;
+  }
+
+  .footer__phone:hover,
+  .footer__email:hover {
+    opacity: 0.75;
+  }
+
+  /* Соцсети */
+  .footer__socials {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 30px;
+  }
+
+  .footer__social-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.2s;
+  }
+
+  .footer__social-link:hover {
+    opacity: 0.75;
+  }
+
+  .footer__social-link img {
+    object-fit: contain;
+    filter: brightness(0) invert(1);
+  }
+
+  /* Разделитель */
+  .footer__divider {
+    width: 100%;
+    height: 1px;
+    background: #FFFFFF;
+  }
+
+  /* Нижняя строка */
+  .footer__bottom {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding-bottom: 40px;
+  }
+
+  .footer__bottom-left {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+
+  .footer__copyright {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 150%;
+    color: #F0F0F0;
+  }
+
+  .footer__privacy {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 116.4%;
+    color: #FFFFFF;
+    transition: opacity 0.2s;
+  }
+
+  .footer__privacy:hover {
+    opacity: 0.75;
+  }
+
+  /* Кнопка "Наверх" */
+  .footer__scroll-top {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 51px;
+    height: 51px;
+    background: none;
+    cursor: pointer;
+    transition: background 0.2s;
+    padding: 0;
+    /* Стрелка смотрит вверх — поворачиваем SVG */
+    transform: rotate(0deg);
+  }
+
+  .footer__scroll-top:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+</style>
+
+<script>
+  const scrollTopBtn = document.getElementById('scrollTopBtn');
+
+  scrollTopBtn?.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+</script>

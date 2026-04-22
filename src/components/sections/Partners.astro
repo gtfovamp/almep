@@ -1,0 +1,236 @@
+---
+const partners = [
+    {
+        image: "assets/images/partner-1.png",
+        alt: "Партнер 1",
+        width: 218,
+        height: 57,
+    },
+    {
+        image: "assets/images/partner-2.png",
+        alt: "Партнер 2",
+        width: 270,
+        height: 57,
+    },
+    {
+        image: "assets/images/partner-3.png",
+        alt: "Партнер 3",
+        width: 160,
+        height: 106,
+    },
+    {
+        image: "assets/images/partner-4.png",
+        alt: "Партнер 4",
+        width: 202,
+        height: 57,
+    },
+];
+---
+
+<section class="partners">
+    <div class="partners__inner">
+        <h2 class="partners__title">Партнеры</h2>
+
+        <div class="partners__content">
+            <!-- Логотипы партнеров -->
+            <div class="partners__logos">
+                <div class="partners__row">
+                    {
+                        partners.map((partner) => (
+                            <div class="partners__logo">
+                                <img
+                                    src={partner.image}
+                                    alt={partner.alt}
+                                    width={partner.width}
+                                    height={partner.height}
+                                />
+                            </div>
+                        ))
+                    }
+                </div>
+
+                <!-- Ссылка "Все отзывы" -->
+                <a href="/reviews" class="partners__link">
+                    <span class="partners__link-text">Все отзывы</span>
+                    <svg
+                        width="27"
+                        height="20"
+                        viewBox="0 0 27 20"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                    >
+                        <path
+                            d="M0.013702 10.3945L26.1767 9.68739M26.1767 9.68739L16.8428 0.353585M26.1767 9.68739L16.9401 18.924"
+                            stroke="#1C508F"></path>
+                    </svg>
+                </a>
+            </div>
+
+            <!-- Кнопка консультации -->
+            <a href="/contact" class="partners__btn">Запросить консультацию</a>
+        </div>
+    </div>
+</section>
+
+<style>
+    .partners {
+        width: 100%;
+        background: #fff;
+        padding: 80px 0;
+    }
+
+    .partners__inner {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 50px;
+        width: 1410px;
+        margin: 0 auto;
+    }
+
+    /* ── Заголовок ── */
+    .partners__title {
+        font-family: "Montserrat", sans-serif;
+        font-weight: 500;
+        font-size: 48px;
+        line-height: 110%;
+        color: #000;
+        margin: 0;
+        width: 100%;
+    }
+
+    /* ── Контент ── */
+    .partners__content {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 40px;
+        width: 100%;
+    }
+
+    /* ── Блок с логотипами ── */
+    .partners__logos {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 40px;
+        width: 100%;
+    }
+
+    /* ── Ряд логотипов ── */
+    .partners__row {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 186px;
+        width: 100%;
+    }
+
+    .partners__logo {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .partners__logo img {
+        display: block;
+        object-fit: contain;
+    }
+
+    /* ── Ссылка "Все отзывы" ── */
+    .partners__link {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 11px;
+        text-decoration: none;
+        transition: opacity 0.2s ease;
+    }
+
+    .partners__link:hover {
+        opacity: 0.8;
+    }
+
+    .partners__link-text {
+        font-family: "Montserrat", sans-serif;
+        font-weight: 400;
+        font-size: 24px;
+        line-height: 110%;
+        color: #1c508f;
+    }
+
+    /* Стрелка */
+    .partners__arrow {
+        width: 18px;
+        height: 18px;
+        background: #1c508f;
+        border: 1px solid #1c508f;
+        transform: rotate(45deg);
+        position: relative;
+    }
+
+    .partners__arrow::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 8px;
+        height: 8px;
+        background: #fff;
+        transform: translate(-50%, -50%) rotate(-45deg);
+    }
+
+    /* ── Кнопка ── */
+    .partners__btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 330px;
+        height: 85px;
+        background: #1c508f;
+        box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.3);
+        border-radius: 9px;
+        font-family: "Montserrat", sans-serif;
+        font-weight: 400;
+        font-size: 18px;
+        line-height: 130%;
+        letter-spacing: -0.01em;
+        color: #fff;
+        text-decoration: none;
+        transition: background 0.2s ease;
+    }
+
+    .partners__btn:hover {
+        background: #174480;
+    }
+
+    /* ── Адаптивность (опционально) ── */
+    @media (max-width: 1440px) {
+        .partners__inner {
+            width: 90%;
+        }
+    }
+
+    @media (max-width: 1024px) {
+        .partners__row {
+            gap: 80px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .partners__title {
+            font-size: 36px;
+        }
+
+        .partners__row {
+            gap: 40px;
+        }
+
+        .partners__btn {
+            width: 100%;
+        }
+    }
+</style>

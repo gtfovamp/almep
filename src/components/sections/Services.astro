@@ -1,0 +1,292 @@
+---
+const services = [
+  {
+    number: '01',
+    title: '1 год официальной гарантии',
+    description: 'Мы предоставляем официальную гарантию сроком 1 год на все наши продукты и выполненные работы.',
+    image: 'assets/images/service2.png',
+  },
+  {
+    number: '02',
+    title: 'Техническая консультация',
+    description: 'Инженерная консультация по правильному выбору материалов и техническим вопросам на этапе проектирования.',
+    image: 'assets/images/service2.png',
+  },
+  {
+    number: '03',
+    title: 'Установка и комиссионный сбор',
+    description: 'Профессиональная установка оборудования с последующей проверкой и вводом в эксплуатацию.',
+    image: 'assets/images/service2.png',
+  },
+  {
+    number: '04',
+    title: 'Сервис после продажи',
+    description: 'Комплексное послепродажное обслуживание: техническая поддержка, обслуживание и замена компонентов.',
+    image: 'assets/images/service2.png',
+  },
+];
+---
+
+<section class="services">
+  <div class="services__inner">
+    <h2 class="services__title">Услуги</h2>
+    <div class="services__content">
+      <div class="services__grid">
+        {services.map((service) => (
+          <div class="services__card">
+
+            <!-- Фон: фото + оверлей -->
+            <div class="services__bg">
+              <img src={service.image} alt={service.title} />
+              <div class="services__overlay"></div>
+            </div>
+
+            <!-- Контент -->
+            <div class="services__body">
+              <div class="services__top">
+                <h3 class="services__card-title">{service.title}</h3>
+                <p class="services__card-desc">{service.description}</p>
+              </div>
+              <div class="services__footer">
+                <span class="services__number">{service.number}</span>
+
+                <!-- Стрелка диагональная (обычный стейт, чёрная) -->
+                <svg class="arrow-diagonal" width="27" height="27" viewBox="0 0 27 27" fill="none">
+                  <path d="M3 24L24 3M24 3H8M24 3V19" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+
+                <!-- Стрелка вниз (hover, белая) -->
+                <svg class="arrow-down" width="27" height="29" viewBox="0 0 27 29" fill="none">
+                  <path d="M13.5 1V28M13.5 28L2 16.5M13.5 28L25 16.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+
+              </div>
+            </div>
+
+          </div>
+        ))}
+      </div>
+
+      <div class="services__cta">
+        <a href="/products" class="services__btn">Перейти в каталог</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .services {
+    width: 100%;
+    background: #fff;
+    padding: 80px 0;
+  }
+
+  .services__inner {
+    display: flex;
+    flex-direction: column;
+    gap: 60px;
+    width: 1410px;
+    margin: 0 auto;
+  }
+
+  .services__title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    font-size: 48px;
+    line-height: 110%;
+    color: #000;
+  }
+
+  .services__content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 50px;
+    width: 100%;
+  }
+
+  .services__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 690px);
+    grid-template-rows: repeat(2, 240px);
+    gap: 30px;
+    width: 100%;
+  }
+
+  /* ===== КАРТОЧКА ===== */
+  .services__card {
+    position: relative;
+    width: 690px;
+    height: 240px;
+    border-radius: 7px;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+  }
+
+  /* ===== ФОН ===== */
+  .services__bg {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  .services__bg img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .services__overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.56);
+  }
+
+  /* ===== КОНТЕНТ ===== */
+  .services__body {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 26px 25px 20px;
+  }
+
+  .services__top {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  /* Заголовок */
+  .services__card-title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 110%;
+    letter-spacing: -0.01em;
+
+    /* По умолчанию — чёрный */
+    color: #000;
+    transition: color 0.3s ease;
+  }
+
+  /* Описание — скрыто по умолчанию */
+  .services__card-desc {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 130%;
+    letter-spacing: -0.01em;
+    color: #fff;
+    max-width: 487px;
+
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.35s ease 0.05s, transform 0.35s ease 0.05s;
+  }
+
+  /* ===== ФУТЕР ===== */
+  .services__footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+  }
+
+  .services__number {
+    font-family: 'Raleway', sans-serif;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 110%;
+    /* По умолчанию — чёрный */
+    color: #000;
+    transition: color 0.3s ease;
+  }
+
+  /* ===== СТРЕЛКИ ===== */
+
+  /* Диагональная — видна по умолчанию */
+  .arrow-diagonal {
+    opacity: 1;
+    transition: opacity 0.3s ease;
+    flex-shrink: 0;
+  }
+
+  /* Стрелка вниз — скрыта по умолчанию */
+  .arrow-down {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    flex-shrink: 0;
+  }
+
+  /* ===== HOVER ===== */
+
+  /* Показываем фото */
+  .services__card:hover .services__bg {
+    opacity: 1;
+  }
+
+  /* Заголовок → белый */
+  .services__card:hover .services__card-title {
+    color: #fff;
+  }
+
+  /* Номер → белый */
+  .services__card:hover .services__number {
+    color: #fff;
+  }
+
+  /* Описание появляется */
+  .services__card:hover .services__card-desc {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Меняем стрелки */
+  .services__card:hover .arrow-diagonal {
+    opacity: 0;
+  }
+
+  .services__card:hover .arrow-down {
+    opacity: 1;
+  }
+
+  /* ===== КНОПКА ===== */
+  .services__cta {
+    width: 100%;
+  }
+
+  .services__btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 330px;
+    height: 85px;
+    background: #1C508F;
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.3);
+    border-radius: 9px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 130%;
+    letter-spacing: -0.01em;
+    color: #fff;
+    text-decoration: none;
+    transition: background 0.2s ease;
+  }
+
+  .services__btn:hover {
+    background: #174480;
+  }
+</style>

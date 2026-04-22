@@ -1,0 +1,267 @@
+---
+// ConsultationSection.astro
+---
+
+<section class="consultation">
+  <div class="consultation__bg"></div>
+  <div class="consultation__inner">
+
+    <!-- Левая часть: форма -->
+    <div class="consultation__left">
+      <h2 class="consultation__title">Бесплатная консультация</h2>
+
+      <div class="consultation__form-wrap">
+        <p class="consultation__desc">
+          Ниже оставьте свои контакты, чтобы мы смогли<br/>
+          связаться с вами для полной консультации
+        </p>
+
+        <form class="consultation__form" action="#" method="POST">
+          <div class="consultation__fields-row">
+            <div class="consultation__field">
+              <input type="text" placeholder="Ваше имя" class="consultation__input" />
+            </div>
+            <div class="consultation__field">
+              <input type="email" placeholder="E-mail" class="consultation__input" />
+            </div>
+          </div>
+
+          <div class="consultation__fields-row">
+            <div class="consultation__field">
+              <input type="tel" placeholder="Ваш номер телефона" class="consultation__input" />
+            </div>
+          </div>
+
+          <button type="submit" class="consultation__btn">
+            Отправить
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Правая часть: контакты + соцсети -->
+    <div class="consultation__right">
+      <div class="consultation__contact-info">
+        <span class="consultation__phone">+994 10 241 99 10</span>
+        <span class="consultation__email">info@almeptrading.az</span>
+      </div>
+
+      <div class="consultation__socials">
+        <a href="#" class="consultation__social-link" aria-label="Instagram">
+          <img src="/assets/icons/instagram.svg" alt="Instagram" width="30" height="30" />
+        </a>
+        <a href="#" class="consultation__social-link" aria-label="YouTube">
+          <img src="/assets/icons/youtube.svg" alt="YouTube" width="32" height="32" />
+        </a>
+        <a href="#" class="consultation__social-link" aria-label="Facebook">
+          <img src="/assets/icons/facebook.svg" alt="Facebook" width="30" height="30" />
+        </a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<style>
+  .consultation {
+    position: relative;
+    width: 100%;
+    height: 653px;
+    overflow: hidden;
+    background: #BCBCBC;
+  }
+
+  /* Затемнённый фон */
+  .consultation__bg {
+    position: absolute;
+    top: -140px;
+    left: 0;
+    width: 100%;
+    height: calc(100% + 140px);
+    background:
+      linear-gradient(0deg, rgba(0, 0, 0, 0.73), rgba(0, 0, 0, 0.73)),
+      url('/assets/images/consultation-bg.png') center / cover no-repeat;
+    z-index: 0;
+  }
+
+  /* Внутренний контейнер — центрирован по высоте */
+  .consultation__inner {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 1411px;
+    height: 100%;
+    margin: 0 auto;
+  }
+
+  /* ===================== */
+  /* === Левая часть === */
+  /* ===================== */
+  .consultation__left {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 40px;
+    width: 690px;
+    flex-shrink: 0;
+  }
+
+  .consultation__title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    font-size: 48px;
+    line-height: 110%;
+    color: #FFFFFF;
+    margin: 0;
+  }
+
+  .consultation__form-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 30px;
+    width: 100%;
+  }
+
+  .consultation__desc {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 130%;
+    letter-spacing: -0.01em;
+    color: #FFFFFF;
+    margin: 0;
+  }
+
+  .consultation__form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+    width: 100%;
+  }
+
+  /* Строка с полями */
+  .consultation__fields-row {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 30px;
+    width: 100%;
+  }
+
+  /* Одно поле */
+  .consultation__field {
+    box-sizing: border-box;
+    width: 330px;
+    height: 60px;
+    border: 1px solid #FFFFFF;
+    border-radius: 5px;
+    flex-shrink: 0;
+  }
+
+  .consultation__input {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    padding: 0 20px;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 130%;
+    letter-spacing: -0.01em;
+    color: #FFFFFF;
+  }
+
+  .consultation__input::placeholder {
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  /* Кнопка */
+  .consultation__btn {
+    width: 330px;
+    height: 85px;
+    background: #1C508F;
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.3);
+    border-radius: 9px;
+    border: none;
+    cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 130%;
+    text-align: center;
+    letter-spacing: -0.01em;
+    color: #FFFFFF;
+    transition: background 0.2s ease;
+    margin-top: 10px;
+  }
+
+  .consultation__btn:hover {
+    background: #174480;
+  }
+
+  /* ====================== */
+  /* === Правая часть === */
+  /* ====================== */
+  .consultation__right {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    gap: 30px;
+    flex-shrink: 0;
+    /* Прижимаем к низу секции */
+    align-self: flex-end;
+    padding-bottom: 60px;
+  }
+
+  .consultation__contact-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 20px;
+  }
+
+  .consultation__phone,
+  .consultation__email {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 110%;
+    color: #FFFFFF;
+    white-space: nowrap;
+  }
+
+  /* Соцсети */
+  .consultation__socials {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .consultation__social-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    flex-shrink: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  .consultation__social-link:hover {
+    opacity: 0.75;
+  }
+
+  .consultation__social-link img {
+    object-fit: contain;
+    filter: brightness(0) invert(1);
+  }
+</style>

@@ -1,0 +1,377 @@
+---
+import Nav from './Nav.astro';
+
+const navLinks = [
+  { label: 'Главная', href: '/', active: true },
+  { label: 'О компании', href: '/about', dropdown: true },
+  { label: 'Услуги', href: '/services' },
+  { label: 'Продукция', href: '/products' },
+  { label: 'Партнёры', href: '/partners' },
+  { label: 'Портфолио', href: '/portfolio' },
+  { label: 'Новости', href: '/news' },
+  { label: 'Отзывы', href: '/reviews' },
+  { label: 'Контакты', href: '/contacts' },
+];
+---
+
+<header class="header">
+  <div class="header__inner">
+
+    <!-- Верхняя строка -->
+    <div class="header__top">
+
+      <!-- Левая часть: лого + кнопка каталог -->
+      <div class="header__left">
+        <a href="/" class="header__logo">
+          <img src="/assets/icons/logo.svg" alt="Almep Trading" width="162" height="56" />
+        </a>
+        <a href="/products" class="header__catalog-btn">Каталог</a>
+      </div>
+
+      <!-- Правая часть: поиск, язык, телефон -->
+      <div class="header__right">
+        <button class="header__search" aria-label="Поиск">
+          <img src="/assets/icons/search.svg" alt="Поиск" width="28" height="28" />
+        </button>
+
+        <!-- Языковой переключатель -->
+        <div class="header__lang" id="langSwitcher">
+          <div class="header__lang-trigger">
+            <img src="/assets/icons/globe.svg" alt="Язык" width="28" height="28" />
+            <span class="header__lang-current">RU</span>
+            <svg class="header__lang-arrow" width="15" height="8" viewBox="0 0 15 8" fill="none">
+              <path d="M1 1L7.5 7L14 1" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+
+          <!-- Дропдаун языков -->
+          <div class="header__lang-dropdown">
+            <!-- Верхняя строка с глобусом + текущий язык + стрелка -->
+            <div class="header__lang-dropdown-top">
+              <img src="/assets/icons/globe.svg" alt="Язык" width="28" height="28" />
+              <span class="header__lang-dropdown-label">RU</span>
+              <svg width="15" height="8" viewBox="0 0 15 8" fill="none">
+                <path d="M1 1L7.5 7L14 1" stroke="black" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </div>
+
+            <!-- Разделитель -->
+            <div class="header__lang-divider"></div>
+
+            <!-- Список языков -->
+            <ul class="header__lang-list">
+              <li>
+                <button class="header__lang-option" data-lang="AZ">AZ</button>
+              </li>
+              <li>
+                <button class="header__lang-option" data-lang="EN">EN</button>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <a href="tel:+994102419910" class="header__phone">+994 10 241 99 10</a>
+      </div>
+    </div>
+
+    <!-- Нижняя строка: навигация + соцсети -->
+    <div class="header__bottom">
+      <Nav links={navLinks} />
+
+      <div class="header__socials">
+        <a href="#" class="header__social-link" aria-label="Instagram">
+          <img src="/assets/icons/instagram.svg" alt="Instagram" width="30" height="30" />
+        </a>
+        <a href="#" class="header__social-link" aria-label="YouTube">
+          <img src="/assets/icons/youtube.svg" alt="YouTube" width="37" height="37" />
+        </a>
+        <a href="#" class="header__social-link" aria-label="Facebook">
+          <img src="/assets/icons/facebook.svg" alt="Facebook" width="32" height="32" />
+        </a>
+      </div>
+    </div>
+
+  </div>
+</header>
+
+<style>
+  .header {
+    position: absolute;
+    top: 35px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 1410px;
+    z-index: 100;
+  }
+
+  .header__inner {
+    display: flex;
+    flex-direction: column;
+    gap: 33px;
+  }
+
+  /* === Верхняя строка === */
+  .header__top {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 56px;
+  }
+
+  .header__left {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 31px;
+  }
+
+  .header__logo img {
+    display: block;
+    width: 162px;
+    height: 56px;
+    object-fit: contain;
+  }
+
+  .header__catalog-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 164px;
+    height: 50px;
+    background: #1C508F;
+    border-radius: 2px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 110%;
+    color: #FFFFFF;
+    transition: background 0.2s;
+  }
+
+  .header__catalog-btn:hover {
+    background: #174480;
+  }
+
+  /* === Правая часть === */
+  .header__right {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .header__search {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    cursor: pointer;
+    background: none;
+    border: none;
+  }
+
+  .header__search img {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+    filter: brightness(0) invert(1);
+  }
+
+  /* === Языковой переключатель === */
+  .header__lang {
+    position: relative;
+    cursor: pointer;
+  }
+
+  .header__lang-trigger {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    height: 28px;
+  }
+
+  .header__lang-trigger img {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+    filter: brightness(0) invert(1);
+  }
+
+  .header__lang-current {
+    font-family: 'Raleway', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 110%;
+    color: #FFFFFF;
+  }
+
+  .header__lang-arrow {
+    transition: transform 0.2s ease;
+    flex-shrink: 0;
+  }
+
+  /* Дропдаун — появляется строго под триггером */
+  .header__lang-dropdown {
+    position: absolute;
+    /* Прижимаем к верхнему краю триггера */
+    top: 0;
+    right: 0;
+    width: 160px;
+    background: #FFFFFF;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-4px);
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+    z-index: 300;
+  }
+
+  .header__lang.is-open .header__lang-dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  .header__lang.is-open .header__lang-arrow {
+    transform: rotate(180deg);
+  }
+
+  /* Верхняя строка в дропдауне: глобус + RU + стрелка */
+  .header__lang-dropdown-top {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 17px 0;
+  }
+
+  .header__lang-dropdown-top img {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+  }
+
+  .header__lang-dropdown-label {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 110%;
+    color: #000000;
+  }
+
+  /* Разделитель */
+  .header__lang-divider {
+    width: 86px;
+    height: 1px;
+    background: rgba(0, 0, 0, 0.3);
+    margin: 10px auto 0;
+  }
+
+  /* Список языков */
+  .header__lang-list {
+    list-style: none;
+    padding: 11px 0 16px;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 11px;
+  }
+
+  .header__lang-option {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 110%;
+    text-align: center;
+    color: #636363;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+    width: 28px;
+    transition: color 0.15s;
+  }
+
+  .header__lang-option:hover {
+    color: #1C508F;
+  }
+
+  /* Телефон */
+  .header__phone {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 110%;
+    color: #FFFFFF;
+    white-space: nowrap;
+  }
+
+  /* === Нижняя строка === */
+  .header__bottom {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 37px;
+  }
+
+  /* === Соцсети === */
+  .header__socials {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .header__social-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .header__social-link img {
+    object-fit: contain;
+    filter: brightness(0) invert(1);
+    transition: opacity 0.2s;
+  }
+
+  .header__social-link:hover img {
+    opacity: 0.75;
+  }
+</style>
+
+<script>
+  const langSwitcher = document.getElementById('langSwitcher');
+  const langOptions = document.querySelectorAll('.header__lang-option');
+  const langCurrent = document.querySelector('.header__lang-current');
+  const langDropdownLabel = document.querySelector('.header__lang-dropdown-label');
+
+  // Открыть/закрыть дропдаун языков
+  langSwitcher?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    langSwitcher.classList.toggle('is-open');
+  });
+
+  // Выбор языка
+  langOptions.forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const lang = (btn as HTMLElement).dataset.lang ?? '';
+      if (langCurrent) langCurrent.textContent = lang;
+      if (langDropdownLabel) langDropdownLabel.textContent = lang;
+      langSwitcher?.classList.remove('is-open');
+    });
+  });
+
+  // Закрыть при клике вне
+  document.addEventListener('click', () => {
+    langSwitcher?.classList.remove('is-open');
+  });
+</script>

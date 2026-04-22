@@ -1,0 +1,709 @@
+---
+// ContactsSection.astro
+---
+
+<section class="contacts">
+    <div class="contacts__inner">
+        <h2 class="contacts__title">Контакты</h2>
+
+        <div class="contacts__content">
+            <!-- Левая часть -->
+            <div class="contacts__left">
+                <div class="contacts__row">
+                    <div class="contacts__item">
+                        <span class="contacts__label">Адрес:</span>
+                        <span class="contacts__value">Улица Нариман</span>
+                    </div>
+                    <div class="contacts__item">
+                        <span class="contacts__label">Телефон:</span>
+                        <a href="tel:+994102419910" class="contacts__value contacts__value--link">
+                            +994 10 241 99 10
+                        </a>
+                    </div>
+                </div>
+
+                <div class="contacts__row">
+                    <div class="contacts__item">
+                        <span class="contacts__label">График работы:</span>
+                        <div class="contacts__schedule">
+                            <span class="contacts__value">Пн–Сб,</span>
+                            <span class="contacts__value">09:00–18:00</span>
+                        </div>
+                    </div>
+                    <div class="contacts__item">
+                        <span class="contacts__label">E-mail:</span>
+                        <a href="mailto:info@almeptrading.az" class="contacts__value contacts__value--link">
+                            info@almeptrading.az
+                        </a>
+                    </div>
+                </div>
+
+                <button class="contacts__btn">Запросить консультацию</button>
+            </div>
+
+            <!-- Карта -->
+            <div class="contacts__map-wrapper">
+                <div class="contacts__map-overlay-top"></div>
+                <div class="contacts__map-overlay-bottom"></div>
+                <div class="contacts__map" id="map"></div>
+
+                <!-- Кастомные контролы зума -->
+                <div class="map-controls">
+                    <button class="map-controls__btn" id="zoom-in" aria-label="Приблизить">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                            <path d="M8 2V14M2 8H14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </button>
+                    <div class="map-controls__divider"></div>
+                    <button class="map-controls__btn" id="zoom-out" aria-label="Отдалить">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                            <path d="M2 8H14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Бейдж локации -->
+                <div class="map-badge">
+                    <div class="map-badge__dot"></div>
+                    <div class="map-badge__text">
+                        <span class="map-badge__title">Almep Trading</span>
+                        <span class="map-badge__sub">Баку, Азербайджан</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Leaflet -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const bakuCenter = [40.4093, 49.8671];
+
+    // ─── Инициализация карты ───────────────────────────────────────────────
+    const map = L.map("map", {
+        center: bakuCenter,
+        zoom: 12,
+        scrollWheelZoom: false,
+        zoomControl: false,
+        attributionControl: false,
+    });
+
+    // ─── Тайлы: CartoDB Positron (чистые, светлые) ────────────────────────
+    L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
+        subdomains: "abcd",
+        maxZoom: 19,
+    }).addTo(map);
+
+    
+
+    // ─── Кастомные кнопки зума ────────────────────────────────────────────
+    document.getElementById("zoom-in").addEventListener("click", () => {
+        map.zoomIn();
+    });
+    document.getElementById("zoom-out").addEventListener("click", () => {
+        map.zoomOut();
+    });
+
+    // ─── Пульсирующий маркер ──────────────────────────────────────────────
+    const pulseIcon = L.divIcon({
+        className: "",
+        html: `
+            <div class="pulse-marker">
+                <div class="pulse-marker__ring pulse-marker__ring--1"></div>
+                <div class="pulse-marker__ring pulse-marker__ring--2"></div>
+                <div class="pulse-marker__ring pulse-marker__ring--3"></div>
+                <div class="pulse-marker__core">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="white"/>
+                    </svg>
+                </div>
+            </div>
+        `,
+        iconSize: [60, 60],
+        iconAnchor: [30, 30],
+        popupAnchor: [0, -36],
+    });
+
+    // ─── Маркер + попап ───────────────────────────────────────────────────
+    const marker = L.marker(bakuCenter, { icon: pulseIcon }).addTo(map);
+
+    marker.bindPopup(`
+        <div class="modern-popup">
+            <div class="modern-popup__header">
+                <div class="modern-popup__icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="white"/>
+                    </svg>
+                </div>
+                <div>
+                    <div class="modern-popup__title">Almep Trading</div>
+                    <div class="modern-popup__sub">Официальный офис</div>
+                </div>
+            </div>
+            <div class="modern-popup__divider"></div>
+            <div class="modern-popup__row">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" stroke="#1c508f" stroke-width="2" fill="none"/>
+                </svg>
+                <span>Улица Нариман, Баку</span>
+            </div>
+            <div class="modern-popup__row">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+                    <path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1-9.4 0-17-7.6-17-17 0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z" stroke="#1c508f" stroke-width="2" fill="none"/>
+                </svg>
+                <span>+994 10 241 99 10</span>
+            </div>
+            <div class="modern-popup__row">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+                    <rect x="2" y="4" width="20" height="16" rx="2" stroke="#1c508f" stroke-width="2" fill="none"/>
+                    <path d="M2 8l10 6 10-6" stroke="#1c508f" stroke-width="2" fill="none"/>
+                </svg>
+                <span>Пн–Сб, 09:00–18:00</span>
+            </div>
+        </div>
+    `, {
+        className: "modern-popup-wrapper",
+        maxWidth: 240,
+        offset: [0, -10],
+    }).openPopup();
+
+    // ─── Граница Баку ─────────────────────────────────────────────────────
+    fetch("https://nominatim.openstreetmap.org/search?city=Baku&country=Azerbaijan&polygon_geojson=1&format=json")
+        .then((res) => res.json())
+        .then((data) => {
+            if (data && data[0] && data[0].geojson) {
+                // Заливка
+                L.geoJSON(data[0].geojson, {
+                    style: {
+                        color: "transparent",
+                        fillColor: "#1c508f",
+                        fillOpacity: 0.07,
+                    },
+                }).addTo(map);
+
+                // Граница — сплошная
+                L.geoJSON(data[0].geojson, {
+                    style: {
+                        color: "#1c508f",
+                        weight: 2.5,
+                        opacity: 0.45,
+                        fillOpacity: 0,
+                        dashArray: "0",
+                        lineCap: "round",
+                        lineJoin: "round",
+                    },
+                }).addTo(map);
+
+                // Граница — пунктир поверх для эффекта
+                L.geoJSON(data[0].geojson, {
+                    style: {
+                        color: "#4a90d9",
+                        weight: 1,
+                        opacity: 0.6,
+                        fillOpacity: 0,
+                        dashArray: "8 12",
+                        lineCap: "round",
+                    },
+                }).addTo(map);
+            }
+        })
+        .catch((err) => console.warn("Границы не загружены:", err));
+
+    // ─── Плавное появление карты ──────────────────────────────────────────
+    setTimeout(() => {
+        document.querySelector(".contacts__map-wrapper").classList.add("is-loaded");
+    }, 300);
+});
+</script>
+
+<style>
+    /* ═══════════════════════════════════════════════
+       СЕКЦИЯ
+    ═══════════════════════════════════════════════ */
+    .contacts {
+        width: 100%;
+        padding: 80px 0 100px;
+        background: #ffffff;
+    }
+
+    .contacts__inner {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 60px;
+        width: 1411px;
+        margin: 0 auto;
+    }
+
+    .contacts__title {
+        font-family: "Montserrat", sans-serif;
+        font-weight: 500;
+        font-size: 48px;
+        line-height: 110%;
+        color: #000000;
+        margin: 0;
+    }
+
+    .contacts__content {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 33px;
+        width: 100%;
+    }
+
+    /* ═══════════════════════════════════════════════
+       ЛЕВАЯ ЧАСТЬ
+    ═══════════════════════════════════════════════ */
+    .contacts__left {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 50px;
+        width: 448px;
+        flex-shrink: 0;
+    }
+
+    .contacts__row {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        gap: 85px;
+        width: 100%;
+    }
+
+    .contacts__item {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 25px;
+    }
+
+    .contacts__label {
+        font-family: "Montserrat", sans-serif;
+        font-weight: 500;
+        font-size: 20px;
+        line-height: 24px;
+        color: #000000;
+    }
+
+    .contacts__value {
+        font-family: "Montserrat", sans-serif;
+        font-weight: 400;
+        font-size: 18px;
+        line-height: 130%;
+        letter-spacing: -0.01em;
+        color: #151515;
+        text-decoration: none;
+    }
+
+    .contacts__value--link {
+        color: #000000;
+        transition: color 0.2s ease;
+    }
+
+    .contacts__value--link:hover {
+        color: #1c508f;
+    }
+
+    .contacts__schedule {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .contacts__btn {
+        width: 330px;
+        height: 85px;
+        background: #1c508f;
+        box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.3);
+        border-radius: 9px;
+        border: none;
+        cursor: pointer;
+        font-family: "Montserrat", sans-serif;
+        font-weight: 400;
+        font-size: 18px;
+        line-height: 130%;
+        text-align: center;
+        letter-spacing: -0.01em;
+        color: #ffffff;
+        transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+    }
+
+    .contacts__btn:hover {
+        background: #174480;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(28, 80, 143, 0.3);
+    }
+
+    .contacts__btn:active {
+        transform: translateY(0);
+    }
+
+    /* ═══════════════════════════════════════════════
+       ОБЁРТКА КАРТЫ
+    ═══════════════════════════════════════════════ */
+    .contacts__map-wrapper {
+        position: relative;
+        width: 930px;
+        height: 484px;
+        flex-shrink: 0;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow:
+            0 2px 4px rgba(28, 80, 143, 0.06),
+            0 8px 24px rgba(28, 80, 143, 0.12),
+            0 24px 64px rgba(28, 80, 143, 0.1);
+        opacity: 0;
+        transform: translateY(16px);
+        transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .contacts__map-wrapper.is-loaded {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* Тонкая рамка поверх */
+    .contacts__map-wrapper::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: 20px;
+        border: 1.5px solid rgba(28, 80, 143, 0.15);
+        pointer-events: none;
+        z-index: 10;
+    }
+
+    /* ─── Оверлеи сверху и снизу для глубины ─── */
+    .contacts__map-overlay-top {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 80px;
+        background: linear-gradient(
+            to bottom,
+            rgba(240, 245, 255, 0.35),
+            transparent
+        );
+        pointer-events: none;
+        z-index: 5;
+        border-radius: 20px 20px 0 0;
+    }
+
+    .contacts__map-overlay-bottom {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 80px;
+        background: linear-gradient(
+            to top,
+            rgba(240, 245, 255, 0.3),
+            transparent
+        );
+        pointer-events: none;
+        z-index: 5;
+        border-radius: 0 0 20px 20px;
+    }
+
+    /* ─── Сама карта ─── */
+    .contacts__map {
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+    }
+
+    /* ═══════════════════════════════════════════════
+       КАСТОМНЫЕ КНОПКИ ЗУМА
+    ═══════════════════════════════════════════════ */
+    .map-controls {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        z-index: 20;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background: rgba(255, 255, 255, 0.92);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-radius: 12px;
+        border: 1px solid rgba(28, 80, 143, 0.12);
+        box-shadow:
+            0 4px 16px rgba(0, 0, 0, 0.08),
+            0 1px 4px rgba(0, 0, 0, 0.06);
+        overflow: hidden;
+    }
+
+    .map-controls__btn {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        color: #1c508f;
+        transition: background 0.15s ease, color 0.15s ease;
+    }
+
+    .map-controls__btn:hover {
+        background: rgba(28, 80, 143, 0.08);
+        color: #174480;
+    }
+
+    .map-controls__btn:active {
+        background: rgba(28, 80, 143, 0.15);
+    }
+
+    .map-controls__divider {
+        width: 24px;
+        height: 1px;
+        background: rgba(28, 80, 143, 0.12);
+    }
+
+    /* ═══════════════════════════════════════════════
+       БЕЙДЖ ЛОКАЦИИ
+    ═══════════════════════════════════════════════ */
+    .map-badge {
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+        z-index: 20;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: rgba(255, 255, 255, 0.92);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-radius: 12px;
+        border: 1px solid rgba(28, 80, 143, 0.12);
+        box-shadow:
+            0 4px 16px rgba(0, 0, 0, 0.08),
+            0 1px 4px rgba(0, 0, 0, 0.04);
+        padding: 10px 16px;
+    }
+
+    .map-badge__dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: #1c508f;
+        box-shadow: 0 0 0 3px rgba(28, 80, 143, 0.2);
+        flex-shrink: 0;
+        animation: badgePulse 2.5s ease-in-out infinite;
+    }
+
+    @keyframes badgePulse {
+        0%, 100% { box-shadow: 0 0 0 3px rgba(28, 80, 143, 0.2); }
+        50%       { box-shadow: 0 0 0 6px rgba(28, 80, 143, 0.08); }
+    }
+
+    .map-badge__text {
+        display: flex;
+        flex-direction: column;
+        gap: 1px;
+    }
+
+    .map-badge__title {
+        font-family: "Montserrat", sans-serif;
+        font-weight: 600;
+        font-size: 13px;
+        color: #151515;
+        line-height: 1.3;
+    }
+
+    .map-badge__sub {
+        font-family: "Montserrat", sans-serif;
+        font-weight: 400;
+        font-size: 11px;
+        color: #6b7280;
+        line-height: 1.3;
+    }
+
+    /* ═══════════════════════════════════════════════
+       ПУЛЬСИРУЮЩИЙ МАРКЕР (инжектируется через JS)
+    ═══════════════════════════════════════════════ */
+    :global(.pulse-marker) {
+        position: relative;
+        width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    :global(.pulse-marker__ring) {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(28, 80, 143, 0.15);
+        animation: pulseRing 2.4s ease-out infinite;
+    }
+
+    :global(.pulse-marker__ring--1) {
+        width: 60px;
+        height: 60px;
+        animation-delay: 0s;
+    }
+
+    :global(.pulse-marker__ring--2) {
+        width: 44px;
+        height: 44px;
+        animation-delay: 0.3s;
+        background: rgba(28, 80, 143, 0.2);
+    }
+
+    :global(.pulse-marker__ring--3) {
+        width: 30px;
+        height: 30px;
+        animation-delay: 0.6s;
+        background: rgba(28, 80, 143, 0.25);
+    }
+
+    @keyframes pulseRing {
+        0%   { transform: scale(0.7); opacity: 1; }
+        70%  { transform: scale(1.1); opacity: 0.3; }
+        100% { transform: scale(1.2); opacity: 0; }
+    }
+
+    :global(.pulse-marker__core) {
+        position: absolute;
+        width: 36px;
+        height: 36px;
+        background: linear-gradient(135deg, #1c508f 0%, #2d6bb5 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow:
+            0 4px 12px rgba(28, 80, 143, 0.5),
+            0 0 0 3px rgba(255, 255, 255, 0.9);
+        z-index: 2;
+    }
+
+    /* ═══════════════════════════════════════════════
+       ПОПАП
+    ═══════════════════════════════════════════════ */
+    :global(.modern-popup-wrapper .leaflet-popup-content-wrapper) {
+        padding: 0;
+        border-radius: 16px;
+        box-shadow:
+            0 8px 32px rgba(0, 0, 0, 0.12),
+            0 2px 8px rgba(0, 0, 0, 0.08);
+        border: 1px solid rgba(28, 80, 143, 0.1);
+        overflow: hidden;
+    }
+
+    :global(.modern-popup-wrapper .leaflet-popup-content) {
+        margin: 0;
+        width: 240px !important;
+    }
+
+    :global(.modern-popup-wrapper .leaflet-popup-tip-container) {
+        margin-top: -1px;
+    }
+
+    :global(.modern-popup-wrapper .leaflet-popup-tip) {
+        box-shadow: none;
+        background: #fff;
+    }
+
+    :global(.modern-popup) {
+        font-family: "Montserrat", sans-serif;
+        overflow: hidden;
+    }
+
+    :global(.modern-popup__header) {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 16px 12px;
+        background: linear-gradient(135deg, #1c508f 0%, #2563b0 100%);
+    }
+
+    :global(.modern-popup__icon) {
+        width: 32px;
+        height: 32px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    :global(.modern-popup__title) {
+        font-weight: 600;
+        font-size: 14px;
+        color: #ffffff;
+        line-height: 1.3;
+    }
+
+    :global(.modern-popup__sub) {
+        font-weight: 400;
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.7);
+        line-height: 1.3;
+    }
+
+    :global(.modern-popup__divider) {
+        height: 1px;
+        background: rgba(28, 80, 143, 0.08);
+    }
+
+    :global(.modern-popup__row) {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        padding: 9px 16px;
+        font-size: 12px;
+        color: #374151;
+        font-weight: 400;
+        line-height: 1.4;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+        transition: background 0.15s ease;
+    }
+
+    :global(.modern-popup__row:last-child) {
+        border-bottom: none;
+    }
+
+    :global(.modern-popup__row:hover) {
+        background: rgba(28, 80, 143, 0.04);
+    }
+
+    /* ═══════════════════════════════════════════════
+       СКРЫТЬ СТАНДАРТНЫЕ КОНТРОЛЫ LEAFLET
+    ═══════════════════════════════════════════════ */
+    .contacts__map :global(.leaflet-control-zoom) {
+        display: none;
+    }
+
+    .contacts__map :global(.leaflet-control-attribution) {
+        font-size: 10px;
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(4px);
+        border-radius: 6px 0 0 0;
+        padding: 3px 6px;
+        color: #9ca3af;
+    }
+
+    .contacts__map :global(.leaflet-control-attribution a) {
+        color: #1c508f;
+    }
+
+    /* z-index fix */
+    .contacts__map :global(.leaflet-pane) { z-index: 1; }
+    .contacts__map :global(.leaflet-tile-pane) { z-index: 1; }
+    .contacts__map :global(.leaflet-overlay-pane) { z-index: 2; }
+    .contacts__map :global(.leaflet-marker-pane) { z-index: 3; }
+    .contacts__map :global(.leaflet-popup-pane) { z-index: 4; }
+    .contacts__map :global(.leaflet-control) { z-index: 5; }
+</style>

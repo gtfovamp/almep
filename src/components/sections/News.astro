@@ -1,0 +1,547 @@
+---
+const newsItems = [
+  {
+    image: 'assets/images/news-1.png',
+    category: 'Новости компании',
+    date: '04.02.2026',
+    readTime: '5 минут',
+    title: 'Ваш проект амбициозен? Снабжение должно соответствовать.',
+    excerpt: 'Almep Trading — это не просто поставщик, а стратегический партнёр вашего проекта. Для нас каждый клиент — это....',
+    link: '/news/1',
+  },
+  {
+    image: 'assets/images/news-2.png',
+    category: 'Новости компании',
+    date: '04.02.2026',
+    readTime: '5 минут',
+    title: 'Стройте инфраструктуру будущего вместе с ALMEP',
+    excerpt: 'Мы верим, что каждое великое здание или завод начинаются с правильно подобранных деталей....',
+    link: '/news/2',
+  },
+  {
+    image: 'assets/images/news-3.png',
+    category: 'Новости компании',
+    date: '04.02.2026',
+    readTime: '5 минут',
+    title: 'Полная мощность снабжения — от строительства до индустрии.',
+    excerpt: 'Мы не просто продаём продукцию, мы закладываем технический фундамент вашего проекта. С долговечными инструментами Berent и Harden....',
+    link: '/news/3',
+  },
+  {
+    image: 'assets/images/news-1.png',
+    category: 'Новости компании',
+    date: '05.02.2026',
+    readTime: '4 минуты',
+    title: 'Новые поставки оборудования EKF уже на складе.',
+    excerpt: 'Мы рады сообщить о поступлении новой партии оборудования от EKF. Широкий ассортимент решений для электроснабжения....',
+    link: '/news/4',
+  },
+  {
+    image: 'assets/images/news-2.png',
+    category: 'Новости компании',
+    date: '06.02.2026',
+    readTime: '6 минут',
+    title: 'Как правильно выбрать кабельную продукцию для промышленного объекта.',
+    excerpt: 'Выбор кабельной продукции — ответственный процесс, влияющий на безопасность и надёжность всего объекта....',
+    link: '/news/5',
+  },
+  {
+    image: 'assets/images/news-3.png',
+    category: 'Новости компании',
+    date: '07.02.2026',
+    readTime: '3 минуты',
+    title: 'ALMEP расширяет географию поставок.',
+    excerpt: 'Компания ALMEP Trading объявляет о расширении географии поставок и открытии новых логистических маршрутов....',
+    link: '/news/6',
+  },
+];
+
+// Разбиваем по 3 карточки на слайд
+const slides = [];
+for (let i = 0; i < newsItems.length; i += 3) {
+  slides.push(newsItems.slice(i, i + 3));
+}
+---
+
+<section class="news">
+  <div class="news__inner">
+
+    <h2 class="news__title">Новости</h2>
+
+    <div class="news__slider-wrap">
+
+      <div class="news__slider" id="newsSlider">
+        {slides.map((slide, slideIndex) => (
+          <div class={`news__slide ${slideIndex === 0 ? 'news__slide--active' : ''}`}>
+            <div class="news__grid">
+              {slide.map((item) => (
+                <div class="news__card">
+
+                  <!-- Картинка -->
+                  <div class="news__card-img-wrap">
+                    <img
+                      src={item.image}
+                      alt={item.title}
+                      class="news__card-img"
+                    />
+                  </div>
+
+                  <!-- Контент -->
+                  <div class="news__card-body">
+
+                    <div class="news__card-meta-wrap">
+
+                      <!-- Категория -->
+                      <div class="news__card-category">
+                        <span class="news__card-category-text">{item.category}</span>
+                      </div>
+
+                      <!-- Дата и время чтения -->
+                      <div class="news__card-meta">
+                        <div class="news__card-date">
+                          <img src="assets/icons/calendar.svg" alt="Дата" class="news__card-icon" width="28" height="28" />
+                          <span class="news__card-meta-text">{item.date}</span>
+                        </div>
+                        <div class="news__card-time">
+                          <img src="assets/icons/time.svg" alt="Время чтения" class="news__card-icon" width="29" height="29" />
+                          <span class="news__card-meta-text">{item.readTime}</span>
+                        </div>
+                      </div>
+
+                    </div>
+
+                    <!-- Текст -->
+                    <div class="news__card-content">
+                      <h3 class="news__card-title">{item.title}</h3>
+                      <p class="news__card-excerpt">{item.excerpt}</p>
+                    </div>
+
+                    <!-- Ссылка -->
+                    <a href={item.link} class="news__card-link">
+                      Узнать больше
+                      <svg width="27" height="20" viewBox="0 0 27 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M0.013702 10.394L26.1767 9.68691M26.1767 9.68691L16.8428 0.353097M26.1767 9.68691L16.9401 18.9235" stroke="#1C508F"/>
+                      </svg>
+                    </a>
+
+                  </div>
+
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <!-- Стрелка вправо -->
+      <button class="news__arrow news__arrow--right" id="newsArrowRight" aria-label="Следующий слайд">
+        <svg width="23" height="30" viewBox="0 0 23 30" fill="none">
+          <path d="M3 3L20 15L3 27" stroke="#000000" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+
+      <!-- Стрелка влево -->
+      <button class="news__arrow news__arrow--left" id="newsArrowLeft" aria-label="Предыдущий слайд">
+        <svg width="23" height="30" viewBox="0 0 23 30" fill="none">
+          <path d="M20 3L3 15L20 27" stroke="#000000" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+
+    </div>
+
+    <!-- Нижняя панель: точки + ссылка -->
+    <div class="news__bottom">
+
+      <div></div>
+
+      <div class="news__dots" id="newsDots">
+        {slides.map((_, i) => (
+          <button
+            class={`news__dot ${i === 0 ? 'news__dot--active' : ''}`}
+            data-index={i}
+            aria-label={`Слайд ${i + 1}`}
+          />
+        ))}
+      </div>
+
+      <a href="/news" class="news__more">
+        Читать новости
+        <svg width="27" height="20" viewBox="0 0 27 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0.013702 10.394L26.1767 9.68691M26.1767 9.68691L16.8428 0.353097M26.1767 9.68691L16.9401 18.9235" stroke="#1C508F"/>
+        </svg>
+      </a>
+
+    </div>
+
+  </div>
+
+</section>
+
+<style>
+  /* ===== Секция ===== */
+  .news {
+    width: 100%;
+    background: #FFFFFF;
+    padding: 80px 0;
+  }
+
+  .news__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 60px;
+    width: 1455px;
+    margin: 0 auto;
+  }
+
+  /* ===== Заголовок ===== */
+  .news__title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    font-size: 48px;
+    line-height: 110%;
+    color: #000000;
+    width: 100%;
+    margin: 0;
+  }
+
+  /* ===== Слайдер ===== */
+  .news__slider-wrap {
+    position: relative;
+    width: 1410px;
+  }
+
+  .news__slider {
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .news__slide {
+    display: none;
+  }
+
+  .news__slide--active {
+    display: block;
+  }
+
+  /* ===== Сетка карточек ===== */
+  .news__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 450px);
+    gap: 30px;
+    padding: 10px;
+  }
+
+  /* ===== Карточка ===== */
+  .news__card {
+    display: flex;
+    flex-direction: column;
+    width: 450px;
+    min-height: 672px;
+    background: #FFFFFF;
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.3);
+    border-radius: 7px;
+    overflow: hidden;
+  }
+
+  /* ===== Картинка ===== */
+  .news__card-img-wrap {
+    width: 100%;
+    height: 300px;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .news__card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease;
+  }
+
+  .news__card:hover .news__card-img {
+    transform: scale(1.03);
+  }
+
+  /* ===== Тело карточки ===== */
+  .news__card-body {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 25px 30px;
+    flex: 1;
+  }
+
+  /* ===== Мета-обёртка ===== */
+  .news__card-meta-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+    width: 100%;
+  }
+
+  /* ===== Категория ===== */
+  .news__card-category {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 175px;
+    height: 41px;
+    background: #A4C5EE;
+    border-radius: 17px;
+    flex-shrink: 0;
+  }
+
+  .news__card-category-text {
+    font-family: 'Raleway', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 110%;
+    color: #003F8D;
+  }
+
+  /* ===== Дата + время ===== */
+  .news__card-meta {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+
+  .news__card-date,
+  .news__card-time {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 13px;
+  }
+
+  .news__card-icon {
+    flex-shrink: 0;
+    object-fit: contain;
+  }
+
+  .news__card-meta-text {
+    font-family: 'Raleway', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 110%;
+    color: #676767;
+    white-space: nowrap;
+  }
+
+  /* ===== Контент ===== */
+  .news__card-content {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    width: 100%;
+  }
+
+  .news__card-title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 110%;
+    letter-spacing: -0.01em;
+    color: #000000;
+    margin: 0;
+  }
+
+  .news__card-excerpt {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 130%;
+    letter-spacing: -0.01em;
+    color: #000000;
+    margin: 0;
+  }
+
+  /* ===== Ссылка "Узнать больше" ===== */
+  .news__card-link {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 11px;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 110%;
+    color: #1C508F;
+    text-decoration: none;
+    margin-top: auto;
+    transition: opacity 0.2s ease;
+  }
+
+  .news__card-link:hover {
+    opacity: 0.75;
+  }
+
+  .news__card-link svg {
+    flex-shrink: 0;
+  }
+
+  /* ===== Стрелки ===== */
+  .news__arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 76px;
+    height: 76px;
+    background: #F1F1F1;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease;
+    z-index: 10;
+  }
+
+  .news__arrow:hover {
+    background: #E0E0E0;
+  }
+
+  .news__arrow--right {
+    right: -38px;
+  }
+
+  .news__arrow--left {
+    left: -38px;
+  }
+
+  .news__arrow--left.is-hidden,
+  .news__arrow--right.is-hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /* ===== Нижняя панель ===== */
+  .news__bottom {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 1410px;
+    position: relative;
+  }
+
+  /* ===== Точки ===== */
+  .news__dots {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .news__dot {
+    width: 17px;
+    height: 17px;
+    border-radius: 50%;
+    border: none;
+    background: #D9D9D9;
+    cursor: pointer;
+    padding: 0;
+    transition: background 0.2s ease;
+  }
+
+  .news__dot--active {
+    background: #1C508F;
+  }
+
+  /* ===== Ссылка "Читать новости" ===== */
+  .news__more {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 11px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 110%;
+    color: #1C508F;
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+  }
+
+  .news__more:hover {
+    opacity: 0.75;
+  }
+
+  .news__more svg {
+    flex-shrink: 0;
+  }
+
+  /* ── Кнопка ── */
+    .partners__btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 330px;
+        height: 85px;
+        background: #1c508f;
+        box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.3);
+        border-radius: 9px;
+        font-family: "Montserrat", sans-serif;
+        font-weight: 400;
+        font-size: 18px;
+        line-height: 130%;
+        letter-spacing: -0.01em;
+        color: #fff;
+        text-decoration: none;
+        transition: background 0.2s ease;
+    }
+
+    .partners__btn:hover {
+        background: #174480;
+    }
+
+</style>
+
+<script>
+  const newsSlides = document.querySelectorAll('.news__slide');
+  const newsDots   = document.querySelectorAll('.news__dot');
+  const newsArrowRight = document.getElementById('newsArrowRight');
+  const newsArrowLeft  = document.getElementById('newsArrowLeft');
+
+  let newsCurrent = 0;
+  const newsTotal = newsSlides.length;
+
+  function newsGoTo(index: number) {
+    newsSlides[newsCurrent].classList.remove('news__slide--active');
+    newsDots[newsCurrent].classList.remove('news__dot--active');
+
+    newsCurrent = index;
+
+    newsSlides[newsCurrent].classList.add('news__slide--active');
+    newsDots[newsCurrent].classList.add('news__dot--active');
+
+    newsArrowLeft?.classList.toggle('is-hidden', newsCurrent === 0);
+    newsArrowRight?.classList.toggle('is-hidden', newsCurrent === newsTotal - 1);
+  }
+
+  // Инициализация
+  newsArrowLeft?.classList.add('is-hidden');
+  if (newsTotal <= 1) newsArrowRight?.classList.add('is-hidden');
+
+  newsArrowRight?.addEventListener('click', () => {
+    if (newsCurrent < newsTotal - 1) newsGoTo(newsCurrent + 1);
+  });
+
+  newsArrowLeft?.addEventListener('click', () => {
+    if (newsCurrent > 0) newsGoTo(newsCurrent - 1);
+  });
+
+  newsDots.forEach((dot, i) => {
+    dot.addEventListener('click', () => newsGoTo(i));
+  });
+</script>

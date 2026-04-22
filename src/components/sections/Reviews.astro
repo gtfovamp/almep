@@ -1,0 +1,424 @@
+---
+const reviews = [
+  {
+    text: 'Лучшее место для покупки инструментов в Баку. В Almep Trading всегда в наличии качественные бренды Harden и Sensh. Быстрая доставка и профессиональный подход. Спасибо за сотрудничество!',
+    author: 'Джавид Аскеров',
+  },
+  {
+    text: 'Давно пользуюсь инструментом Harden и Berent. Очень прочная сталь, эргономичные рукоятки и высокая износостойкость. Для профессиональных работ — это лучший выбор по соотношению цена-качество.',
+    author: 'Али Агаев',
+  },
+  {
+    text: 'Закупали партию ручного инструмента Sensh. Качество отличное, инструмент не гнётся и не ломается при высоких нагрузках. Теперь работа идёт быстрее и качественнее.',
+    author: 'Джейхун Керимов',
+  },
+  {
+    text: 'Отличный сервис и широкий ассортимент. Заказывали оборудование EKF для нашего объекта — всё пришло вовремя, упаковано надёжно. Будем работать дальше!',
+    author: 'Эльшан Мамедов',
+  },
+  {
+    text: 'Профессиональная команда, которая знает свой продукт. Помогли подобрать нужные инструменты под конкретные задачи. Очень доволен качеством и ценой.',
+    author: 'Рашад Гусейнов',
+  },
+  {
+    text: 'Работаем с Almep Trading уже несколько лет. Надёжный поставщик, всегда выполняют обязательства. Рекомендую всем строительным компаниям.',
+    author: 'Самир Алиев',
+  },
+  {
+    text: 'Купил инструменты Berent для домашней мастерской. Качество превзошло ожидания — всё работает как надо. Цены разумные, доставка быстрая.',
+    author: 'Фарид Исмайлов',
+  },
+];
+
+// По 3 карточки на слайд
+const slides = [];
+for (let i = 0; i < reviews.length; i += 3) {
+  slides.push(reviews.slice(i, i + 3));
+}
+---
+
+<section class="reviews">
+  <div class="reviews__inner">
+
+    <h2 class="reviews__title">Отзывы</h2>
+
+    <div class="reviews__slider-wrap">
+
+      <div class="reviews__slider" id="reviewsSlider">
+        {slides.map((slide, slideIndex) => (
+          <div class={`reviews__slide ${slideIndex === 0 ? 'reviews__slide--active' : ''}`}>
+            <div class="reviews__grid">
+              {slide.map((item) => (
+                <div class="reviews__card">
+
+                  <!-- Кавычка -->
+                  <span class="reviews__quote">"</span>
+
+                  <!-- Контент карточки -->
+                  <div class="reviews__card-inner">
+
+                    <div class="reviews__card-top">
+                      <!-- Текст отзыва -->
+                      <p class="reviews__card-text">{item.text}</p>
+                      <!-- Линия -->
+                      <hr class="reviews__card-line" />
+                    </div>
+
+                    <!-- Автор -->
+                    <div class="reviews__card-author-wrap">
+                      <span class="reviews__card-author">{item.author}</span>
+                    </div>
+
+                  </div>
+
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <!-- Стрелка вправо -->
+      <button class="reviews__arrow reviews__arrow--right" id="reviewsArrowRight" aria-label="Следующий слайд">
+        <svg width="23" height="30" viewBox="0 0 23 30" fill="none">
+          <path d="M3 3L20 15L3 27" stroke="#000000" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+
+      <!-- Стрелка влево -->
+      <button class="reviews__arrow reviews__arrow--left" id="reviewsArrowLeft" aria-label="Предыдущий слайд">
+        <svg width="23" height="30" viewBox="0 0 23 30" fill="none">
+          <path d="M20 3L3 15L20 27" stroke="#000000" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+
+    </div>
+
+    <!-- Нижняя панель -->
+    <div class="reviews__bottom">
+
+      <div></div>
+
+      <div class="reviews__dots" id="reviewsDots">
+        {slides.map((_, i) => (
+          <button
+            class={`reviews__dot ${i === 0 ? 'reviews__dot--active' : ''}`}
+            data-index={i}
+            aria-label={`Слайд ${i + 1}`}
+          />
+        ))}
+      </div>
+
+      <a href="/reviews" class="reviews__more">
+        Все отзывы
+        <svg width="27" height="20" viewBox="0 0 27 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0.013702 10.394L26.1767 9.68691M26.1767 9.68691L16.8428 0.353097M26.1767 9.68691L16.9401 18.9235" stroke="#1C508F"/>
+        </svg>
+      </a>
+
+    </div>
+
+    <!-- Кнопка -->
+    <a href="/contact" class="reviews__btn">Запросить консультацию</a>
+
+  </div>
+</section>
+
+<style>
+  /* ===== Секция ===== */
+  .reviews {
+    width: 100%;
+    background: #FFFFFF;
+    padding: 80px 0;
+  }
+
+  .reviews__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 60px;
+    width: 1469px;
+    margin: 0 auto;
+  }
+
+  /* ===== Заголовок ===== */
+  .reviews__title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    font-size: 48px;
+    line-height: 110%;
+    color: #000000;
+    width: 100%;
+    margin: 0;
+  }
+
+  /* ===== Слайдер ===== */
+  .reviews__slider-wrap {
+    position: relative;
+    width: 1410px;
+  }
+
+  .reviews__slider {
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .reviews__slide {
+    display: none;
+  }
+
+  .reviews__slide--active {
+    display: block;
+  }
+
+  /* ===== Сетка ===== */
+  .reviews__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 450px);
+    gap: 30px;
+    padding: 10px;
+  }
+
+  /* ===== Карточка ===== */
+  .reviews__card {
+    position: relative;
+    width: 435px;
+    height: 420px;
+    background: #FFFFFF;
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.3);
+    border-radius: 7px;
+    box-sizing: border-box;
+  }
+
+  /* ===== Большая кавычка ===== */
+  .reviews__quote {
+    position: absolute;
+    left: 25px;
+    top: 25px;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 400;
+    font-size: 128px;
+    line-height: 110%;
+    color: #000000;
+    user-select: none;
+    pointer-events: none;
+  }
+
+  /* ===== Внутренний контейнер ===== */
+  .reviews__card-inner {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 22px;
+    width: 400px;
+    left: 25px;
+    top: 116px;
+    bottom: 25px;
+  }
+
+  /* ===== Верхняя часть: текст + линия ===== */
+  .reviews__card-top {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 85px;
+    width: 400px;
+    flex: 1;
+  }
+
+  /* ===== Текст отзыва ===== */
+  .reviews__card-text {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 130%;
+    letter-spacing: -0.01em;
+    color: #000000;
+    margin: 0;
+    width: 400px;
+  }
+
+  /* ===== Линия ===== */
+  .reviews__card-line {
+    width: 400px;
+    border: none;
+    border-top: 1px solid #000000;
+    margin: 0;
+    align-self: stretch;
+  }
+
+  /* ===== Автор ===== */
+  .reviews__card-author-wrap {
+    width: 400px;
+  }
+
+  .reviews__card-author {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 110%;
+    letter-spacing: -0.01em;
+    color: #000000;
+  }
+
+  /* ===== Стрелки ===== */
+  .reviews__arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 76px;
+    height: 76px;
+    background: #F1F1F1;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease;
+    z-index: 10;
+  }
+
+  .reviews__arrow:hover {
+    background: #E0E0E0;
+  }
+
+  .reviews__arrow--right {
+    right: -38px;
+  }
+
+  .reviews__arrow--left {
+    left: -38px;
+  }
+
+  .reviews__arrow--left.is-hidden,
+  .reviews__arrow--right.is-hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /* ===== Нижняя панель ===== */
+  .reviews__bottom {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 1410px;
+    position: relative;
+  }
+
+  /* ===== Точки ===== */
+  .reviews__dots {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .reviews__dot {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    border: none;
+    background: #D9D9D9;
+    cursor: pointer;
+    padding: 0;
+    transition: background 0.2s ease;
+  }
+
+  .reviews__dot--active {
+    width: 17px;
+    height: 17px;
+    background: #1C508F;
+  }
+
+  /* ===== Ссылка "Все отзывы" ===== */
+  .reviews__more {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 11px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 110%;
+    color: #1C508F;
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+  }
+
+  .reviews__more:hover {
+    opacity: 0.75;
+  }
+
+  .reviews__more svg {
+    flex-shrink: 0;
+  }
+
+  /* ===== Кнопка ===== */
+  .reviews__btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 330px;
+    height: 85px;
+    background: #1C508F;
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.3);
+    border-radius: 9px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 130%;
+    letter-spacing: -0.01em;
+    color: #FFFFFF;
+    text-decoration: none;
+    transition: background 0.2s ease;
+  }
+
+  .reviews__btn:hover {
+    background: #174480;
+  }
+</style>
+
+<script>
+  const reviewsSlides     = document.querySelectorAll('.reviews__slide');
+  const reviewsDots       = document.querySelectorAll('.reviews__dot');
+  const reviewsArrowRight = document.getElementById('reviewsArrowRight');
+  const reviewsArrowLeft  = document.getElementById('reviewsArrowLeft');
+
+  let reviewsCurrent = 0;
+  const reviewsTotal = reviewsSlides.length;
+
+  function reviewsGoTo(index: number) {
+    reviewsSlides[reviewsCurrent].classList.remove('reviews__slide--active');
+    reviewsDots[reviewsCurrent].classList.remove('reviews__dot--active');
+
+    reviewsCurrent = index;
+
+    reviewsSlides[reviewsCurrent].classList.add('reviews__slide--active');
+    reviewsDots[reviewsCurrent].classList.add('reviews__dot--active');
+
+    reviewsArrowLeft?.classList.toggle('is-hidden', reviewsCurrent === 0);
+    reviewsArrowRight?.classList.toggle('is-hidden', reviewsCurrent === reviewsTotal - 1);
+  }
+
+  // Инициализация
+  reviewsArrowLeft?.classList.add('is-hidden');
+  if (reviewsTotal <= 1) reviewsArrowRight?.classList.add('is-hidden');
+
+  reviewsArrowRight?.addEventListener('click', () => {
+    if (reviewsCurrent < reviewsTotal - 1) reviewsGoTo(reviewsCurrent + 1);
+  });
+
+  reviewsArrowLeft?.addEventListener('click', () => {
+    if (reviewsCurrent > 0) reviewsGoTo(reviewsCurrent - 1);
+  });
+
+  reviewsDots.forEach((dot, i) => {
+    dot.addEventListener('click', () => reviewsGoTo(i));
+  });
+</script>
