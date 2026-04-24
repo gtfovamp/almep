@@ -87,8 +87,10 @@ const stats = [
     flex-direction: column;
     align-items: flex-start;
     gap: 50px;
-    width: 1409px;
+    max-width: 1468px; /* ← вместо width */
+    width: 100%;
     margin: 0 auto;
+    padding: 0 20px; /* добавь отступы по бокам */
   }
 
   /* === Верхний блок: Миссия + Цели === */
@@ -96,9 +98,9 @@ const stats = [
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
+    gap: 220px; /* Расстояние между блоками, подберите нужное */
     width: 100%;
-    padding: 0 150px; /* Добавляем отступы слева и справа */
   }
 
   .mission__block {
