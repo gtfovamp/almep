@@ -1,5 +1,12 @@
 ---
-// Blog.astro
+import type { Lang } from '../../utils/i18n';
+
+interface Props {
+  t: any;
+  lang: Lang;
+}
+
+const { t, lang } = Astro.props;
 ---
 
 <section class="blog">
@@ -12,28 +19,24 @@
     <div class="blog__card-inner">
 
       <!-- Заголовок секции -->
-      <h2 class="blog__title">Блог</h2>
+      <h2 class="blog__title">{t.blog.title}</h2>
 
       <!-- Контент -->
       <div class="blog__content">
 
         <div class="blog__text-wrap">
           <!-- Заголовок статьи -->
-          <h3 class="blog__post-title">Almep Trading — Точка опоры вашего проекта</h3>
+          <h3 class="blog__post-title">{t.blog.post_title}</h3>
 
           <!-- Текст -->
           <p class="blog__post-text">
-            За каждым успешным проектом стоят правильные партнеры.
-            Мы, компания Almep Trading, не просто поставляем профессиональные
-            инструменты для строительства и производства — мы становимся частью вашего успеха.
-            С брендами Berent, Harden, Sensh и EKF мы делаем ваши проекты быстрее,
-            надежнее и эффективнее...
+            {t.blog.post_text}
           </p>
         </div>
 
         <!-- Ссылка "Читать дальше" -->
-        <a href="/blog/1" class="blog__read-more">
-          <span class="blog__read-more-text">Читать дальше...</span>
+        <a href={`/${lang}/blog/1`} class="blog__read-more">
+          <span class="blog__read-more-text">{t.blog.read_more}</span>
           <span class="blog__read-more-line"></span>
         </a>
 

@@ -1,0 +1,50 @@
+---
+import { LANGS, getTranslations, type Lang } from '../../utils/i18n';
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/layout/Header.astro';
+import Hero from '../../components/sections/Hero.astro';
+import About from '../../components/sections/About.astro';
+import Features from '../../components/sections/Features.astro';
+import Portfolio from '../../components/sections/Portfolio.astro';
+import Services from '../../components/sections/Services.astro';
+import Mission from '../../components/sections/Mission.astro';
+import Products from '../../components/sections/Products.astro';
+import WhyUs from '../../components/sections/WhyUs.astro';
+import Partners from '../../components/sections/Partners.astro';
+import News from '../../components/sections/News.astro';
+import Blog from '../../components/sections/Blog.astro';
+import Reviews from '../../components/sections/Reviews.astro';
+import Consultation from '../../components/sections/Consultation.astro';
+import Contacts from '../../components/sections/Contacts.astro';
+import Footer from '../../components/layout/Footer.astro';
+
+export function getStaticPaths() {
+  return LANGS.map(lang => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params as { lang: Lang };
+const t = getTranslations(lang);
+---
+
+<Layout title={`Almep Trading — ${t.nav.home}`}>
+  <main>
+    <div style="position: relative;">
+      <Header t={t} lang={lang} />
+      <Hero t={t} lang={lang} />
+    </div>
+    <About t={t} lang={lang} />
+    <Features t={t} lang={lang} />
+    <Portfolio t={t} lang={lang} />
+    <Services t={t} lang={lang} />
+    <Mission t={t} lang={lang} />
+    <Products t={t} lang={lang} />
+    <WhyUs t={t} lang={lang} />
+    <Partners t={t} lang={lang} />
+    <News t={t} lang={lang} />
+    <Blog t={t} lang={lang} />
+    <Reviews t={t} lang={lang} />
+    <Consultation t={t} lang={lang} />
+    <Contacts t={t} lang={lang} />
+    <Footer t={t} lang={lang} />
+  </main>
+</Layout>

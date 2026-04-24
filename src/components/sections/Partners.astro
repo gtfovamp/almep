@@ -1,26 +1,31 @@
 ---
+import type { Lang } from '../../utils/i18n';
+
+interface Props {
+  t: any;
+  lang: Lang;
+}
+
+const { t, lang } = Astro.props;
+
 const partners = [
     {
-        image: "assets/images/partner-1.png",
-        alt: "Партнер 1",
+        image: "/assets/images/partner-1.png",
         width: 218,
         height: 57,
     },
     {
-        image: "assets/images/partner-2.png",
-        alt: "Партнер 2",
+        image: "/assets/images/partner-2.png",
         width: 270,
         height: 57,
     },
     {
-        image: "assets/images/partner-3.png",
-        alt: "Партнер 3",
+        image: "/assets/images/partner-3.png",
         width: 160,
         height: 106,
     },
     {
-        image: "assets/images/partner-4.png",
-        alt: "Партнер 4",
+        image: "/assets/images/partner-4.png",
         width: 202,
         height: 57,
     },
@@ -29,18 +34,18 @@ const partners = [
 
 <section class="partners">
     <div class="partners__inner">
-        <h2 class="partners__title">Партнеры</h2>
+        <h2 class="partners__title">{t.partners.title}</h2>
 
         <div class="partners__content">
             <!-- Логотипы партнеров -->
             <div class="partners__logos">
                 <div class="partners__row">
                     {
-                        partners.map((partner) => (
+                        partners.map((partner, index) => (
                             <div class="partners__logo">
                                 <img
                                     src={partner.image}
-                                    alt={partner.alt}
+                                    alt={`${t.partners.partner_logo} ${index + 1}`}
                                     width={partner.width}
                                     height={partner.height}
                                 />
@@ -50,8 +55,8 @@ const partners = [
                 </div>
 
                 <!-- Ссылка "Все отзывы" -->
-                <a href="/reviews" class="partners__link">
-                    <span class="partners__link-text">Все отзывы</span>
+                <a href={`/${lang}/reviews`} class="partners__link">
+                    <span class="partners__link-text">{t.partners.all_reviews}</span>
                     <svg
                         width="27"
                         height="20"
@@ -67,7 +72,7 @@ const partners = [
             </div>
 
             <!-- Кнопка консультации -->
-            <a href="/contact" class="partners__btn">Запросить консультацию</a>
+            <a href={`/${lang}/contacts`} class="partners__btn">{t.partners.btn_consultation}</a>
         </div>
     </div>
 </section>

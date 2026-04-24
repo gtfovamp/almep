@@ -1,60 +1,21 @@
 ---
-const newsItems = [
-  {
-    image: 'assets/images/news-1.png',
-    category: 'Новости компании',
-    date: '04.02.2026',
-    readTime: '5 минут',
-    title: 'Ваш проект амбициозен? Снабжение должно соответствовать.',
-    excerpt: 'Almep Trading — это не просто поставщик, а стратегический партнёр вашего проекта. Для нас каждый клиент — это....',
-    link: '/news/1',
-  },
-  {
-    image: 'assets/images/news-2.png',
-    category: 'Новости компании',
-    date: '04.02.2026',
-    readTime: '5 минут',
-    title: 'Стройте инфраструктуру будущего вместе с Almep',
-    excerpt: 'Мы верим, что каждое великое здание или завод начинаются с правильно подобранных деталей....',
-    link: '/news/2',
-  },
-  {
-    image: 'assets/images/news-3.png',
-    category: 'Новости компании',
-    date: '04.02.2026',
-    readTime: '5 минут',
-    title: 'Полная мощность снабжения — от строительства до индустрии.',
-    excerpt: 'Мы не просто продаём продукцию, мы закладываем технический фундамент вашего проекта. С долговечными инструментами Berent и Harden....',
-    link: '/news/3',
-  },
-  {
-    image: 'assets/images/news-1.png',
-    category: 'Новости компании',
-    date: '05.02.2026',
-    readTime: '4 минуты',
-    title: 'Новые поставки оборудования EKF уже на складе.',
-    excerpt: 'Мы рады сообщить о поступлении новой партии оборудования от EKF. Широкий ассортимент решений для электроснабжения....',
-    link: '/news/4',
-  },
-  {
-    image: 'assets/images/news-2.png',
-    category: 'Новости компании',
-    date: '06.02.2026',
-    readTime: '6 минут',
-    title: 'Как правильно выбрать кабельную продукцию для промышленного объекта.',
-    excerpt: 'Выбор кабельной продукции — ответственный процесс, влияющий на безопасность и надёжность всего объекта....',
-    link: '/news/5',
-  },
-  {
-    image: 'assets/images/news-3.png',
-    category: 'Новости компании',
-    date: '07.02.2026',
-    readTime: '3 минуты',
-    title: 'Almep расширяет географию поставок.',
-    excerpt: 'Компания Almep Trading объявляет о расширении географии поставок и открытии новых логистических маршрутов....',
-    link: '/news/6',
-  },
-];
+import type { Lang } from '../../utils/i18n';
+
+interface Props {
+  t: any;
+  lang: Lang;
+}
+
+const { t, lang } = Astro.props;
+
+// Получаем новости из переводов и добавляем изображения + ссылки
+const newsItems = t.news.items.map((item: any, index: number) => ({
+  ...item,
+  image: `/assets/images/news-${(index % 3) + 1}.png`, // Циклично используем 3 изображения
+  link: `/${lang}/news/${index + 1}`,
+  category: t.news.category_company,
+  readTimeFormatted: `${item.readTime} ${item.readTime === '1' ? t.news.minute : t.news.minutes}`
+}));
 
 // Разбиваем по 3 карточки на слайд
 const slides = [];
@@ -66,7 +27,7 @@ for (let i = 0; i < newsItems.length; i += 3) {
 <section class="news">
   <div class="news__inner">
 
-    <h2 class="news__title">Новости</h2>
+    <h2 class="news__title">{t.news.title}</h2>
 
     <div class="news__slider-wrap">
 
@@ -74,7 +35,7 @@ for (let i = 0; i < newsItems.length; i += 3) {
         {slides.map((slide, slideIndex) => (
           <div class={`news__slide ${slideIndex === 0 ? 'news__slide--active' : ''}`}>
             <div class="news__grid">
-              {slide.map((item) => (
+              {slide.map((item: any) => (
                 <div class="news__card">
 
                   <!-- Картинка -->
@@ -99,12 +60,12 @@ for (let i = 0; i < newsItems.length; i += 3) {
                       <!-- Дата и время чтения -->
                       <div class="news__card-meta">
                         <div class="news__card-date">
-                          <img src="assets/icons/calendar.svg" alt="Дата" class="news__card-icon" width="28" height="28" />
+                          <img src="/assets/icons/calendar.svg" alt={t.news.date_alt} class="news__card-icon" width="28" height="28" />
                           <span class="news__card-meta-text">{item.date}</span>
                         </div>
                         <div class="news__card-time">
-                          <img src="assets/icons/time.svg" alt="Время чтения" class="news__card-icon" width="29" height="29" />
-                          <span class="news__card-meta-text">{item.readTime}</span>
+                          <img src="/assets/icons/time.svg" alt={t.news.time_alt} class="news__card-icon" width="29" height="29" />
+                          <span class="news__card-meta-text">{item.readTimeFormatted}</span>
                         </div>
                       </div>
 
@@ -118,7 +79,7 @@ for (let i = 0; i < newsItems.length; i += 3) {
 
                     <!-- Ссылка -->
                     <a href={item.link} class="news__card-link">
-                      Узнать больше
+                      {t.news.learn_more}
                       <svg width="27" height="20" viewBox="0 0 27 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M0.013702 10.394L26.1767 9.68691M26.1767 9.68691L16.8428 0.353097M26.1767 9.68691L16.9401 18.9235" stroke="#1C508F"/>
                       </svg>
@@ -134,14 +95,14 @@ for (let i = 0; i < newsItems.length; i += 3) {
       </div>
 
       <!-- Стрелка вправо -->
-      <button class="news__arrow news__arrow--right" id="newsArrowRight" aria-label="Следующий слайд">
+      <button class="news__arrow news__arrow--right" id="newsArrowRight" aria-label={t.news.aria_next}>
         <svg width="23" height="30" viewBox="0 0 23 30" fill="none">
           <path d="M3 3L20 15L3 27" stroke="#000000" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </button>
 
       <!-- Стрелка влево -->
-      <button class="news__arrow news__arrow--left" id="newsArrowLeft" aria-label="Предыдущий слайд">
+      <button class="news__arrow news__arrow--left" id="newsArrowLeft" aria-label={t.news.aria_prev}>
         <svg width="23" height="30" viewBox="0 0 23 30" fill="none">
           <path d="M20 3L3 15L20 27" stroke="#000000" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
@@ -159,13 +120,13 @@ for (let i = 0; i < newsItems.length; i += 3) {
           <button
             class={`news__dot ${i === 0 ? 'news__dot--active' : ''}`}
             data-index={i}
-            aria-label={`Слайд ${i + 1}`}
+            aria-label={`${t.news.aria_slide} ${i + 1}`}
           />
         ))}
       </div>
 
-      <a href="/news" class="news__more">
-        Читать новости
+      <a href={`/${lang}/news`} class="news__more">
+        {t.news.read_news}
         <svg width="27" height="20" viewBox="0 0 27 20" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M0.013702 10.394L26.1767 9.68691M26.1767 9.68691L16.8428 0.353097M26.1767 9.68691L16.9401 18.9235" stroke="#1C508F"/>
         </svg>
@@ -480,31 +441,6 @@ for (let i = 0; i < newsItems.length; i += 3) {
   .news__more svg {
     flex-shrink: 0;
   }
-
-  /* ── Кнопка ── */
-    .partners__btn {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 330px;
-        height: 85px;
-        background: #1c508f;
-        box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.3);
-        border-radius: 9px;
-        font-family: "Montserrat", sans-serif;
-        font-weight: 400;
-        font-size: 18px;
-        line-height: 130%;
-        letter-spacing: -0.01em;
-        color: #fff;
-        text-decoration: none;
-        transition: background 0.2s ease;
-    }
-
-    .partners__btn:hover {
-        background: #174480;
-    }
-
 </style>
 
 <script>

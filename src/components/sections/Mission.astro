@@ -1,18 +1,15 @@
 ---
-const stats = [
-  {
-    number: '1',
-    text: 'Качество мирового уровня.',
-  },
-  {
-    number: '2',
-    text: 'Оперативность и стабильность поставок.',
-  },
-  {
-    number: '3',
-    text: 'Профессиональная команда и техническая поддержка.',
-  },
-];
+import type { Lang } from '../../utils/i18n';
+
+interface Props {
+  t: any;
+  lang: Lang;
+}
+
+const { t, lang } = Astro.props;
+
+// Получаем статистику из переводов
+const stats = t.mission.stats;
 ---
 
 <section class="mission">
@@ -23,19 +20,17 @@ const stats = [
 
       <!-- Левый блок: Миссия -->
       <div class="mission__block mission__block--left">
-        <h2 class="mission__title">Миссия</h2>
+        <h2 class="mission__title">{t.mission.mission_title}</h2>
         <p class="mission__text">
-          Обеспечивать азербайджанский рынок долговечными, безопасными
-          и профессиональными строительными изделиями
+          {t.mission.mission_text}
         </p>
       </div>
 
       <!-- Правый блок: Цели -->
       <div class="mission__block mission__block--right">
-        <h2 class="mission__title mission__title--right">Цели</h2>
+        <h2 class="mission__title mission__title--right">{t.mission.goals_title}</h2>
         <p class="mission__text mission__text--right">
-          Стать вашим долгосрочным стратегическим партнером, обеспечивая
-          комплексное снабжение и экспертную поддержку на каждом этапе.
+          {t.mission.goals_text}
         </p>
       </div>
 
@@ -43,7 +38,7 @@ const stats = [
 
     <!-- Три блока со скобками -->
     <div class="mission__stats">
-      {stats.map((item) => (
+      {stats.map((item: any) => (
         <div class="mission__stat">
 
           <!-- Угловые скобки через CSS -->
@@ -68,7 +63,7 @@ const stats = [
 
     <!-- Кнопка -->
     <div class="mission__cta">
-      <a href="/products" class="mission__btn">Перейти в каталог</a>
+      <a href={`/${lang}/products`} class="mission__btn">{t.mission.btn_catalog}</a>
     </div>
 
   </div>
@@ -79,7 +74,6 @@ const stats = [
     width: 100%;
     background: #FFFFFF;
     padding: 55px 0 55px;
-
   }
 
   .mission__inner {
@@ -87,10 +81,10 @@ const stats = [
     flex-direction: column;
     align-items: flex-start;
     gap: 50px;
-    max-width: 1468px; /* ← вместо width */
+    max-width: 1468px;
     width: 100%;
     margin: 0 auto;
-    padding: 0 20px; /* добавь отступы по бокам */
+    padding: 0 20px;
   }
 
   /* === Верхний блок: Миссия + Цели === */
@@ -99,7 +93,7 @@ const stats = [
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    gap: 220px; /* Расстояние между блоками, подберите нужное */
+    gap: 220px;
     width: 100%;
   }
 

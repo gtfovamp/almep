@@ -1,5 +1,12 @@
 ---
-// ConsultationSection.astro
+import type { Lang } from '../../utils/i18n';
+
+interface Props {
+  t: any;
+  lang: Lang;
+}
+
+const { t, lang } = Astro.props;
 ---
 
 <section class="consultation">
@@ -8,32 +15,49 @@
 
     <!-- Левая часть: форма -->
     <div class="consultation__left">
-      <h2 class="consultation__title">Бесплатная консультация</h2>
+      <h2 class="consultation__title">{t.consultation.title}</h2>
 
       <div class="consultation__form-wrap">
         <p class="consultation__desc">
-          Ниже оставьте свои контакты, чтобы мы смогли<br/>
-          связаться с вами для полной консультации
+          {t.consultation.description}
         </p>
 
         <form class="consultation__form" action="#" method="POST">
           <div class="consultation__fields-row">
             <div class="consultation__field">
-              <input type="text" placeholder="Ваше имя" class="consultation__input" />
+              <input 
+                type="text" 
+                placeholder={t.consultation.placeholder_name} 
+                class="consultation__input" 
+                name="name"
+                required
+              />
             </div>
             <div class="consultation__field">
-              <input type="email" placeholder="E-mail" class="consultation__input" />
+              <input 
+                type="email" 
+                placeholder={t.consultation.placeholder_email} 
+                class="consultation__input"
+                name="email"
+                required
+              />
             </div>
           </div>
 
           <div class="consultation__fields-row">
             <div class="consultation__field">
-              <input type="tel" placeholder="Ваш номер телефона" class="consultation__input" />
+              <input 
+                type="tel" 
+                placeholder={t.consultation.placeholder_phone} 
+                class="consultation__input"
+                name="phone"
+                required
+              />
             </div>
           </div>
 
           <button type="submit" class="consultation__btn">
-            Отправить
+            {t.consultation.btn_send}
           </button>
         </form>
       </div>
@@ -42,19 +66,23 @@
     <!-- Правая часть: контакты + соцсети -->
     <div class="consultation__right">
       <div class="consultation__contact-info">
-        <span class="consultation__phone">+994 10 241 99 10</span>
-        <span class="consultation__email">info@almeptrading.az</span>
+        <a href={`tel:${t.consultation.phone.replace(/\s/g, '')}`} class="consultation__phone">
+          {t.consultation.phone}
+        </a>
+        <a href={`mailto:${t.consultation.email}`} class="consultation__email">
+          {t.consultation.email}
+        </a>
       </div>
 
       <div class="consultation__socials">
-        <a href="#" class="consultation__social-link" aria-label="Instagram">
-          <img src="/assets/icons/instagram.svg" alt="Instagram" width="30" height="30" />
+        <a href="#" class="consultation__social-link" aria-label={t.consultation.social_instagram}>
+          <img src="/assets/icons/instagram.svg" alt={t.consultation.social_instagram} width="30" height="30" />
         </a>
-        <a href="#" class="consultation__social-link" aria-label="YouTube">
-          <img src="/assets/icons/youtube.svg" alt="YouTube" width="32" height="32" />
+        <a href="#" class="consultation__social-link" aria-label={t.consultation.social_youtube}>
+          <img src="/assets/icons/youtube.svg" alt={t.consultation.social_youtube} width="32" height="32" />
         </a>
-        <a href="#" class="consultation__social-link" aria-label="Facebook">
-          <img src="/assets/icons/facebook.svg" alt="Facebook" width="30" height="30" />
+        <a href="#" class="consultation__social-link" aria-label={t.consultation.social_facebook}>
+          <img src="/assets/icons/facebook.svg" alt={t.consultation.social_facebook} width="30" height="30" />
         </a>
       </div>
     </div>
@@ -216,7 +244,6 @@
     align-items: flex-end;
     gap: 30px;
     flex-shrink: 0;
-    /* Прижимаем к низу секции */
     align-self: flex-end;
     padding-bottom: 60px;
   }
@@ -236,6 +263,13 @@
     line-height: 110%;
     color: #FFFFFF;
     white-space: nowrap;
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+  }
+
+  .consultation__phone:hover,
+  .consultation__email:hover {
+    opacity: 0.8;
   }
 
   /* Соцсети */

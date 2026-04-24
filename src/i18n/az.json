@@ -1,0 +1,314 @@
+{
+    "nav": {
+        "home": "Ana səhifə",
+        "about": "Haqqımızda",
+        "services": "Xidmətlər",
+        "products": "Məhsullar",
+        "partners": "Tərəfdaşlar",
+        "portfolio": "Portfolio",
+        "news": "Xəbərlər",
+        "reviews": "Rəylər",
+        "contacts": "Əlaqə"
+    },
+    "header": {
+        "catalog": "Kataloq",
+        "phone": "+994 10 241 99 10"
+    },
+    "hero": {
+        "title": "Almep Trading — Peşəkar həllərdə strateji tərəfdaşınız",
+        "description": "Almep Trading biznes üçün yüksək keyfiyyətli texniki və elektrotexniki həllərin tədarükü və paylanması ilə məşğul olur.",
+        "btn_consultation": "Konsultasiya tələb edin",
+        "btn_catalog": "Kataloqa keç"
+    },
+    "about": {
+        "title": "Almep Trading",
+        "intro_1": "Almep Trading: Təchizatçıdan daha çox — strateji tərəfdaşınız. Müasir biznesdə layihənin uğuru tədarük zəncirinin etibarlılığından asılıdır. Almep Trading-də biz adi satışdan kənara çıxırıq.",
+        "intro_2": "Müasir biznesdə layihənin uğuru tədarük zəncirinin etibarlılığından asılıdır. Almep Trading-də biz adi satışdan kənara çıxırıq.",
+        "feature_quality_title": "Keyfiyyət Təminatı",
+        "feature_quality_text": "Laboratoriya testləri və beynəlxalq ISO sertifikatlaşdırması vasitəsilə məhsulun 100% nəzarətini təmin edirik.",
+        "feature_optimization_title": "Layihə Optimallaşdırması",
+        "feature_optimization_text": "Sadəcə məhsul satmırıq — büdcənizə və qrafikinizə uyğun ən yaxşı texniki həlləri seçirik.",
+        "partners_intro": "Yalnız ən yaxşılarına etibar edirik, buna görə portfelimiz qlobal liderləri təmsil edir:",
+        "partner_berent": "Berent və Harden — ən mürəkkəb vəzifələr üçün peşəkar əl alətlərinin etalonı.",
+        "partner_ekf": "EKF — təhlükəsiz və effektiv enerji sistemləri üçün qabaqcıl elektrotexniki həllər.",
+        "partner_sensh": "Sensh — sənaye avtomatlaşdırması və istehsalı üçün innovativ komponentlər.",
+        "conclusion": "Almep — keyfiyyət təminatı, müddətlərə riayət və hər texniki tapşırığa fərdi yanaşmadır.",
+        "btn_consultation": "Konsultasiya tələb edin"
+    },
+    "features": {
+        "professional_title": "Peşəkar Təchizatçı",
+        "professional_text": "Tikinti və sənaye sektorları üçün yüksək keyfiyyətli həllərdə etibarlı tərəfdaş.",
+        "solutions_title": "Həll Təklif Edən Tərəf",
+        "solutions_text": "Sadəcə məhsul satmırıq, layihə tələblərinə və texniki spesifikasiyalara uyğun optimal həllər təklif edirik.",
+        "integrated_title": "İnteqrasiya olunmuş Struktur",
+        "integrated_text": "Həm iri B2B layihələrinin, həm də pərakəndə bazarın (B2C) ehtiyaclarını eyni vaxtda ödəyən çevik idarəetmə sistemi."
+    },
+    "portfolio": {
+        "title": "Portfolio",
+        "learn_more": "Ətraflı",
+        "btn_consultation": "Konsultasiya tələb edin",
+        "aria_next": "Növbəti slayd",
+        "aria_prev": "Əvvəlki slayd",
+        "aria_slide": "Slayd"
+    },
+    "services": {
+        "title": "Xidmətlər",
+        "btn_catalog": "Kataloqa keç",
+        "items": [
+            {
+                "number": "01",
+                "title": "1 İl Rəsmi Zəmanət",
+                "description": "Bütün məhsullarımıza və görülən işlərə 1 il rəsmi zəmanət veririk."
+            },
+            {
+                "number": "02",
+                "title": "Texniki Məsləhət",
+                "description": "Layihələndirmə mərhələsində materialların düzgün seçilməsi və texniki məsələlər üzrə mühəndis məsləhəti."
+            },
+            {
+                "number": "03",
+                "title": "Quraşdırma və İstismara Vermə",
+                "description": "Sonradan yoxlama və istismara vermə ilə peşəkar avadanlıq quraşdırılması."
+            },
+            {
+                "number": "04",
+                "title": "Satışdan Sonra Xidmət",
+                "description": "Kompleks satışdan sonra xidmət: texniki dəstək, təmir və komponentlərin dəyişdirilməsi."
+            }
+        ]
+    },
+    "mission": {
+        "mission_title": "Missiya",
+        "mission_text": "Azərbaycan bazarını davamlı, təhlükəsiz və peşəkar tikinti məhsulları ilə təmin etmək",
+        "goals_title": "Məqsədlər",
+        "goals_text": "Hər mərhələdə kompleks təchizat və ekspert dəstəyi təmin edərək, uzunmüddətli strateji tərəfdaşınız olmaq.",
+        "stats": [
+            {
+                "number": "1",
+                "text": "Dünya səviyyəsində keyfiyyət."
+            },
+            {
+                "number": "2",
+                "text": "Çatdırılmanın operativliyi və sabitliyi."
+            },
+            {
+                "number": "3",
+                "text": "Peşəkar komanda və texniki dəstək."
+            }
+        ],
+        "btn_catalog": "Kataloqa keç"
+    },
+    "products": {
+        "title": "Məhsullar",
+        "download_catalog": "Kataloqu yüklə",
+        "learn_more": "Ətraflı",
+        "btn_catalog": "Kataloqa keç",
+        "items": [
+            {
+                "title": "Təmir və tikinti alətləri",
+                "description": "Layihələrin elektrik təchizatı və təhlükəsizliyi üçün sertifikatlı elektrik materialları və avadanlıqları.",
+                "href": "/products/tools"
+            },
+            {
+                "title": "Bağlama elementləri",
+                "description": "Layihələrin elektrik təchizatı və təhlükəsizliyi üçün sertifikatlı elektrik materialları və avadanlıqları.",
+                "href": "/products/fasteners"
+            },
+            {
+                "title": "Güc mənbələri",
+                "description": "Layihələrin elektrik təchizatı və təhlükəsizliyi üçün sertifikatlı elektrik materialları və avadanlıqları.",
+                "href": "/products/power"
+            },
+            {
+                "title": "Avadanlıq və cihazlar",
+                "description": "Layihələrin elektrik təchizatı və təhlükəsizliyi üçün sertifikatlı elektrik materialları və avadanlıqları.",
+                "href": "/products/equipment"
+            },
+            {
+                "title": "İstehlak materialları",
+                "description": "Layihələrin elektrik təchizatı və təhlükəsizliyi üçün sertifikatlı elektrik materialları və avadanlıqları.",
+                "href": "/products/consumables"
+            },
+            {
+                "title": "Təhlükəsizlik və istismar materialları",
+                "description": "Layihələrin elektrik təchizatı və təhlükəsizliyi üçün sertifikatlı elektrik materialları və avadanlıqları.",
+                "href": "/products/safety"
+            }
+        ]
+    },
+    "whyus": {
+        "title": "Niyə bizi seçirlər",
+        "features": [
+            {
+                "title": "Düzgün seçim",
+                "description": "Layihənin texniki tələblərini təhlil edərək optimal məhsul seçirik."
+            },
+            {
+                "title": "Büdcə optimallaşdırması",
+                "description": "Keyfiyyəti qoruyaraq və büdcəyə əməl edərək effektiv alternativlər yaradırıq."
+            },
+            {
+                "title": "Vaxt qənaəti",
+                "description": "Sürətli logistika və dəqiq planlaşdırma sayəsində vaxt itkisini minimuma endiririk."
+            },
+            {
+                "title": "Risk nəzarəti",
+                "description": "Risk idarəçiliyi hesabına təhlükəsiz tədarük zənciri."
+            }
+        ],
+        "stats": [
+            {
+                "label": "Məmnun müştərilər",
+                "value": "98%"
+            },
+            {
+                "label": "Peşəkar komanda",
+                "value": "100%"
+            },
+            {
+                "label": "İşdə uğur",
+                "value": "99%"
+            }
+        ],
+        "btn_consultation": "Konsultasiya tələb edin",
+        "photo_alt": "Niyə bizi seçirlər"
+    },
+    "partners": {
+        "title": "Tərəfdaşlar",
+        "partner_logo": "Tərəfdaş loqosu",
+        "all_reviews": "Bütün rəylər",
+        "btn_consultation": "Konsultasiya tələb edin"
+    },
+    "news": {
+        "title": "Xəbərlər",
+        "category_company": "Şirkət xəbərləri",
+        "minutes": "dəqiqə",
+        "minute": "dəqiqə",
+        "learn_more": "Ətraflı",
+        "read_news": "Xəbərləri oxu",
+        "aria_next": "Növbəti slayd",
+        "aria_prev": "Əvvəlki slayd",
+        "aria_slide": "Slayd",
+        "date_alt": "Tarix",
+        "time_alt": "Oxuma vaxtı",
+        "items": [
+            {
+                "title": "Layihəniz ambisiyalıdır? Tədarük uyğun olmalıdır.",
+                "excerpt": "Almep Trading sadəcə tədarükçü deyil, layihənizin strateji tərəfdaşıdır. Bizim üçün hər müştəri....",
+                "date": "04.02.2026",
+                "readTime": "5"
+            },
+            {
+                "title": "Almep ilə birlikdə gələcəyin infrastrukturunu qurun",
+                "excerpt": "Biz inanırıq ki, hər böyük bina və ya zavod düzgün seçilmiş detallarla başlayır....",
+                "date": "04.02.2026",
+                "readTime": "5"
+            },
+            {
+                "title": "Tam tədarük gücü — tikintidən sənayeyə qədər.",
+                "excerpt": "Biz sadəcə məhsul satmırıq, layihənizin texniki əsasını qoyuruq. Davamlı Berent və Harden alətləri ilə....",
+                "date": "04.02.2026",
+                "readTime": "5"
+            },
+            {
+                "title": "Yeni EKF avadanlıq çatdırılmaları artıq anbardadır.",
+                "excerpt": "EKF-dən yeni avadanlıq partiyasının gəlməsini məmnuniyyətlə elan edirik. Elektrik təchizatı həllərinin geniş çeşidi....",
+                "date": "05.02.2026",
+                "readTime": "4"
+            },
+            {
+                "title": "Sənaye obyekti üçün kabel məhsullarını necə düzgün seçmək olar.",
+                "excerpt": "Kabel məhsullarının seçimi bütün obyektin təhlükəsizliyinə və etibarlılığına təsir edən məsul prosesdir....",
+                "date": "06.02.2026",
+                "readTime": "6"
+            },
+            {
+                "title": "Almep tədarük coğrafiyasını genişləndirir.",
+                "excerpt": "Almep Trading tədarük coğrafiyasının genişləndirilməsini və yeni logistik marşrutların açılmasını elan edir....",
+                "date": "07.02.2026",
+                "readTime": "3"
+            }
+        ]
+    },
+    "blog": {
+        "title": "Bloq",
+        "post_title": "Almep Trading — Layihənizin dayaq nöqtəsi",
+        "post_text": "Hər uğurlu layihənin arxasında düzgün tərəfdaşlar durur. Biz, Almep Trading şirkəti, sadəcə tikinti və istehsal üçün peşəkar alətlər tədarük etmirik — sizin uğurunuzun bir hissəsi oluruq. Berent, Harden, Sensh və EKF brendləri ilə layihələrinizi daha sürətli, etibarlı və səmərəli edirik...",
+        "read_more": "Daha çox oxu..."
+    },
+    "reviews": {
+  "title": "Rəylər",
+  "all_reviews": "Bütün rəylər",
+  "btn_consultation": "Konsultasiya tələb edin",
+  "aria_next": "Növbəti slayd",
+  "aria_prev": "Əvvəlki slayd",
+  "aria_slide": "Slayd",
+  "items": [
+    {
+      "text": "Bakıda alət almaq üçün ən yaxşı yer. Almep Trading-də həmişə keyfiyyətli Harden və Sensh brendləri var. Sürətli çatdırılma və peşəkar yanaşma. Əməkdaşlığa görə təşəkkür!",
+      "author": "Cavid Əsgərov"
+    },
+    {
+      "text": "Uzun müddətdir Harden və Berent alətlərindən istifadə edirəm. Çox möhkəm polad, erqonomik tutacaqlar və yüksək dözümlülük. Peşəkar işlər üçün — qiymət-keyfiyyət nisbətində ən yaxşı seçimdir.",
+      "author": "Əli Ağayev"
+    },
+    {
+      "text": "Sensh əl alətləri partiyasını aldıq. Keyfiyyət əladır, alət yüksək yüklərdə əyilmir və sınmır. İndi iş daha sürətli və keyfiyyətli gedir.",
+      "author": "Ceyhun Kərimov"
+    },
+    {
+      "text": "Əla servis və geniş çeşid. Obyektimiz üçün EKF avadanlığını sifariş etdik — hər şey vaxtında gəldi, etibarlı qablaşdırıldı. İşi davam etdirəcəyik!",
+      "author": "Elşan Məmmədov"
+    },
+    {
+      "text": "Məhsulunu bilən peşəkar komanda. Konkret vəzifələr üçün lazım olan alətləri seçməkdə kömək etdilər. Keyfiyyət və qiymətdən çox razıyam.",
+      "author": "Rəşad Hüseyinov"
+    },
+    {
+      "text": "Almep Trading ilə bir neçə ildir işləyirik. Etibarlı təchizatçı, həmişə öhdəliklərini yerinə yetirirlər. Bütün tikinti şirkətlərinə tövsiyə edirəm.",
+      "author": "Samir Əliyev"
+    },
+    {
+      "text": "Ev emalatxanası üçün Berent alətlərini aldım. Keyfiyyət gözləntiləri üstələdi — hər şey lazım olduğu kimi işləyir. Münasib qiymətlər, sürətli çatdırılma.",
+      "author": "Farid İsmayılov"
+    }
+  ]
+},
+"consultation": {
+  "title": "Pulsuz məsləhət",
+  "description": "Tam məsləhət üçün sizinlə əlaqə saxlaya bilməyimiz üçün aşağıda əlaqə məlumatlarınızı qoyun",
+  "placeholder_name": "Adınız",
+  "placeholder_email": "E-mail",
+  "placeholder_phone": "Telefon nömrəniz",
+  "btn_send": "Göndər",
+  "phone": "+994 10 241 99 10",
+  "email": "info@almeptrading.az",
+  "social_instagram": "Instagram",
+  "social_youtube": "YouTube",
+  "social_facebook": "Facebook"
+},
+"contacts": {
+  "title": "Əlaqə",
+  "address_label": "Ünvan:",
+  "address_value": "Nəriman küçəsi",
+  "phone_label": "Telefon:",
+  "phone_value": "+994 10 241 99 10",
+  "schedule_label": "İş saatları:",
+  "schedule_days": "Bz–Şn,",
+  "schedule_hours": "09:00–18:00",
+  "email_label": "E-mail:",
+  "email_value": "info@almeptrading.az",
+  "btn_consultation": "Konsultasiya tələb edin",
+  "zoom_in": "Yaxınlaşdır",
+  "zoom_out": "Uzaqlaşdır",
+  "company_name": "Almep Trading",
+  "office_label": "Rəsmi ofis",
+  "city": "Bakı, Azərbaycan",
+  "popup_address": "Nəriman küçəsi, Bakı"
+},
+"footer": {
+  "copyright": "2026 © All rights reserved",
+  "privacy": "Privacy Policy",
+  "scroll_top": "Back to top"
+}
+}

@@ -1,17 +1,26 @@
 ---
+import type { Lang } from '../../utils/i18n';
+
+interface Props {
+  t: any;
+  lang: Lang;
+}
+
+const { t, lang } = Astro.props;
+
 const portfolioItems = [
-  { image: 'assets/images/portfolio-1.jpg',  title: 'Азербайджанский технический университет', year: '2011' },
-  { image: 'assets/images/portfolio-2.jpg',  title: 'Metro',                                   year: '2015' },
-  { image: 'assets/images/portfolio-3.jpg',  title: 'Əmlak Xidmətləri Məkanı',                 year: '2017' },
-  { image: 'assets/images/portfolio-4.jpg',  title: 'Школа №47',                               year: '2018' },
-  { image: 'assets/images/portfolio-5.jpg',  title: 'UNEC',                                    year: '2019' },
-  { image: 'assets/images/portfolio-6.jpg',  title: 'Seaside Resort',                          year: '2020' },
-  { image: 'assets/images/portfolio-7.jpg',  title: 'Baku White City',                         year: '2020' },
-  { image: 'assets/images/portfolio-8.jpg',  title: 'Heydar Aliyev Center',                    year: '2021' },
-  { image: 'assets/images/portfolio-9.jpg',  title: 'Port Baku Mall',                          year: '2021' },
-  { image: 'assets/images/portfolio-10.jpg', title: 'SOCAR Tower',                             year: '2022' },
-  { image: 'assets/images/portfolio-11.jpg', title: 'Flame Towers',                            year: '2022' },
-  { image: 'assets/images/portfolio-12.jpg', title: 'Crystal Hall',                            year: '2023' },
+  { image: '/assets/images/portfolio-1.jpg',  title: 'Азербайджанский технический университет', year: '2011' },
+  { image: '/assets/images/portfolio-2.jpg',  title: 'Metro',                                   year: '2015' },
+  { image: '/assets/images/portfolio-3.jpg',  title: 'Əmlak Xidmətləri Məkanı',                 year: '2017' },
+  { image: '/assets/images/portfolio-4.jpg',  title: 'Школа №47',                               year: '2018' },
+  { image: '/assets/images/portfolio-5.jpg',  title: 'UNEC',                                    year: '2019' },
+  { image: '/assets/images/portfolio-6.jpg',  title: 'Seaside Resort',                          year: '2020' },
+  { image: '/assets/images/portfolio-7.jpg',  title: 'Baku White City',                         year: '2020' },
+  { image: '/assets/images/portfolio-8.jpg',  title: 'Heydar Aliyev Center',                    year: '2021' },
+  { image: '/assets/images/portfolio-9.jpg',  title: 'Port Baku Mall',                          year: '2021' },
+  { image: '/assets/images/portfolio-10.jpg', title: 'SOCAR Tower',                             year: '2022' },
+  { image: '/assets/images/portfolio-11.jpg', title: 'Flame Towers',                            year: '2022' },
+  { image: '/assets/images/portfolio-12.jpg', title: 'Crystal Hall',                            year: '2023' },
 ];
 
 const slides = [];
@@ -23,7 +32,7 @@ for (let i = 0; i < portfolioItems.length; i += 6) {
 <section class="portfolio">
   <div class="portfolio__inner">
 
-    <h2 class="portfolio__title">Портфолио</h2>
+    <h2 class="portfolio__title">{t.portfolio.title}</h2>
 
     <div class="portfolio__slider-wrap">
 
@@ -38,7 +47,6 @@ for (let i = 0; i < portfolioItems.length; i += 6) {
                     alt={item.title}
                     class="portfolio__card-img"
                   />
-                  <!-- ✅ Caption теперь у каждой карточки -->
                   <div class="portfolio__card-caption">
                     <span class="portfolio__card-title">{item.title}</span>
                     <span class="portfolio__card-year">{item.year}</span>
@@ -50,13 +58,13 @@ for (let i = 0; i < portfolioItems.length; i += 6) {
         ))}
       </div>
 
-      <button class="portfolio__arrow portfolio__arrow--right" id="arrowRight" aria-label="Следующий слайд">
+      <button class="portfolio__arrow portfolio__arrow--right" id="arrowRight" aria-label={t.portfolio.aria_next}>
         <svg width="23" height="30" viewBox="0 0 23 30" fill="none">
           <path d="M3 3L20 15L3 27" stroke="#000000" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </button>
 
-      <button class="portfolio__arrow portfolio__arrow--left" id="arrowLeft" aria-label="Предыдущий слайд">
+      <button class="portfolio__arrow portfolio__arrow--left" id="arrowLeft" aria-label={t.portfolio.aria_prev}>
         <svg width="23" height="30" viewBox="0 0 23 30" fill="none">
           <path d="M20 3L3 15L20 27" stroke="#000000" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
@@ -73,13 +81,13 @@ for (let i = 0; i < portfolioItems.length; i += 6) {
           <button
             class={`portfolio__dot ${i === 0 ? 'portfolio__dot--active' : ''}`}
             data-index={i}
-            aria-label={`Слайд ${i + 1}`}
+            aria-label={`${t.portfolio.aria_slide} ${i + 1}`}
           />
         ))}
       </div>
 
-      <a href="/portfolio" class="portfolio__more">
-        Узнать больше
+      <a href={`/${lang}/portfolio`} class="portfolio__more">
+        {t.portfolio.learn_more}
         <svg width="27" height="20" viewBox="0 0 27 20" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M0.013702 10.394L26.1767 9.68691M26.1767 9.68691L16.8428 0.353097M26.1767 9.68691L16.9401 18.9235" stroke="#1C508F"/>
         </svg>
@@ -88,7 +96,7 @@ for (let i = 0; i < portfolioItems.length; i += 6) {
     </div>
 
     <div class="portfolio__cta">
-      <a href="/contacts" class="portfolio__btn">Запросить консультацию</a>
+      <a href={`/${lang}/contacts`} class="portfolio__btn">{t.portfolio.btn_consultation}</a>
     </div>
 
   </div>
@@ -144,7 +152,6 @@ for (let i = 0; i < portfolioItems.length; i += 6) {
     gap: 30px;
   }
 
-  /* === Карточка === */
   .portfolio__card {
     position: relative;
     width: 450px;
@@ -161,7 +168,6 @@ for (let i = 0; i < portfolioItems.length; i += 6) {
     height: 100%;
     object-fit: cover;
     display: block;
-    /* ✅ Плавное увеличение при hover */
     transition: transform 0.3s ease;
   }
 
@@ -169,7 +175,6 @@ for (let i = 0; i < portfolioItems.length; i += 6) {
     transform: scale(1.03);
   }
 
-  /* === Caption: скрыт по умолчанию, появляется при hover === */
   .portfolio__card-caption {
     position: absolute;
     bottom: 0;
@@ -184,14 +189,11 @@ for (let i = 0; i < portfolioItems.length; i += 6) {
     padding: 26px 15px 0;
     gap: 42px;
     box-sizing: border-box;
-
-    /* ✅ Скрыт по умолчанию */
     opacity: 0;
     transform: translateY(100%);
     transition: opacity 0.3s ease, transform 0.3s ease;
   }
 
-  /* ✅ Появляется при наведении на карточку */
   .portfolio__card:hover .portfolio__card-caption {
     opacity: 1;
     transform: translateY(0);
@@ -217,7 +219,6 @@ for (let i = 0; i < portfolioItems.length; i += 6) {
     white-space: nowrap;
   }
 
-  /* === Стрелки === */
   .portfolio__arrow {
     position: absolute;
     top: 50%;
@@ -253,7 +254,6 @@ for (let i = 0; i < portfolioItems.length; i += 6) {
     pointer-events: none;
   }
 
-  /* === Нижняя панель === */
   .portfolio__bottom {
     display: flex;
     flex-direction: row;

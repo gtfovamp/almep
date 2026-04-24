@@ -1,54 +1,31 @@
 ---
-const products = [
-  {
-    image: 'assets/images/product-1.png',
-    title: 'Инструменты для ремонта и строительства',
-    description: 'Сертифицированные электрические материалы и оборудование для обеспечения электроснабжения и безопасности проектов.',
-    href: '/products/tools',
-  },
-  {
-    image: 'assets/images/product-2.png',
-    title: 'Крепежные элементы',
-    description: 'Сертифицированные электрические материалы и оборудование для обеспечения электроснабжения и безопасности проектов.',
-    href: '/products/fasteners',
-  },
-  {
-    image: 'assets/images/product-3.png',
-    title: 'Источники питания',
-    description: 'Сертифицированные электрические материалы и оборудование для обеспечения электроснабжения и безопасности проектов.',
-    href: '/products/power',
-  },
-  {
-    image: 'assets/images/product-4.png',
-    title: 'Оборудования и устройства',
-    description: 'Сертифицированные электрические материалы и оборудование для обеспечения электроснабжения и безопасности проектов.',
-    href: '/products/equipment',
-  },
-  {
-    image: 'assets/images/product-5.png',
-    title: 'Расходные материалы',
-    description: 'Сертифицированные электрические материалы и оборудование для обеспечения электроснабжения и безопасности проектов.',
-    href: '/products/consumables',
-  },
-  {
-    image: 'assets/images/product-6.png',
-    title: 'Материалы для безопасности и эксплуатации',
-    description: 'Сертифицированные электрические материалы и оборудование для обеспечения электроснабжения и безопасности проектов.',
-    href: '/products/safety',
-  },
-];
+import type { Lang } from '../../utils/i18n';
+
+interface Props {
+  t: any;
+  lang: Lang;
+}
+
+const { t, lang } = Astro.props;
+
+// Получаем продукты из переводов и добавляем изображения
+const products = t.products.items.map((item: any, index: number) => ({
+  ...item,
+  image: `/assets/images/product-${index + 1}.png`,
+  href: `/${lang}${item.href}` // Добавляем язык к ссылкам
+}));
 ---
 
 <section class="products">
   <div class="products__inner">
 
-    <h2 class="products__title">Продукция</h2>
+    <h2 class="products__title">{t.products.title}</h2>
 
     <div class="products__content">
 
       <!-- Скачать каталог -->
       <a href="/catalog.pdf" class="products__download" download>
-        Скачать каталог
+        {t.products.download_catalog}
         <svg width="18" height="19" viewBox="0 0 18 19" fill="none">
           <path d="M9 1V14M9 14L3 8M9 14L15 8"
             stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -57,7 +34,7 @@ const products = [
 
       <!-- Сетка -->
       <div class="products__grid">
-        {products.map((product) => (
+        {products.map((product: any) => (
           <a href={product.href} class="products__card">
 
             <!-- Фото (всегда видно) -->
@@ -88,7 +65,7 @@ const products = [
                 <p class="products__card-hover-desc">{product.description}</p>
               </div>
               <div class="products__card-hover-footer">
-                <span class="products__card-hover-link">Узнать больше</span>
+                <span class="products__card-hover-link">{t.products.learn_more}</span>
                 <!-- Стрелка диагональная (ромб) -->
                 <svg class="products__card-hover-arrow" width="27" height="29" viewBox="0 0 27 29" fill="none">
                   <path d="M3 26L24 5M24 5H8M24 5V21"
@@ -103,7 +80,7 @@ const products = [
 
       <!-- Кнопка -->
       <div class="products__cta">
-        <a href="/products" class="products__btn">Перейти в каталог</a>
+        <a href={`/${lang}/products`} class="products__btn">{t.products.btn_catalog}</a>
       </div>
 
     </div>
@@ -233,8 +210,6 @@ const products = [
     padding: 20px 28px;
     box-sizing: border-box;
     z-index: 2;
-
-    /* анимация скрытия */
     opacity: 1;
     transform: translateY(0);
     transition: opacity 0.3s ease, transform 0.3s ease;
@@ -265,8 +240,6 @@ const products = [
     justify-content: space-between;
     padding: 65px 30px 45px;
     box-sizing: border-box;
-
-    /* скрыт по умолчанию */
     opacity: 0;
     transform: translateY(8px);
     transition: opacity 0.35s ease 0.05s, transform 0.35s ease 0.05s;

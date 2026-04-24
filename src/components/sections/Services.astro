@@ -1,38 +1,26 @@
 ---
-const services = [
-  {
-    number: '01',
-    title: '1 год официальной гарантии',
-    description: 'Мы предоставляем официальную гарантию сроком 1 год на все наши продукты и выполненные работы.',
-    image: 'assets/images/service2.png',
-  },
-  {
-    number: '02',
-    title: 'Техническая консультация',
-    description: 'Инженерная консультация по правильному выбору материалов и техническим вопросам на этапе проектирования.',
-    image: 'assets/images/service2.png',
-  },
-  {
-    number: '03',
-    title: 'Установка и комиссионный сбор',
-    description: 'Профессиональная установка оборудования с последующей проверкой и вводом в эксплуатацию.',
-    image: 'assets/images/service2.png',
-  },
-  {
-    number: '04',
-    title: 'Сервис после продажи',
-    description: 'Комплексное послепродажное обслуживание: техническая поддержка, обслуживание и замена компонентов.',
-    image: 'assets/images/service2.png',
-  },
-];
+import type { Lang } from '../../utils/i18n';
+
+interface Props {
+  t: any;
+  lang: Lang;
+}
+
+const { t, lang } = Astro.props;
+
+// Получаем услуги из переводов
+const services = t.services.items.map((item: any) => ({
+  ...item,
+  image: '/assets/images/service2.png' // Пока одна картинка для всех
+}));
 ---
 
 <section class="services">
   <div class="services__inner">
-    <h2 class="services__title">Услуги</h2>
+    <h2 class="services__title">{t.services.title}</h2>
     <div class="services__content">
       <div class="services__grid">
-        {services.map((service) => (
+        {services.map((service: any) => (
           <div class="services__card">
 
             <!-- Фон: фото + оверлей -->
@@ -68,7 +56,7 @@ const services = [
       </div>
 
       <div class="services__cta">
-        <a href="/products" class="services__btn">Перейти в каталог</a>
+        <a href={`/${lang}/products`} class="services__btn">{t.services.btn_catalog}</a>
       </div>
     </div>
   </div>
@@ -172,11 +160,9 @@ const services = [
     font-size: 24px;
     line-height: 110%;
     letter-spacing: -0.01em;
-
-    /* По умолчанию — чёрный */
     color: #000;
     transition: color 0.3s ease;
-    margin: 0; /* ← добавь */
+    margin: 0;
   }
 
   /* Описание — скрыто по умолчанию */
@@ -188,11 +174,10 @@ const services = [
     letter-spacing: -0.01em;
     color: #fff;
     max-width: 487px;
-
     opacity: 0;
     transform: translateY(8px);
     transition: opacity 0.35s ease 0.05s, transform 0.35s ease 0.05s;
-    margin: 0; /* ← добавь */
+    margin: 0;
   }
 
   /* ===== ФУТЕР ===== */
@@ -208,7 +193,6 @@ const services = [
     font-weight: 400;
     font-size: 20px;
     line-height: 110%;
-    /* По умолчанию — чёрный */
     color: #000;
     transition: color 0.3s ease;
   }

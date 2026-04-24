@@ -1,44 +1,57 @@
 ---
-// ContactsSection.astro
+import type { Lang } from '../../utils/i18n';
+
+interface Props {
+  t: any;
+  lang: Lang;
+}
+
+const { t, lang } = Astro.props;
 ---
 
 <section class="contacts">
     <div class="contacts__inner">
-        <h2 class="contacts__title">Контакты</h2>
+        <h2 class="contacts__title">{t.contacts.title}</h2>
 
         <div class="contacts__content">
             <!-- Левая часть -->
             <div class="contacts__left">
                 <div class="contacts__row">
                     <div class="contacts__item">
-                        <span class="contacts__label">Адрес:</span>
-                        <span class="contacts__value">Улица Нариман</span>
+                        <span class="contacts__label">{t.contacts.address_label}</span>
+                        <span class="contacts__value">{t.contacts.address_value}</span>
                     </div>
                     <div class="contacts__item">
-                        <span class="contacts__label">Телефон:</span>
-                        <a href="tel:+994102419910" class="contacts__value contacts__value--link">
-                            +994 10 241 99 10
+                        <span class="contacts__label">{t.contacts.phone_label}</span>
+                        <a
+                            href={`tel:${t.contacts.phone_value.replace(/\s/g, '')}`}
+                            class="contacts__value contacts__value--link"
+                        >
+                            {t.contacts.phone_value}
                         </a>
                     </div>
                 </div>
 
                 <div class="contacts__row">
                     <div class="contacts__item">
-                        <span class="contacts__label">График работы:</span>
+                        <span class="contacts__label">{t.contacts.schedule_label}</span>
                         <div class="contacts__schedule">
-                            <span class="contacts__value">Пн–Сб,</span>
-                            <span class="contacts__value">09:00–18:00</span>
+                            <span class="contacts__value">{t.contacts.schedule_days}</span>
+                            <span class="contacts__value">{t.contacts.schedule_hours}</span>
                         </div>
                     </div>
                     <div class="contacts__item">
-                        <span class="contacts__label">E-mail:</span>
-                        <a href="mailto:info@almeptrading.az" class="contacts__value contacts__value--link">
-                            info@almeptrading.az
+                        <span class="contacts__label">{t.contacts.email_label}</span>
+                        <a
+                            href={`mailto:${t.contacts.email_value}`}
+                            class="contacts__value contacts__value--link"
+                        >
+                            {t.contacts.email_value}
                         </a>
                     </div>
                 </div>
 
-                <button class="contacts__btn">Запросить консультацию</button>
+                <button class="contacts__btn">{t.contacts.btn_consultation}</button>
             </div>
 
             <!-- Карта -->
@@ -49,15 +62,41 @@
 
                 <!-- Кастомные контролы зума -->
                 <div class="map-controls">
-                    <button class="map-controls__btn" id="zoom-in" aria-label="Приблизить">
-                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                            <path d="M8 2V14M2 8H14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    <button
+                        class="map-controls__btn"
+                        id="zoom-in"
+                        aria-label={t.contacts.zoom_in}
+                    >
+                        <svg
+                            width="16"
+                            height="16"
+                            viewBox="0 0 16 16"
+                            fill="none"
+                        >
+                            <path
+                                d="M8 2V14M2 8H14"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"></path>
                         </svg>
                     </button>
                     <div class="map-controls__divider"></div>
-                    <button class="map-controls__btn" id="zoom-out" aria-label="Отдалить">
-                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                            <path d="M2 8H14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    <button
+                        class="map-controls__btn"
+                        id="zoom-out"
+                        aria-label={t.contacts.zoom_out}
+                    >
+                        <svg
+                            width="16"
+                            height="16"
+                            viewBox="0 0 16 16"
+                            fill="none"
+                        >
+                            <path
+                                d="M2 8H14"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"></path>
                         </svg>
                     </button>
                 </div>
@@ -66,8 +105,8 @@
                 <div class="map-badge">
                     <div class="map-badge__dot"></div>
                     <div class="map-badge__text">
-                        <span class="map-badge__title">Almep Trading</span>
-                        <span class="map-badge__sub">Баку, Азербайджан</span>
+                        <span class="map-badge__title">{t.contacts.company_name}</span>
+                        <span class="map-badge__sub">{t.contacts.city}</span>
                     </div>
                 </div>
             </div>
@@ -76,42 +115,52 @@
 </section>
 
 <!-- Leaflet -->
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-    const bakuCenter = [40.4093, 49.8671];
+<script define:vars={{ 
+  companyName: t.contacts.company_name,
+  officeLabel: t.contacts.office_label,
+  popupAddress: t.contacts.popup_address,
+  phoneValue: t.contacts.phone_value,
+  scheduleText: `${t.contacts.schedule_days} ${t.contacts.schedule_hours}`
+}}>
+    document.addEventListener("DOMContentLoaded", () => {
+        const bakuCenter = [40.4093, 49.8671];
 
-    // ─── Инициализация карты ───────────────────────────────────────────────
-    const map = L.map("map", {
-        center: bakuCenter,
-        zoom: 12,
-        scrollWheelZoom: false,
-        zoomControl: false,
-        attributionControl: false,
-    });
+        // ─── Инициализация карты ───────────────────────────────────────────────
+        const map = L.map("map", {
+            center: bakuCenter,
+            zoom: 12,
+            scrollWheelZoom: false,
+            zoomControl: false,
+            attributionControl: false,
+        });
 
-    // ─── Тайлы: CartoDB Positron (чистые, светлые) ────────────────────────
-    L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
-        subdomains: "abcd",
-        maxZoom: 19,
-    }).addTo(map);
+        // ─── Тайлы: CartoDB Positron (чистые, светлые) ────────────────────────
+        L.tileLayer(
+            "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+            {
+                subdomains: "abcd",
+                maxZoom: 19,
+            },
+        ).addTo(map);
 
-    
+        // ─── Кастомные кнопки зума ────────────────────────────────────────────
+        document.getElementById("zoom-in").addEventListener("click", () => {
+            map.zoomIn();
+        });
+        document.getElementById("zoom-out").addEventListener("click", () => {
+            map.zoomOut();
+        });
 
-    // ─── Кастомные кнопки зума ────────────────────────────────────────────
-    document.getElementById("zoom-in").addEventListener("click", () => {
-        map.zoomIn();
-    });
-    document.getElementById("zoom-out").addEventListener("click", () => {
-        map.zoomOut();
-    });
-
-    // ─── Пульсирующий маркер ──────────────────────────────────────────────
-    const pulseIcon = L.divIcon({
-        className: "",
-        html: `
+        // ─── Пульсирующий маркер ──────────────────────────────────────────────
+        const pulseIcon = L.divIcon({
+            className: "",
+            html: `
             <div class="pulse-marker">
                 <div class="pulse-marker__ring pulse-marker__ring--1"></div>
                 <div class="pulse-marker__ring pulse-marker__ring--2"></div>
@@ -123,15 +172,17 @@ document.addEventListener("DOMContentLoaded", () => {
                 </div>
             </div>
         `,
-        iconSize: [60, 60],
-        iconAnchor: [30, 30],
-        popupAnchor: [0, -36],
-    });
+            iconSize: [60, 60],
+            iconAnchor: [30, 30],
+            popupAnchor: [0, -36],
+        });
 
-    // ─── Маркер + попап ───────────────────────────────────────────────────
-    const marker = L.marker(bakuCenter, { icon: pulseIcon }).addTo(map);
+        // ─── Маркер + попап ───────────────────────────────────────────────────
+        const marker = L.marker(bakuCenter, { icon: pulseIcon }).addTo(map);
 
-    marker.bindPopup(`
+        marker
+            .bindPopup(
+                `
         <div class="modern-popup">
             <div class="modern-popup__header">
                 <div class="modern-popup__icon">
@@ -140,8 +191,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     </svg>
                 </div>
                 <div>
-                    <div class="modern-popup__title">Almep Trading</div>
-                    <div class="modern-popup__sub">Официальный офис</div>
+                    <div class="modern-popup__title">${companyName}</div>
+                    <div class="modern-popup__sub">${officeLabel}</div>
                 </div>
             </div>
             <div class="modern-popup__divider"></div>
@@ -149,75 +200,82 @@ document.addEventListener("DOMContentLoaded", () => {
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
                     <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" stroke="#1c508f" stroke-width="2" fill="none"/>
                 </svg>
-                <span>Улица Нариман, Баку</span>
+                <span>${popupAddress}</span>
             </div>
             <div class="modern-popup__row">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
                     <path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1-9.4 0-17-7.6-17-17 0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z" stroke="#1c508f" stroke-width="2" fill="none"/>
                 </svg>
-                <span>+994 10 241 99 10</span>
+                <span>${phoneValue}</span>
             </div>
             <div class="modern-popup__row">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
                     <rect x="2" y="4" width="20" height="16" rx="2" stroke="#1c508f" stroke-width="2" fill="none"/>
                     <path d="M2 8l10 6 10-6" stroke="#1c508f" stroke-width="2" fill="none"/>
                 </svg>
-                <span>Пн–Сб, 09:00–18:00</span>
+                <span>${scheduleText}</span>
             </div>
         </div>
-    `, {
-        className: "modern-popup-wrapper",
-        maxWidth: 240,
-        offset: [0, -10],
-    }).openPopup();
+    `,
+                {
+                    className: "modern-popup-wrapper",
+                    maxWidth: 240,
+                    offset: [0, -10],
+                },
+            )
+            .openPopup();
 
-    // ─── Граница Баку ─────────────────────────────────────────────────────
-    fetch("https://nominatim.openstreetmap.org/search?city=Baku&country=Azerbaijan&polygon_geojson=1&format=json")
-        .then((res) => res.json())
-        .then((data) => {
-            if (data && data[0] && data[0].geojson) {
-                // Заливка
-                L.geoJSON(data[0].geojson, {
-                    style: {
-                        color: "transparent",
-                        fillColor: "#1c508f",
-                        fillOpacity: 0.07,
-                    },
-                }).addTo(map);
+        // ─── Граница Баку ─────────────────────────────────────────────────────
+        fetch(
+            "https://nominatim.openstreetmap.org/search?city=Baku&country=Azerbaijan&polygon_geojson=1&format=json",
+        )
+            .then((res) => res.json())
+            .then((data) => {
+                if (data && data[0] && data[0].geojson) {
+                    // Заливка
+                    L.geoJSON(data[0].geojson, {
+                        style: {
+                            color: "transparent",
+                            fillColor: "#1c508f",
+                            fillOpacity: 0.07,
+                        },
+                    }).addTo(map);
 
-                // Граница — сплошная
-                L.geoJSON(data[0].geojson, {
-                    style: {
-                        color: "#1c508f",
-                        weight: 2.5,
-                        opacity: 0.45,
-                        fillOpacity: 0,
-                        dashArray: "0",
-                        lineCap: "round",
-                        lineJoin: "round",
-                    },
-                }).addTo(map);
+                    // Граница — сплошная
+                    L.geoJSON(data[0].geojson, {
+                        style: {
+                            color: "#1c508f",
+                            weight: 2.5,
+                            opacity: 0.45,
+                            fillOpacity: 0,
+                            dashArray: "0",
+                            lineCap: "round",
+                            lineJoin: "round",
+                        },
+                    }).addTo(map);
 
-                // Граница — пунктир поверх для эффекта
-                L.geoJSON(data[0].geojson, {
-                    style: {
-                        color: "#4a90d9",
-                        weight: 1,
-                        opacity: 0.6,
-                        fillOpacity: 0,
-                        dashArray: "8 12",
-                        lineCap: "round",
-                    },
-                }).addTo(map);
-            }
-        })
-        .catch((err) => console.warn("Границы не загружены:", err));
+                    // Граница — пунктир поверх для эффекта
+                    L.geoJSON(data[0].geojson, {
+                        style: {
+                            color: "#4a90d9",
+                            weight: 1,
+                            opacity: 0.6,
+                            fillOpacity: 0,
+                            dashArray: "8 12",
+                            lineCap: "round",
+                        },
+                    }).addTo(map);
+                }
+            })
+            .catch((err) => console.warn("Границы не загружены:", err));
 
-    // ─── Плавное появление карты ──────────────────────────────────────────
-    setTimeout(() => {
-        document.querySelector(".contacts__map-wrapper").classList.add("is-loaded");
-    }, 300);
-});
+        // ─── Плавное появление карты ──────────────────────────────────────────
+        setTimeout(() => {
+            document
+                .querySelector(".contacts__map-wrapper")
+                .classList.add("is-loaded");
+        }, 300);
+    });
 </script>
 
 <style>
@@ -331,7 +389,10 @@ document.addEventListener("DOMContentLoaded", () => {
         text-align: center;
         letter-spacing: -0.01em;
         color: #ffffff;
-        transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+        transition:
+            background 0.2s ease,
+            transform 0.15s ease,
+            box-shadow 0.2s ease;
     }
 
     .contacts__btn:hover {
@@ -360,7 +421,9 @@ document.addEventListener("DOMContentLoaded", () => {
             0 24px 64px rgba(28, 80, 143, 0.1);
         opacity: 0;
         transform: translateY(16px);
-        transition: opacity 0.6s ease, transform 0.6s ease;
+        transition:
+            opacity 0.6s ease,
+            transform 0.6s ease;
     }
 
     .contacts__map-wrapper.is-loaded {
@@ -451,7 +514,9 @@ document.addEventListener("DOMContentLoaded", () => {
         border: none;
         cursor: pointer;
         color: #1c508f;
-        transition: background 0.15s ease, color 0.15s ease;
+        transition:
+            background 0.15s ease,
+            color 0.15s ease;
     }
 
     .map-controls__btn:hover {
@@ -502,8 +567,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     @keyframes badgePulse {
-        0%, 100% { box-shadow: 0 0 0 3px rgba(28, 80, 143, 0.2); }
-        50%       { box-shadow: 0 0 0 6px rgba(28, 80, 143, 0.08); }
+        0%,
+        100% {
+            box-shadow: 0 0 0 3px rgba(28, 80, 143, 0.2);
+        }
+        50% {
+            box-shadow: 0 0 0 6px rgba(28, 80, 143, 0.08);
+        }
     }
 
     .map-badge__text {
@@ -568,9 +638,18 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     @keyframes pulseRing {
-        0%   { transform: scale(0.7); opacity: 1; }
-        70%  { transform: scale(1.1); opacity: 0.3; }
-        100% { transform: scale(1.2); opacity: 0; }
+        0% {
+            transform: scale(0.7);
+            opacity: 1;
+        }
+        70% {
+            transform: scale(1.1);
+            opacity: 0.3;
+        }
+        100% {
+            transform: scale(1.2);
+            opacity: 0;
+        }
     }
 
     :global(.pulse-marker__core) {
@@ -700,10 +779,22 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     /* z-index fix */
-    .contacts__map :global(.leaflet-pane) { z-index: 1; }
-    .contacts__map :global(.leaflet-tile-pane) { z-index: 1; }
-    .contacts__map :global(.leaflet-overlay-pane) { z-index: 2; }
-    .contacts__map :global(.leaflet-marker-pane) { z-index: 3; }
-    .contacts__map :global(.leaflet-popup-pane) { z-index: 4; }
-    .contacts__map :global(.leaflet-control) { z-index: 5; }
+    .contacts__map :global(.leaflet-pane) {
+        z-index: 1;
+    }
+    .contacts__map :global(.leaflet-tile-pane) {
+        z-index: 1;
+    }
+    .contacts__map :global(.leaflet-overlay-pane) {
+        z-index: 2;
+    }
+    .contacts__map :global(.leaflet-marker-pane) {
+        z-index: 3;
+    }
+    .contacts__map :global(.leaflet-popup-pane) {
+        z-index: 4;
+    }
+    .contacts__map :global(.leaflet-control) {
+        z-index: 5;
+    }
 </style>

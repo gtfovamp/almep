@@ -1,44 +1,34 @@
 ---
-// src/components/WhyUs.astro
+import type { Lang } from '../../utils/i18n';
 
-const features = [
-  {
-    icon: 'assets/icons/whyus-1.svg',
-    title: 'Правильный выбор',
-    description: 'Анализируя технические требования проекта, мы выбираем оптимальный продукт.',
-  },
-  {
-    icon: 'assets/icons/whyus-2.svg',
-    title: 'Оптимизация бюджета',
-    description: 'Создаём эффективные альтернативы с сохранением качества и соблюдением бюджета.',
-  },
-  {
-    icon: 'assets/icons/whyus-3.svg',
-    title: 'Экономия времени',
-    description: 'Благодаря быстрой логистике и точному планированию мы минимизируем потерю времени.',
-  },
-  {
-    icon: 'assets/icons/whyus-4.svg',
-    title: 'Контроль рисков',
-    description: 'Безопасная цепочка поставок благодаря управлению рисками.',
-  },
-];
+interface Props {
+  t: any;
+  lang: Lang;
+}
 
-const stats = [
-  { label: 'Довольные клиенты',      value: '98%', percent: 98 },
-  { label: 'Команда проффесионалов', value: '100%', percent: 100 },
-  { label: 'Успех в работе',         value: '99%',  percent: 99 },
-];
+const { t, lang } = Astro.props;
+
+// Получаем фичи из переводов и добавляем иконки
+const features = t.whyus.features.map((feature: any, index: number) => ({
+  ...feature,
+  icon: `/assets/icons/whyus-${index + 1}.svg`
+}));
+
+// Статистика с процентами для анимации
+const stats = t.whyus.stats.map((stat: any) => ({
+  ...stat,
+  percent: parseInt(stat.value.replace('%', ''))
+}));
 ---
 
 <section class="whyus">
   <div class="whyus__inner">
 
-    <h2 class="whyus__title">Почему выбирают нас</h2>
+    <h2 class="whyus__title">{t.whyus.title}</h2>
 
     <!-- Верхний ряд: иконки -->
     <div class="whyus__features">
-      {features.map((f) => (
+      {features.map((f: any) => (
         <div class="whyus__feature">
           <div class="whyus__icon-wrap">
             <img src={f.icon} alt={f.title} class="whyus__icon" />
@@ -57,7 +47,7 @@ const stats = [
 
         <!-- Прогрессбары -->
         <div class="whyus__stats">
-          {stats.map((s) => (
+          {stats.map((s: any) => (
             <div class="whyus__stat">
               <div class="whyus__stat-header">
                 <span class="whyus__stat-label">{s.label}</span>
@@ -74,15 +64,15 @@ const stats = [
         </div>
 
         <!-- Кнопка -->
-        <a href="/contact" class="whyus__btn">Запросить консультацию</a>
+        <a href={`/${lang}/contacts`} class="whyus__btn">{t.whyus.btn_consultation}</a>
 
       </div>
 
       <!-- Правая часть: фото -->
       <div class="whyus__photo-wrap">
         <img
-          src="assets/images/why-us.png"
-          alt="Почему выбирают нас"
+          src="/assets/images/why-us.png"
+          alt={t.whyus.photo_alt}
           class="whyus__photo"
         />
       </div>
@@ -253,8 +243,6 @@ const stats = [
     height: 100%;
     background: #1C508F;
     border-radius: 5px;
-
-    /* Анимация при загрузке */
     animation: barGrow 1.2s ease forwards;
     transform-origin: left;
   }

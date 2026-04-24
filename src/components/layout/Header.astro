@@ -1,34 +1,49 @@
 ---
 import Nav from './Nav.astro';
+import { getLangLabel, type Lang } from '../../utils/i18n';
+
+interface Props {
+  t: any;
+  lang: Lang;
+}
+
+const { t, lang } = Astro.props;
+
+const currentPath = new URL(Astro.request.url).pathname;
+const pathWithoutLang = currentPath.replace(/^\/(ru|en|az)/, '') || '/';
 
 const navLinks = [
-  { label: 'Главная', href: '/', active: true },
-  { label: 'О компании', href: '/about', dropdown: true },
-  { label: 'Услуги', href: '/services' },
-  { label: 'Продукция', href: '/products' },
-  { label: 'Партнёры', href: '/partners' },
-  { label: 'Портфолио', href: '/portfolio' },
-  { label: 'Новости', href: '/news' },
-  { label: 'Отзывы', href: '/reviews' },
-  { label: 'Контакты', href: '/contacts' },
+  { label: t.nav.home, href: `/${lang}`, active: pathWithoutLang === '/' },
+  { label: t.nav.about, href: `/${lang}/about`, dropdown: true },
+  { label: t.nav.services, href: `/${lang}/services` },
+  { label: t.nav.products, href: `/${lang}/products` },
+  { label: t.nav.partners, href: `/${lang}/partners` },
+  { label: t.nav.portfolio, href: `/${lang}/portfolio` },
+  { label: t.nav.news, href: `/${lang}/news` },
+  { label: t.nav.reviews, href: `/${lang}/reviews` },
+  { label: t.nav.contacts, href: `/${lang}/contacts` },
 ];
+
+const currentLangLabel = getLangLabel(lang);
+const otherLangs = [
+  { code: 'ru', label: 'RU' },
+  { code: 'en', label: 'EN' },
+  { code: 'az', label: 'AZ' },
+].filter(l => l.code !== lang);
 ---
 
 <header class="header">
   <div class="header__inner">
-
-    <!-- Верхняя строка -->
     <div class="header__top">
-
-      <!-- Левая часть: лого + кнопка каталог -->
       <div class="header__left">
-        <a href="/" class="header__logo">
+        <a href={`/${lang}`} class="header__logo">
           <img src="/assets/icons/logo.svg" alt="Almep Trading" width="162" height="56" />
         </a>
-        <a href="/products" class="header__catalog-btn">Каталог</a>
+        <a href={`/${lang}/products`} class="header__catalog-btn">
+          {t.header.catalog}
+        </a>
       </div>
 
-      <!-- Правая часть: поиск, язык, телефон -->
       <div class="header__right">
         <button class="header__search" aria-label="Поиск">
           <img src="/assets/icons/search.svg" alt="Поиск" width="28" height="28" />
@@ -38,46 +53,47 @@ const navLinks = [
         <div class="header__lang" id="langSwitcher">
           <div class="header__lang-trigger">
             <img src="/assets/icons/globe.svg" alt="Язык" width="28" height="28" />
-            <span class="header__lang-current">RU</span>
+            <span class="header__lang-current">{currentLangLabel}</span>
             <svg class="header__lang-arrow" width="15" height="8" viewBox="0 0 15 8" fill="none">
               <path d="M1 1L7.5 7L14 1" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
             </svg>
           </div>
 
-          <!-- Дропдаун языков -->
           <div class="header__lang-dropdown">
-            <!-- Верхняя строка с глобусом + текущий язык + стрелка -->
             <div class="header__lang-dropdown-top">
               <img src="/assets/icons/globe.svg" alt="Язык" width="28" height="28" />
-              <span class="header__lang-dropdown-label">RU</span>
+              <span class="header__lang-dropdown-label">{currentLangLabel}</span>
               <svg width="15" height="8" viewBox="0 0 15 8" fill="none">
                 <path d="M1 1L7.5 7L14 1" stroke="black" stroke-width="1.5" stroke-linecap="round"/>
               </svg>
             </div>
 
-            <!-- Разделитель -->
             <div class="header__lang-divider"></div>
 
-            <!-- Список языков -->
             <ul class="header__lang-list">
-              <li>
-                <button class="header__lang-option" data-lang="AZ">AZ</button>
-              </li>
-              <li>
-                <button class="header__lang-option" data-lang="EN">EN</button>
-              </li>
+              {otherLangs.map(l => (
+                <li>
+                  <a 
+                    href={`/${l.code}${pathWithoutLang}`}
+                    class="header__lang-option"
+                    data-lang={l.code}
+                  >
+                    {l.label}
+                  </a>
+                </li>
+              ))}
             </ul>
           </div>
         </div>
 
-        <a href="tel:+994102419910" class="header__phone">+994 10 241 99 10</a>
+        <a href={`tel:${t.header.phone.replace(/\s/g, '')}`} class="header__phone">
+          {t.header.phone}
+        </a>
       </div>
     </div>
 
-    <!-- Нижняя строка: навигация + соцсети -->
     <div class="header__bottom">
       <Nav links={navLinks} />
-
       <div class="header__socials">
         <a href="#" class="header__social-link" aria-label="Instagram">
           <img src="/assets/icons/instagram.svg" alt="Instagram" width="30" height="30" />
@@ -90,7 +106,6 @@ const navLinks = [
         </a>
       </div>
     </div>
-
   </div>
 </header>
 
@@ -110,7 +125,6 @@ const navLinks = [
     gap: 33px;
   }
 
-  /* === Верхняя строка === */
   .header__top {
     display: flex;
     flex-direction: row;
@@ -154,7 +168,6 @@ const navLinks = [
     background: #174480;
   }
 
-  /* === Правая часть === */
   .header__right {
     display: flex;
     flex-direction: row;
@@ -181,7 +194,6 @@ const navLinks = [
     filter: brightness(0) invert(1);
   }
 
-  /* === Языковой переключатель === */
   .header__lang {
     position: relative;
     cursor: pointer;
@@ -215,10 +227,8 @@ const navLinks = [
     flex-shrink: 0;
   }
 
-  /* Дропдаун — появляется строго под триггером */
   .header__lang-dropdown {
     position: absolute;
-    /* Прижимаем к верхнему краю триггера */
     top: 0;
     right: 0;
     width: 160px;
@@ -241,7 +251,6 @@ const navLinks = [
     transform: rotate(180deg);
   }
 
-  /* Верхняя строка в дропдауне: глобус + RU + стрелка */
   .header__lang-dropdown-top {
     display: flex;
     flex-direction: row;
@@ -264,7 +273,6 @@ const navLinks = [
     color: #000000;
   }
 
-  /* Разделитель */
   .header__lang-divider {
     width: 86px;
     height: 1px;
@@ -272,7 +280,6 @@ const navLinks = [
     margin: 10px auto 0;
   }
 
-  /* Список языков */
   .header__lang-list {
     list-style: none;
     padding: 11px 0 16px;
@@ -296,13 +303,14 @@ const navLinks = [
     padding: 0;
     width: 28px;
     transition: color 0.15s;
+    text-decoration: none;
+    display: block;
   }
 
   .header__lang-option:hover {
     color: #1C508F;
   }
 
-  /* Телефон */
   .header__phone {
     font-family: 'Montserrat', sans-serif;
     font-weight: 600;
@@ -312,7 +320,6 @@ const navLinks = [
     white-space: nowrap;
   }
 
-  /* === Нижняя строка === */
   .header__bottom {
     display: flex;
     flex-direction: row;
@@ -322,7 +329,6 @@ const navLinks = [
     height: 37px;
   }
 
-  /* === Соцсети === */
   .header__socials {
     display: flex;
     flex-direction: row;
@@ -349,29 +355,24 @@ const navLinks = [
 
 <script>
   const langSwitcher = document.getElementById('langSwitcher');
-  const langOptions = document.querySelectorAll('.header__lang-option');
-  const langCurrent = document.querySelector('.header__lang-current');
-  const langDropdownLabel = document.querySelector('.header__lang-dropdown-label');
 
-  // Открыть/закрыть дропдаун языков
+  // Открыть/закрыть дропдаун
   langSwitcher?.addEventListener('click', (e) => {
     e.stopPropagation();
     langSwitcher.classList.toggle('is-open');
   });
 
-  // Выбор языка
-  langOptions.forEach((btn) => {
-    btn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const lang = (btn as HTMLElement).dataset.lang ?? '';
-      if (langCurrent) langCurrent.textContent = lang;
-      if (langDropdownLabel) langDropdownLabel.textContent = lang;
-      langSwitcher?.classList.remove('is-open');
-    });
-  });
-
   // Закрыть при клике вне
   document.addEventListener('click', () => {
     langSwitcher?.classList.remove('is-open');
+  });
+  
+  // Переинициализация после View Transition
+  document.addEventListener('astro:page-load', () => {
+    const switcher = document.getElementById('langSwitcher');
+    switcher?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      switcher.classList.toggle('is-open');
+    });
   });
 </script>

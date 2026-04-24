@@ -1,19 +1,28 @@
 ---
+import type { Lang } from '../../utils/i18n';
+
+interface Props {
+  t: any;
+  lang: Lang;
+}
+
+const { t } = Astro.props;
+
 const features = [
   {
     icon: '/assets/icons/briefcase.svg',
-    title: 'Профессиональный поставщик',
-    text: 'Надёжный партнёр в высококачественных решениях для строительного и промышленного секторов.',
+    title: t.features.professional_title,
+    text: t.features.professional_text,
   },
   {
     icon: '/assets/icons/problem-solving-skills.svg',
-    title: 'Сторона, предлагающая решения',
-    text: 'Мы не просто продаём продукцию, мы предлагаем оптимальные решения, соответствующие требованиям проекта и техническим спецификациям.',
+    title: t.features.solutions_title,
+    text: t.features.solutions_text,
   },
   {
     icon: '/assets/icons/structure.svg',
-    title: 'Интегрированная структура',
-    text: 'Гибкая система управления, одновременно удовлетворяющая потребности как крупных B2B-проектов, так и розничного рынка (B2C).',
+    title: t.features.integrated_title,
+    text: t.features.integrated_text,
   },
 ];
 ---

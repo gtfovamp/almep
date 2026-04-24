@@ -1,4 +1,11 @@
 ---
+import type { Lang } from '../../utils/i18n';
+
+interface Props {
+  t: any;
+  lang: Lang;
+}
+const { t, lang } = Astro.props;
 ---
 
 <section class="hero">
@@ -6,21 +13,19 @@
 
   <div class="hero__content">
     <h1 class="hero__title">
-      Almep Trading — Ваш стратегический партнер в мире профессиональных решений
+      {t.hero.title}
     </h1>
 
     <p class="hero__description">
-      Almep Trading занимается организацией поставок и дистрибуции высококачественных
-      технических и электротехнических решений для бизнеса. Мы обеспечиваем стабильность,
-      надёжность и комплексную поддержку нашим партнёрам на всех этапах сотрудничества.
+      {t.hero.description}
     </p>
 
     <div class="hero__buttons">
-      <a href="/contacts" class="hero__btn hero__btn--primary">
-        Запросить консультацию
+      <a href={`/${lang}/contacts`} class="hero__btn hero__btn--primary">
+        {t.hero.btn_consultation}
       </a>
-      <a href="/products" class="hero__btn hero__btn--outline">
-        Перейти в каталог
+      <a href={`/${lang}/products`} class="hero__btn hero__btn--outline">
+        {t.hero.btn_catalog}
       </a>
     </div>
   </div>

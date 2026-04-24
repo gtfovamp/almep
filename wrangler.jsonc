@@ -1,0 +1,15 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "almep-trading",
+  "compatibility_date": "2025-02-04",
+  "observability": {
+    "enabled": true
+  },
+  "kv_namespaces": [
+    {
+      "binding": "KV",
+      "id": "8a8d3a3879a54b1cb0d40f4da79a5683",
+      "preview_id": "8a8d3a3879a54b1cb0d40f4da79a5683"
+    }
+  ]
+}

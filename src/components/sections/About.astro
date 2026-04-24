@@ -1,11 +1,19 @@
 ---
+import type { Lang } from '../../utils/i18n';
+
+interface Props {
+  t: any;
+  lang: Lang;
+}
+
+const { t, lang } = Astro.props;
 ---
 
 <section class="about">
   <div class="about__inner">
 
     <!-- Заголовок -->
-    <h2 class="about__title">Almep Trading</h2>
+    <h2 class="about__title">{t.about.title}</h2>
 
     <div class="about__content">
 
@@ -14,7 +22,7 @@
 
         <!-- Фото -->
         <div class="about__image-wrap">
-          <img src="assets/images/about-1.png" alt="Almep Trading" class="about__image" />
+          <img src="/assets/images/about-1.png" alt={t.about.title} class="about__image" />
         </div>
 
         <!-- Текст справа -->
@@ -22,13 +30,10 @@
 
           <div class="about__text-block">
             <p class="about__text">
-              Almep Trading: Больше, чем поставщик — ваш стратегический партнер.
-              В современном бизнесе успех проекта зависит от надежности цепочки поставок.
-              Мы в Almep Trading выходим за рамки обычных продаж.
+              {t.about.intro_1}
             </p>
             <p class="about__text">
-              В современном бизнесе успех проекта зависит от надежности цепочки поставок.
-              Мы в Almep Trading выходим за рамки обычных продаж.
+              {t.about.intro_2}
             </p>
           </div>
 
@@ -38,24 +43,22 @@
             <!-- Гарантия качества -->
             <div class="about__feature">
               <div class="about__feature-icon">
-                <img src="/assets/icons/guarantee.svg" alt="Гарантия качества" width="63" height="63" />
+                <img src="/assets/icons/guarantee.svg" alt={t.about.feature_quality_title} width="63" height="63" />
               </div>
-              <h4 class="about__feature-title">Гарантия качества</h4>
+              <h4 class="about__feature-title">{t.about.feature_quality_title}</h4>
               <p class="about__feature-text">
-                Обеспечиваем 100% контроль продукции через лабораторные тесты
-                и международную сертификацию ISO.
+                {t.about.feature_quality_text}
               </p>
             </div>
 
             <!-- Проектная оптимизация -->
             <div class="about__feature">
               <div class="about__feature-icon">
-                <img src="/assets/icons/workflow.svg" alt="Проектная оптимизация" width="63" height="63" />
+                <img src="/assets/icons/workflow.svg" alt={t.about.feature_optimization_title} width="63" height="63" />
               </div>
-              <h4 class="about__feature-title">Проектная оптимизация</h4>
+              <h4 class="about__feature-title">{t.about.feature_optimization_title}</h4>
               <p class="about__feature-text">
-                Не просто продаем товар, а подбираем лучшие технические решения
-                под ваш бюджет и график.
+                {t.about.feature_optimization_text}
               </p>
             </div>
 
@@ -69,28 +72,21 @@
         <!-- Текст слева -->
         <div class="about__text-col about__text-col--left">
           <p class="about__text">
-            Мы доверяем только лучшим, поэтому в нашем портфеле представлены мировые лидеры:
+            {t.about.partners_intro}
           </p>
           <ul class="about__list">
-            <li>
-              Berent и Harden — эталон профессионального ручного инструмента для самых сложных задач.
-            </li>
-            <li>
-              EKF — передовые электротехнические решения для безопасной и эффективной энергосистемы.
-            </li>
-            <li>
-              Sensh — инновационные компоненты для промышленной автоматизации и производства.
-            </li>
+            <li>{t.about.partner_berent}</li>
+            <li>{t.about.partner_ekf}</li>
+            <li>{t.about.partner_sensh}</li>
           </ul>
           <p class="about__text">
-            Almep — это гарантия качества, соблюдение сроков и индивидуальный подход
-            к каждому техническому заданию.
+            {t.about.conclusion}
           </p>
         </div>
 
         <!-- Фото -->
         <div class="about__image-wrap">
-          <img src="assets/images/about-2.png" alt="Almep Trading продукция" class="about__image" />
+          <img src="/assets/images/about-2.png" alt={`${t.about.title} ${t.nav.products}`} class="about__image" />
         </div>
 
       </div>
@@ -99,7 +95,7 @@
 
     <!-- Кнопка -->
     <div class="about__cta">
-      <a href="/contacts" class="about__btn">Запросить консультацию</a>
+      <a href={`/${lang}/contacts`} class="about__btn">{t.about.btn_consultation}</a>
     </div>
 
   </div>
