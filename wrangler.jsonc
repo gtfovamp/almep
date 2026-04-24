@@ -2,9 +2,11 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "almep-trading",
   "compatibility_date": "2025-02-04",
+    "assets": { "directory": "./dist" },
   "observability": {
     "enabled": true
   },
+  
   "kv_namespaces": [
     {
       "binding": "KV",
