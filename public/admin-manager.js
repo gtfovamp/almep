@@ -291,3 +291,8 @@ class PartnersManager extends AdminManager {
     }
   }
 }
+
+// Export to global scope
+window.AdminManager = AdminManager;
+window.PortfolioManager = PortfolioManager;
+window.PartnersManager = PartnersManager;
