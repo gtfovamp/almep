@@ -13,7 +13,7 @@ In a new terminal, run:
 ```bash
 curl -X POST http://localhost:4321/api/admin/create-user \
   -H "Content-Type: application/json" \
-  -d '{"username":"admin","password":"admin123"}'
+  -d '{"username":"fuadadmin2026","password":"fuadadmin2026"}'
 ```
 
 You should see: `{"success":true}`
@@ -22,8 +22,8 @@ You should see: `{"success":true}`
 
 1. Open http://localhost:4321/admin/login
 2. Login with:
-   - Username: `admin`
-   - Password: `admin123`
+   - Username: `fuadadmin2026`
+   - Password: `fuadadmin2026`
 
 ## 4. Start Managing Content
 
@@ -54,10 +54,8 @@ npm run deploy
 ```bash
 curl -X POST https://your-domain.com/api/admin/create-user \
   -H "Content-Type: application/json" \
-  -d '{"username":"admin","password":"YOUR_STRONG_PASSWORD_HERE"}'
+  -d '{"username":"fuadadmin2026","password":"fuadadmin2026"}'
 ```
-
-**IMPORTANT:** Use a strong password in production!
 
 ### 4. Disable User Creation (Optional)
 

@@ -109,13 +109,13 @@ npm run dev
 # 2. Создать админа
 curl -X POST http://localhost:4321/api/admin/create-user \
   -H "Content-Type: application/json" \
-  -d '{"username":"admin","password":"admin123"}'
+  -d '{"username":"fuadadmin2026","password":"fuadadmin2026"}'
 
 # 3. Открыть админку
 open http://localhost:4321/admin/login
 ```
 
-**Логин**: admin / admin123
+**Логин**: fuadadmin2026 / fuadadmin2026
 
 ## 🎯 Преимущества
 

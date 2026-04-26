@@ -12,14 +12,14 @@ npx wrangler d1 execute almep-db --remote --file=migrations/0004_create_admin_au
 ```bash
 curl -X POST http://localhost:4321/api/admin/create-user \
   -H "Content-Type: application/json" \
-  -d '{"username":"admin","password":"admin123"}'
+  -d '{"username":"fuadadmin2026","password":"fuadadmin2026"}'
 ```
 
-For production, use a strong password:
+For production:
 ```bash
 curl -X POST https://your-domain.com/api/admin/create-user \
   -H "Content-Type: application/json" \
-  -d '{"username":"admin","password":"YOUR_STRONG_PASSWORD"}'
+  -d '{"username":"fuadadmin2026","password":"fuadadmin2026"}'
 ```
 
 ## Security Notes
@@ -36,9 +36,9 @@ curl -X POST https://your-domain.com/api/admin/create-user \
 - Portfolio: `/admin/portfolio`
 - Partners: `/admin/partners`
 
-## Default Credentials (Development Only)
+## Default Credentials
 
-- Username: `admin`
-- Password: `admin123`
+- Username: `fuadadmin2026`
+- Password: `fuadadmin2026`
 
-**IMPORTANT: Change these credentials in production!**
+**Note:** These credentials are used for both development and production.
