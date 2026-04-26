@@ -162,8 +162,8 @@ try {
   </div>
 
   <script src="/admin-manager.js" is:inline></script>
-  <script>
-    const partnersManager = new PartnersManager({
+  <script is:inline>
+    window.partnersManager = new PartnersManager({
       apiEndpoint: '/api/partners',
       formId: 'partnerForm',
       listId: 'partnerList'

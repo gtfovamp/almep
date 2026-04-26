@@ -174,8 +174,8 @@ try {
   </div>
 
   <script src="/admin-manager.js" is:inline></script>
-  <script>
-    const portfolioManager = new PortfolioManager({
+  <script is:inline>
+    window.portfolioManager = new PortfolioManager({
       apiEndpoint: '/api/portfolio',
       formId: 'portfolioForm',
       listId: 'portfolioList'
