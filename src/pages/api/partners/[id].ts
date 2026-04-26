@@ -1,167 +1,81 @@
 import type { APIRoute } from 'astro';
-import { env } from 'cloudflare:workers';
+import { getItem, updateItem, deleteItem, validateImageFile, errorResponse, successResponse } from '../../../lib/api-helpers';
+import { requireAuth } from '../../../lib/auth';
 
 export const prerender = false;
 
 export const GET: APIRoute = async ({ params }) => {
   try {
-    const db = env.DB;
-    const id = params.id;
+    const item = await getItem('partners', params.id!);
 
-    if (!db) {
-      return new Response(JSON.stringify({ error: 'Database not available' }), {
-        status: 503,
-        headers: { 'Content-Type': 'application/json' }
-      });
+    if (!item) {
+      return errorResponse('Partner not found', 404);
     }
 
-    const result = await db.prepare('SELECT * FROM partners WHERE id = ?').bind(id).first();
-
-    if (!result) {
-      return new Response(JSON.stringify({ error: 'Partner not found' }), {
-        status: 404,
-        headers: { 'Content-Type': 'application/json' }
-      });
-    }
-
-    return new Response(JSON.stringify(result), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' }
-    });
+    return successResponse(item);
   } catch (error) {
-    console.error('Error fetching partner:', error);
-    return new Response(JSON.stringify({ error: 'Failed to fetch partner' }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' }
-    });
+    console.error('Get partner error:', error);
+    return errorResponse('Failed to fetch partner', 500);
   }
 };
 
-export const PUT: APIRoute = async ({ params, request }) => {
+export const PUT: APIRoute = async ({ params, request, cookies }) => {
   try {
-    const db = env.DB;
-    const kv = env.KV;
-    const id = params.id;
-
-    if (!db || !kv) {
-      return new Response(JSON.stringify({ error: 'Database or storage not available' }), {
-        status: 503,
-        headers: { 'Content-Type': 'application/json' }
-      });
-    }
+    // Check authentication
+    const authError = await requireAuth(cookies);
+    if (authError) return authError;
 
     const formData = await request.formData();
-    const name = formData.get('name') as string;
-    const name_en = formData.get('name_en') as string;
-    const name_az = formData.get('name_az') as string;
-    const description = formData.get('description') as string;
-    const description_en = formData.get('description_en') as string;
-    const description_az = formData.get('description_az') as string;
     const image = formData.get('image') as File | null;
 
-    let imageUrl: string | undefined;
-
-    // If new image uploaded, upload to KV
+    // Validate image if provided
     if (image && image.size > 0) {
-      const imageKey = `partners/${Date.now()}-${image.name}`;
-      const imageBuffer = await image.arrayBuffer();
-
-      await kv.put(imageKey, imageBuffer, {
-        metadata: {
-          contentType: image.type,
-          fileName: image.name,
-          uploadedAt: new Date().toISOString()
-        }
-      });
-      imageUrl = `/images/${imageKey}`;
+      const imageError = validateImageFile(image);
+      if (imageError) {
+        return errorResponse(imageError);
+      }
     }
 
-    // Update database
-    const updateFields = [];
-    const values = [];
+    const fields: Record<string, any> = {};
 
-    if (name) {
-      updateFields.push('name = ?');
-      values.push(name);
-    }
-    if (name_en !== undefined) {
-      updateFields.push('name_en = ?');
-      values.push(name_en);
-    }
-    if (name_az !== undefined) {
-      updateFields.push('name_az = ?');
-      values.push(name_az);
-    }
-    if (description !== undefined) {
-      updateFields.push('description = ?');
-      values.push(description);
-    }
-    if (description_en !== undefined) {
-      updateFields.push('description_en = ?');
-      values.push(description_en);
-    }
-    if (description_az !== undefined) {
-      updateFields.push('description_az = ?');
-      values.push(description_az);
-    }
-    if (imageUrl) {
-      updateFields.push('image_url = ?');
-      values.push(imageUrl);
-    }
+    const name = formData.get('name');
+    if (name) fields.name = name;
 
-    updateFields.push('updated_at = CURRENT_TIMESTAMP');
-    values.push(id);
+    const name_en = formData.get('name_en');
+    if (name_en !== null) fields.name_en = name_en;
 
-    await db.prepare(
-      `UPDATE partners SET ${updateFields.join(', ')} WHERE id = ?`
-    ).bind(...values).run();
+    const name_az = formData.get('name_az');
+    if (name_az !== null) fields.name_az = name_az;
 
-    return new Response(JSON.stringify({ success: true }), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' }
-    });
+    const description = formData.get('description');
+    if (description !== null) fields.description = description;
+
+    const description_en = formData.get('description_en');
+    if (description_en !== null) fields.description_en = description_en;
+
+    const description_az = formData.get('description_az');
+    if (description_az !== null) fields.description_az = description_az;
+
+    await updateItem('partners', params.id!, fields, image && image.size > 0 ? image : undefined);
+
+    return successResponse({ success: true });
   } catch (error) {
-    console.error('Error updating partner:', error);
-    return new Response(JSON.stringify({ error: 'Failed to update partner' }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' }
-    });
+    console.error('Update partner error:', error);
+    return errorResponse('Failed to update partner', 500);
   }
 };
 
-export const DELETE: APIRoute = async ({ params }) => {
+export const DELETE: APIRoute = async ({ params, cookies }) => {
   try {
-    const db = env.DB;
-    const kv = env.KV;
-    const id = params.id;
+    // Check authentication
+    const authError = await requireAuth(cookies);
+    if (authError) return authError;
 
-    if (!db || !kv) {
-      return new Response(JSON.stringify({ error: 'Database or storage not available' }), {
-        status: 503,
-        headers: { 'Content-Type': 'application/json' }
-      });
-    }
+    await deleteItem('partners', params.id!);
 
-    // Get image URL before deleting
-    const { results } = await db.prepare('SELECT image_url FROM partners WHERE id = ?').bind(id).all();
-    const item = results[0] as any;
-
-    if (item?.image_url) {
-      const imageKey = item.image_url.replace('/images/', '');
-      await kv.delete(imageKey);
-    }
-
-    await db.prepare('DELETE FROM partners WHERE id = ?').bind(id).run();
-
-    return new Response(JSON.stringify({ success: true }), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' }
-    });
+    return successResponse({ success: true });
   } catch (error) {
-    console.error('Error deleting partner:', error);
-    return new Response(JSON.stringify({ error: 'Failed to delete partner' }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' }
-    });
+    console.error('Delete partner error:', error);
+    return errorResponse('Failed to delete partner', 500);
   }
 };

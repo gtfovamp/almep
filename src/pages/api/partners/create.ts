@@ -1,21 +1,17 @@
 import type { APIRoute } from 'astro';
-import { env } from 'cloudflare:workers';
+import { createItem, validateRequired, validateImageFile, errorResponse, successResponse } from '../../../lib/api-helpers';
+import { requireAuth } from '../../../lib/auth';
 
 export const prerender = false;
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, cookies }) => {
   try {
-    const db = env.DB;
-    const kv = env.KV;
-
-    if (!db || !kv) {
-      return new Response(JSON.stringify({ error: 'Database or storage not available' }), {
-        status: 503,
-        headers: { 'Content-Type': 'application/json' }
-      });
-    }
+    // Check authentication
+    const authError = await requireAuth(cookies);
+    if (authError) return authError;
 
     const formData = await request.formData();
+
     const name = formData.get('name') as string;
     const name_en = formData.get('name_en') as string;
     const name_az = formData.get('name_az') as string;
@@ -24,51 +20,31 @@ export const POST: APIRoute = async ({ request }) => {
     const description_az = formData.get('description_az') as string;
     const image = formData.get('image') as File;
 
-    if (!name || !image) {
-      return new Response(JSON.stringify({ error: 'Missing required fields' }), {
-        status: 400,
-        headers: { 'Content-Type': 'application/json' }
-      });
+    // Validate required fields
+    const validationError = validateRequired({ name, image }, ['name', 'image']);
+    if (validationError) {
+      return errorResponse(validationError);
     }
 
-    // Upload image to KV
-    const imageKey = `partners/${Date.now()}-${image.name}`;
-    const imageBuffer = await image.arrayBuffer();
+    // Validate image
+    const imageError = validateImageFile(image);
+    if (imageError) {
+      return errorResponse(imageError);
+    }
 
-    await kv.put(imageKey, imageBuffer, {
-      metadata: {
-        contentType: image.type,
-        fileName: image.name,
-        uploadedAt: new Date().toISOString()
-      }
-    });
+    // Create item
+    const result = await createItem('partners', {
+      name,
+      name_en,
+      name_az,
+      description,
+      description_en,
+      description_az
+    }, image);
 
-    const imageUrl = `/images/${imageKey}`;
-
-    // Get max order_index
-    const { results: maxOrder } = await db.prepare(
-      'SELECT MAX(order_index) as max_order FROM partners'
-    ).all();
-    const nextOrder = (maxOrder[0]?.max_order || 0) + 1;
-
-    // Insert into database
-    const result = await db.prepare(
-      `INSERT INTO partners (name, name_en, name_az, description, description_en, description_az, image_url, order_index)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
-    ).bind(name, name_en, name_az, description, description_en, description_az, imageUrl, nextOrder).run();
-
-    return new Response(JSON.stringify({
-      success: true,
-      id: result.meta.last_row_id
-    }), {
-      status: 201,
-      headers: { 'Content-Type': 'application/json' }
-    });
+    return successResponse({ success: true, id: result.id }, 201);
   } catch (error) {
-    console.error('Error creating partner:', error);
-    return new Response(JSON.stringify({ error: 'Failed to create partner' }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' }
-    });
+    console.error('Create partner error:', error);
+    return errorResponse('Failed to create partner', 500);
   }
 };
