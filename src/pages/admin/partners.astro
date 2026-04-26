@@ -124,7 +124,7 @@ const { results: partners } = await db.prepare(
     const imageInput = document.getElementById('image');
     const currentImageDiv = document.getElementById('current-image');
 
-    function openModal() {
+    window.openModal = function() {
       document.getElementById('modal-title').textContent = 'Add Partner';
       form.reset();
       document.getElementById('partner-id').value = '';
@@ -132,11 +132,11 @@ const { results: partners } = await db.prepare(
       modal.classList.add('active');
     }
 
-    function closeModal() {
+    window.closeModal = function() {
       modal.classList.remove('active');
     }
 
-    async function editPartner(id) {
+    window.editPartner = async function(id) {
       const response = await fetch(`/api/partners/${id}`);
       const partner = await response.json();
 
@@ -158,7 +158,7 @@ const { results: partners } = await db.prepare(
       modal.classList.add('active');
     }
 
-    async function deletePartner(id) {
+    window.deletePartner = async function(id) {
       if (!confirm('Are you sure you want to delete this partner?')) return;
 
       await fetch(`/api/partners/${id}`, { method: 'DELETE' });
