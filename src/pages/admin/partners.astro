@@ -1,6 +1,7 @@
 ---
-const runtime = Astro.locals.runtime;
-const db = runtime.env.DB;
+import { env } from 'cloudflare:workers';
+
+const db = env.DB;
 
 const { results: partners } = await db.prepare(
   'SELECT * FROM partners ORDER BY order_index ASC'

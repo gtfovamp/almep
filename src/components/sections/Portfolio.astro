@@ -1,4 +1,5 @@
 ---
+import { env } from 'cloudflare:workers';
 import type { Lang } from '../../utils/i18n';
 
 export const prerender = false;
@@ -13,10 +14,13 @@ const { t, lang } = Astro.props;
 // Fetch portfolio items from API
 let portfolioItems = [];
 try {
-  const response = await fetch(new URL('/api/portfolio', Astro.url.origin));
-  if (response.ok) {
-    const data = await response.json();
-    portfolioItems = data.map((item: any) => ({
+  const db = env.DB;
+  if (db) {
+    const { results } = await db.prepare(
+      'SELECT * FROM portfolio ORDER BY order_index ASC LIMIT 9'
+    ).all();
+
+    portfolioItems = results.map((item: any) => ({
       image: item.image_url,
       title: lang === 'en' ? (item.title_en || item.title) :
              lang === 'az' ? (item.title_az || item.title) :
