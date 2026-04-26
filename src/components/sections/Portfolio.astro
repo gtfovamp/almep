@@ -1,6 +1,8 @@
 ---
 import type { Lang } from '../../utils/i18n';
 
+export const prerender = false;
+
 interface Props {
   t: any;
   lang: Lang;
@@ -8,20 +10,23 @@ interface Props {
 
 const { t, lang } = Astro.props;
 
-const portfolioItems = [
-  { image: '/assets/images/portfolio-1.jpg',  title: 'Азербайджанский технический университет', year: '2011' },
-  { image: '/assets/images/portfolio-2.jpg',  title: 'Metro',                                   year: '2015' },
-  { image: '/assets/images/portfolio-3.jpg',  title: 'Əmlak Xidmətləri Məkanı',                 year: '2017' },
-  { image: '/assets/images/portfolio-4.jpg',  title: 'Школа №47',                               year: '2018' },
-  { image: '/assets/images/portfolio-5.jpg',  title: 'UNEC',                                    year: '2019' },
-  { image: '/assets/images/portfolio-6.jpg',  title: 'Seaside Resort',                          year: '2020' },
-  { image: '/assets/images/portfolio-7.jpg',  title: 'Baku White City',                         year: '2020' },
-  { image: '/assets/images/portfolio-8.jpg',  title: 'Heydar Aliyev Center',                    year: '2021' },
-  { image: '/assets/images/portfolio-9.jpg',  title: 'Port Baku Mall',                          year: '2021' },
-  { image: '/assets/images/portfolio-10.jpg', title: 'SOCAR Tower',                             year: '2022' },
-  { image: '/assets/images/portfolio-11.jpg', title: 'Flame Towers',                            year: '2022' },
-  { image: '/assets/images/portfolio-12.jpg', title: 'Crystal Hall',                            year: '2023' },
-];
+// Fetch portfolio items from API
+let portfolioItems = [];
+try {
+  const response = await fetch(new URL('/api/portfolio', Astro.url.origin));
+  if (response.ok) {
+    const data = await response.json();
+    portfolioItems = data.map((item: any) => ({
+      image: item.image_url,
+      title: lang === 'en' ? (item.title_en || item.title) :
+             lang === 'az' ? (item.title_az || item.title) :
+             item.title,
+      year: item.year
+    }));
+  }
+} catch (error) {
+  console.error('Error fetching portfolio:', error);
+}
 
 const slides = [];
 for (let i = 0; i < portfolioItems.length; i += 6) {

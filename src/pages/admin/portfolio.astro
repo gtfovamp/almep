@@ -1,0 +1,973 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { env } from 'cloudflare:workers';
+
+export const prerender = false;
+
+let portfolioItems = [];
+try {
+  const db = env.DB;
+
+  if (db) {
+    const { results } = await db.prepare(
+      'SELECT * FROM portfolio ORDER BY order_index ASC'
+    ).all();
+    portfolioItems = results || [];
+  }
+} catch (error) {
+  console.error('Error fetching portfolio:', error);
+}
+---
+
+<Layout title="Админка - Портфолио">
+  <div class="admin">
+    <div class="admin__container">
+      <header class="admin__header">
+        <h1>Управление портфолио</h1>
+        <a href="/" class="admin__back">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M12 4L6 10L12 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          На сайт
+        </a>
+      </header>
+
+      <div class="admin__content">
+        <section class="admin__form-section" id="formSection">
+          <div class="form-header">
+            <h2 id="formTitle">Добавить новый проект</h2>
+            <button type="button" class="btn btn--ghost" id="cancelEdit" style="display: none;">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M12 4L4 12M4 4L12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+              Отменить
+            </button>
+          </div>
+          <form id="portfolioForm" class="admin__form" enctype="multipart/form-data">
+            <div class="form__row">
+              <div class="form__group">
+                <label for="title">Название (RU) *</label>
+                <input type="text" id="title" name="title" required />
+              </div>
+              <div class="form__group">
+                <label for="year">Год *</label>
+                <input type="text" id="year" name="year" required placeholder="2024" />
+              </div>
+            </div>
+
+            <div class="form__row">
+              <div class="form__group">
+                <label for="title_en">Название (EN)</label>
+                <input type="text" id="title_en" name="title_en" />
+              </div>
+              <div class="form__group">
+                <label for="title_az">Название (AZ)</label>
+                <input type="text" id="title_az" name="title_az" />
+              </div>
+            </div>
+
+            <div class="form__group">
+              <label for="description">Описание (RU)</label>
+              <textarea id="description" name="description" rows="3"></textarea>
+            </div>
+
+            <div class="form__row">
+              <div class="form__group">
+                <label for="description_en">Описание (EN)</label>
+                <textarea id="description_en" name="description_en" rows="3"></textarea>
+              </div>
+              <div class="form__group">
+                <label for="description_az">Описание (AZ)</label>
+                <textarea id="description_az" name="description_az" rows="3"></textarea>
+              </div>
+            </div>
+
+            <div class="form__group">
+              <label for="image">
+                Изображение *
+                <span class="label-hint">Рекомендуемый размер: 450×330px</span>
+              </label>
+              <div class="file-upload" id="fileUpload">
+                <input type="file" id="image" name="image" accept="image/*" required />
+                <div class="file-upload__placeholder">
+                  <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                    <path d="M24 16V32M16 24H32" stroke="#1C508F" stroke-width="2" stroke-linecap="round"/>
+                    <rect x="4" y="4" width="40" height="40" rx="4" stroke="#1C508F" stroke-width="2"/>
+                  </svg>
+                  <span>Нажмите или перетащите изображение</span>
+                </div>
+                <div class="file-upload__preview" style="display: none;">
+                  <img src="" alt="Preview" />
+                  <button type="button" class="file-upload__remove">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                      <path d="M15 5L5 15M5 5L15 15" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="form__actions">
+              <button type="submit" class="btn btn--primary" id="submitBtn">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <path d="M10 4V16M4 10H16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                Добавить проект
+              </button>
+            </div>
+          </form>
+        </section>
+
+        <section class="admin__list-section">
+          <div class="list-header">
+            <h2>Существующие проекты</h2>
+            <span class="list-count">{portfolioItems.length} {portfolioItems.length === 1 ? 'проект' : portfolioItems.length < 5 ? 'проекта' : 'проектов'}</span>
+          </div>
+          {portfolioItems.length === 0 ? (
+            <div class="empty-state">
+              <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+                <rect x="8" y="8" width="48" height="48" rx="4" stroke="#ccc" stroke-width="2"/>
+                <path d="M32 24V40M24 32H40" stroke="#ccc" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+              <p>Пока нет проектов в портфолио</p>
+              <span>Добавьте первый проект, используя форму выше</span>
+            </div>
+          ) : (
+            <div class="portfolio__list" id="portfolioList">
+              {portfolioItems.map((item) => (
+                <div class="portfolio__item" data-id={item.id} data-order={item.order_index} draggable="true">
+                  <div class="portfolio__item-drag" title="Перетащите для изменения порядка">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                      <circle cx="7" cy="5" r="1.5" fill="#999"/>
+                      <circle cx="13" cy="5" r="1.5" fill="#999"/>
+                      <circle cx="7" cy="10" r="1.5" fill="#999"/>
+                      <circle cx="13" cy="10" r="1.5" fill="#999"/>
+                      <circle cx="7" cy="15" r="1.5" fill="#999"/>
+                      <circle cx="13" cy="15" r="1.5" fill="#999"/>
+                    </svg>
+                  </div>
+                  <div class="portfolio__item-image">
+                    <img src={item.image_url} alt={item.title} />
+                  </div>
+                  <div class="portfolio__item-info">
+                    <h3>{item.title}</h3>
+                    <div class="portfolio__item-meta">
+                      <span class="meta-year">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                          <circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5"/>
+                          <path d="M8 4V8L11 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                        {item.year}
+                      </span>
+                      {item.title_en && <span class="meta-lang">EN</span>}
+                      {item.title_az && <span class="meta-lang">AZ</span>}
+                    </div>
+                  </div>
+                  <div class="portfolio__item-actions">
+                    <button class="btn btn--icon btn--edit" onclick={`editPortfolio(${item.id})`} title="Редактировать">
+                      <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                        <path d="M12.5 2.5L15.5 5.5L6 15H3V12L12.5 2.5Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    </button>
+                    <button class="btn btn--icon btn--danger" onclick={`deletePortfolio(${item.id})`} title="Удалить">
+                      <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                        <path d="M3 5H15M7 8V13M11 8V13M4 5L5 15H13L14 5M7 5V3H11V5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </section>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  * {
+    box-sizing: border-box;
+  }
+
+  .admin {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
+    padding: 40px 20px;
+  }
+
+  .admin__container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .admin__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+    padding: 24px 32px;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.06);
+  }
+
+  .admin__header h1 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 28px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin: 0;
+  }
+
+  .admin__back {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #1C508F;
+    text-decoration: none;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    padding: 10px 16px;
+    border-radius: 8px;
+    transition: all 0.2s;
+  }
+
+  .admin__back:hover {
+    background: #f0f4f8;
+  }
+
+  .admin__content {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .admin__form-section,
+  .admin__list-section {
+    background: white;
+    padding: 32px;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.06);
+  }
+
+  .form-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #f0f0f0;
+  }
+
+  .form-header h2 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin: 0;
+  }
+
+  .list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #f0f0f0;
+  }
+
+  .list-header h2 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin: 0;
+  }
+
+  .list-count {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #666;
+    background: #f5f5f5;
+    padding: 6px 12px;
+    border-radius: 20px;
+  }
+
+  .admin__form {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .form__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  .form__group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .form__group label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .label-hint {
+    font-size: 12px;
+    font-weight: 400;
+    color: #999;
+  }
+
+  .form__group input:not([type="file"]),
+  .form__group textarea {
+    padding: 12px 16px;
+    border: 2px solid #e5e5e5;
+    border-radius: 10px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    transition: all 0.2s;
+    background: #fafafa;
+  }
+
+  .form__group input:not([type="file"]):focus,
+  .form__group textarea:focus {
+    outline: none;
+    border-color: #1C508F;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(28, 80, 143, 0.1);
+  }
+
+  .form__group textarea {
+    resize: vertical;
+    min-height: 80px;
+  }
+
+  .file-upload {
+    position: relative;
+  }
+
+  .file-upload input[type="file"] {
+    position: absolute;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    z-index: 2;
+  }
+
+  .file-upload__placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 40px;
+    border: 2px dashed #d0d0d0;
+    border-radius: 12px;
+    background: #fafafa;
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+
+  .file-upload:hover .file-upload__placeholder {
+    border-color: #1C508F;
+    background: #f0f4f8;
+  }
+
+  .file-upload__placeholder span {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    color: #666;
+  }
+
+  .file-upload__preview {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    max-width: 300px;
+  }
+
+  .file-upload__preview img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .file-upload__remove {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 32px;
+    height: 32px;
+    background: rgba(220, 53, 69, 0.9);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+
+  .file-upload__remove:hover {
+    background: #dc3545;
+    transform: scale(1.1);
+  }
+
+  .form__actions {
+    display: flex;
+    gap: 12px;
+    padding-top: 8px;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 10px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .btn--primary {
+    background: #1C508F;
+    color: white;
+    box-shadow: 0 2px 8px rgba(28, 80, 143, 0.2);
+  }
+
+  .btn--primary:hover {
+    background: #174480;
+    box-shadow: 0 4px 12px rgba(28, 80, 143, 0.3);
+    transform: translateY(-1px);
+  }
+
+  .btn--primary:active {
+    transform: translateY(0);
+  }
+
+  .btn--ghost {
+    background: transparent;
+    color: #666;
+    border: 2px solid #e5e5e5;
+  }
+
+  .btn--ghost:hover {
+    background: #f5f5f5;
+    border-color: #d0d0d0;
+  }
+
+  .btn--icon {
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border-radius: 8px;
+  }
+
+  .btn--edit {
+    background: #f0f4f8;
+    color: #1C508F;
+  }
+
+  .btn--edit:hover {
+    background: #1C508F;
+    color: white;
+  }
+
+  .btn--danger {
+    background: #fff5f5;
+    color: #dc3545;
+  }
+
+  .btn--danger:hover {
+    background: #dc3545;
+    color: white;
+  }
+
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    text-align: center;
+  }
+
+  .empty-state svg {
+    margin-bottom: 16px;
+  }
+
+  .empty-state p {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 18px;
+    font-weight: 500;
+    color: #333;
+    margin: 0 0 8px 0;
+  }
+
+  .empty-state span {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    color: #999;
+  }
+
+  .portfolio__list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .portfolio__item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px;
+    background: #fafafa;
+    border: 2px solid #f0f0f0;
+    border-radius: 12px;
+    transition: all 0.2s;
+  }
+
+  .portfolio__item:hover {
+    background: white;
+    border-color: #e0e0e0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+
+  .portfolio__item.dragging {
+    opacity: 0.5;
+    cursor: grabbing;
+  }
+
+  .portfolio__item.drag-over {
+    border-color: #1C508F;
+    background: #f0f4f8;
+  }
+
+  .portfolio__item-drag {
+    cursor: grab;
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    border-radius: 6px;
+    transition: background 0.2s;
+  }
+
+  .portfolio__item-drag:hover {
+    background: #e8e8e8;
+  }
+
+  .portfolio__item-drag:active {
+    cursor: grabbing;
+  }
+
+  .portfolio__item-image {
+    width: 120px;
+    height: 80px;
+    border-radius: 8px;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: #e0e0e0;
+  }
+
+  .portfolio__item-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .portfolio__item-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .portfolio__item-info h3 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin: 0 0 8px 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .portfolio__item-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .meta-year {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    color: #666;
+  }
+
+  .meta-lang {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    color: #1C508F;
+    background: #e8f0f8;
+    padding: 3px 8px;
+    border-radius: 4px;
+  }
+
+  .portfolio__item-actions {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 768px) {
+    .form__row {
+      grid-template-columns: 1fr;
+    }
+
+    .portfolio__item {
+      flex-wrap: wrap;
+    }
+
+    .portfolio__item-actions {
+      width: 100%;
+      justify-content: flex-end;
+    }
+  }
+</style>
+
+<script>
+  const form = document.getElementById('portfolioForm') as HTMLFormElement;
+  const formTitle = document.getElementById('formTitle') as HTMLHeadingElement;
+  const submitBtn = document.getElementById('submitBtn') as HTMLButtonElement;
+  const cancelBtn = document.getElementById('cancelEdit') as HTMLButtonElement;
+  const imageInput = document.getElementById('image') as HTMLInputElement;
+  const fileUpload = document.getElementById('fileUpload') as HTMLElement;
+  const fileUploadPlaceholder = fileUpload?.querySelector('.file-upload__placeholder') as HTMLElement;
+  const fileUploadPreview = fileUpload?.querySelector('.file-upload__preview') as HTMLElement;
+  const fileUploadPreviewImg = fileUploadPreview?.querySelector('img') as HTMLImageElement;
+  const fileUploadRemove = fileUpload?.querySelector('.file-upload__remove') as HTMLButtonElement;
+
+  let editingId: number | null = null;
+
+  // File upload preview
+  imageInput?.addEventListener('change', (e) => {
+    const file = (e.target as HTMLInputElement).files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        fileUploadPreviewImg.src = e.target?.result as string;
+        fileUploadPlaceholder.style.display = 'none';
+        fileUploadPreview.style.display = 'block';
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+
+  fileUploadRemove?.addEventListener('click', () => {
+    imageInput.value = '';
+    fileUploadPlaceholder.style.display = 'flex';
+    fileUploadPreview.style.display = 'none';
+  });
+
+  // Drag and drop for file upload
+  fileUpload?.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    fileUploadPlaceholder.style.borderColor = '#1C508F';
+    fileUploadPlaceholder.style.background = '#f0f4f8';
+  });
+
+  fileUpload?.addEventListener('dragleave', () => {
+    fileUploadPlaceholder.style.borderColor = '#d0d0d0';
+    fileUploadPlaceholder.style.background = '#fafafa';
+  });
+
+  fileUpload?.addEventListener('drop', (e) => {
+    e.preventDefault();
+    fileUploadPlaceholder.style.borderColor = '#d0d0d0';
+    fileUploadPlaceholder.style.background = '#fafafa';
+
+    const file = e.dataTransfer?.files[0];
+    if (file && file.type.startsWith('image/')) {
+      const dataTransfer = new DataTransfer();
+      dataTransfer.items.add(file);
+      imageInput.files = dataTransfer.files;
+      imageInput.dispatchEvent(new Event('change'));
+    }
+  });
+
+  // Cancel edit mode
+  cancelBtn?.addEventListener('click', () => {
+    resetForm();
+  });
+
+  function resetForm() {
+    editingId = null;
+    form.reset();
+    imageInput.required = true;
+    fileUploadPlaceholder.style.display = 'flex';
+    fileUploadPreview.style.display = 'none';
+    formTitle.textContent = 'Добавить новый проект';
+    submitBtn.innerHTML = `
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+        <path d="M10 4V16M4 10H16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      Добавить проект
+    `;
+    cancelBtn.style.display = 'none';
+    document.getElementById('formSection')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(form);
+    const url = editingId ? `/api/portfolio/${editingId}` : '/api/portfolio/create';
+    const method = editingId ? 'PUT' : 'POST';
+
+    submitBtn.disabled = true;
+    submitBtn.style.opacity = '0.6';
+    submitBtn.style.cursor = 'not-allowed';
+
+    try {
+      const response = await fetch(url, {
+        method,
+        body: formData
+      });
+
+      if (response.ok) {
+        const message = editingId ? 'Проект успешно обновлен!' : 'Проект успешно добавлен!';
+        showNotification(message, 'success');
+        setTimeout(() => window.location.reload(), 1000);
+      } else {
+        const error = await response.json();
+        showNotification('Ошибка: ' + (error.error || 'Не удалось сохранить проект'), 'error');
+        submitBtn.disabled = false;
+        submitBtn.style.opacity = '1';
+        submitBtn.style.cursor = 'pointer';
+      }
+    } catch (error) {
+      showNotification('Ошибка сети', 'error');
+      submitBtn.disabled = false;
+      submitBtn.style.opacity = '1';
+      submitBtn.style.cursor = 'pointer';
+      console.error(error);
+    }
+  });
+
+  (window as any).editPortfolio = async (id: number) => {
+    try {
+      const response = await fetch(`/api/portfolio`);
+      const items = await response.json();
+      const item = items.find((i: any) => i.id === id);
+
+      if (!item) {
+        showNotification('Проект не найден', 'error');
+        return;
+      }
+
+      editingId = id;
+
+      (document.getElementById('title') as HTMLInputElement).value = item.title || '';
+      (document.getElementById('title_en') as HTMLInputElement).value = item.title_en || '';
+      (document.getElementById('title_az') as HTMLInputElement).value = item.title_az || '';
+      (document.getElementById('year') as HTMLInputElement).value = item.year || '';
+      (document.getElementById('description') as HTMLTextAreaElement).value = item.description || '';
+      (document.getElementById('description_en') as HTMLTextAreaElement).value = item.description_en || '';
+      (document.getElementById('description_az') as HTMLTextAreaElement).value = item.description_az || '';
+
+      if (item.image_url) {
+        fileUploadPreviewImg.src = item.image_url;
+        fileUploadPlaceholder.style.display = 'none';
+        fileUploadPreview.style.display = 'block';
+      }
+
+      imageInput.required = false;
+      formTitle.textContent = 'Редактировать проект';
+      submitBtn.innerHTML = `
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <path d="M16 4L7 13L3 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Сохранить изменения
+      `;
+      cancelBtn.style.display = 'flex';
+
+      document.getElementById('formSection')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } catch (error) {
+      showNotification('Ошибка загрузки данных', 'error');
+      console.error(error);
+    }
+  };
+
+  (window as any).deletePortfolio = async (id: number) => {
+    if (!confirm('Вы уверены, что хотите удалить этот проект? Это действие нельзя отменить.')) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/portfolio/${id}`, {
+        method: 'DELETE'
+      });
+
+      if (response.ok) {
+        showNotification('Проект успешно удален!', 'success');
+        setTimeout(() => window.location.reload(), 1000);
+      } else {
+        showNotification('Ошибка при удалении', 'error');
+      }
+    } catch (error) {
+      showNotification('Ошибка сети', 'error');
+      console.error(error);
+    }
+  };
+
+  function showNotification(message: string, type: 'success' | 'error') {
+    const notification = document.createElement('div');
+    notification.className = `notification notification--${type}`;
+    notification.innerHTML = `
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+        ${type === 'success'
+          ? '<path d="M16 5L7.5 13.5L4 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>'
+          : '<path d="M10 6V10M10 14H10.01M18 10C18 14.4183 14.4183 18 10 18C5.58172 18 2 14.4183 2 10C2 5.58172 5.58172 2 10 2C14.4183 2 18 5.58172 18 10Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>'
+        }
+      </svg>
+      <span>${message}</span>
+    `;
+    document.body.appendChild(notification);
+
+    setTimeout(() => {
+      notification.classList.add('notification--show');
+    }, 100);
+
+    setTimeout(() => {
+      notification.classList.remove('notification--show');
+      setTimeout(() => notification.remove(), 300);
+    }, 3000);
+  }
+
+  // Drag and drop for portfolio items
+  const portfolioList = document.getElementById('portfolioList');
+  let draggedElement: HTMLElement | null = null;
+
+  portfolioList?.addEventListener('dragstart', (e) => {
+    const target = e.target as HTMLElement;
+    if (target.classList.contains('portfolio__item')) {
+      draggedElement = target;
+      target.classList.add('dragging');
+    }
+  });
+
+  portfolioList?.addEventListener('dragend', (e) => {
+    const target = e.target as HTMLElement;
+    if (target.classList.contains('portfolio__item')) {
+      target.classList.remove('dragging');
+      draggedElement = null;
+    }
+  });
+
+  portfolioList?.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    const target = (e.target as HTMLElement).closest('.portfolio__item') as HTMLElement;
+
+    if (target && draggedElement && target !== draggedElement) {
+      const items = Array.from(portfolioList.querySelectorAll('.portfolio__item'));
+      const draggedIndex = items.indexOf(draggedElement);
+      const targetIndex = items.indexOf(target);
+
+      if (draggedIndex < targetIndex) {
+        target.after(draggedElement);
+      } else {
+        target.before(draggedElement);
+      }
+    }
+  });
+
+  portfolioList?.addEventListener('drop', async (e) => {
+    e.preventDefault();
+
+    const items = Array.from(portfolioList.querySelectorAll('.portfolio__item')) as HTMLElement[];
+    const newOrder = items.map((item, index) => ({
+      id: parseInt(item.dataset.id || '0'),
+      order_index: index + 1
+    }));
+
+    try {
+      const response = await fetch('/api/portfolio/reorder', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ items: newOrder })
+      });
+
+      if (response.ok) {
+        showNotification('Порядок успешно обновлен', 'success');
+      } else {
+        showNotification('Ошибка при сохранении порядка', 'error');
+        window.location.reload();
+      }
+    } catch (error) {
+      showNotification('Ошибка сети', 'error');
+      console.error(error);
+      window.location.reload();
+    }
+  });
+</script>
+
+<style is:global>
+  .notification {
+    position: fixed;
+    top: 24px;
+    right: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    z-index: 1000;
+    transform: translateX(400px);
+    transition: transform 0.3s ease;
+  }
+
+  .notification--show {
+    transform: translateX(0);
+  }
+
+  .notification--success {
+    color: #155724;
+    border-left: 4px solid #28a745;
+  }
+
+  .notification--error {
+    color: #721c24;
+    border-left: 4px solid #dc3545;
+  }
+
+  .notification svg {
+    flex-shrink: 0;
+  }
+</style>

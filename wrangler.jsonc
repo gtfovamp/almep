@@ -2,16 +2,23 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "almep-trading",
   "compatibility_date": "2025-02-04",
-    "assets": { "directory": "./dist" },
   "observability": {
     "enabled": true
   },
-  
+
   "kv_namespaces": [
     {
       "binding": "KV",
       "id": "8a8d3a3879a54b1cb0d40f4da79a5683",
       "preview_id": "8a8d3a3879a54b1cb0d40f4da79a5683"
+    }
+  ],
+
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "almep-db",
+      "database_id": "66620e12-3e1d-4db1-9e3b-f37bb7f7a72e"
     }
   ]
 }

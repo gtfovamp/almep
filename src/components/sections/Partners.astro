@@ -8,28 +8,12 @@ interface Props {
 
 const { t, lang } = Astro.props;
 
-const partners = [
-    {
-        image: "/assets/images/partner-1.png",
-        width: 218,
-        height: 57,
-    },
-    {
-        image: "/assets/images/partner-2.png",
-        width: 270,
-        height: 57,
-    },
-    {
-        image: "/assets/images/partner-3.png",
-        width: 160,
-        height: 106,
-    },
-    {
-        image: "/assets/images/partner-4.png",
-        width: 202,
-        height: 57,
-    },
-];
+const runtime = Astro.locals.runtime;
+const db = runtime.env.DB;
+
+const { results: partners } = await db.prepare(
+  'SELECT * FROM partners ORDER BY order_index ASC'
+).all();
 ---
 
 <section class="partners">
@@ -41,13 +25,11 @@ const partners = [
             <div class="partners__logos">
                 <div class="partners__row">
                     {
-                        partners.map((partner, index) => (
+                        partners.map((partner: any, index) => (
                             <div class="partners__logo">
                                 <img
-                                    src={partner.image}
-                                    alt={`${t.partners.partner_logo} ${index + 1}`}
-                                    width={partner.width}
-                                    height={partner.height}
+                                    src={partner.image_url}
+                                    alt={partner[`name_${lang}`] || partner.name}
                                 />
                             </div>
                         ))
