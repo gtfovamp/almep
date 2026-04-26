@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro';
 import { env } from 'cloudflare:workers';
-import bcrypt from 'bcryptjs';
+import { hashPassword } from '../../../lib/password';
 import { checkAuth } from '../../../lib/auth';
 import { validateUsername, validatePassword, errorResponse, successResponse, checkRateLimit } from '../../../lib/api-helpers';
 
@@ -8,10 +8,18 @@ export const prerender = false;
 
 export const POST: APIRoute = async ({ request, cookies }) => {
   try {
-    // SECURITY: Only authenticated admins can create users
-    const isAuthenticated = await checkAuth(cookies);
-    if (!isAuthenticated) {
-      return errorResponse('Unauthorized', 401);
+    const db = env.DB;
+
+    // Check if any users exist
+    const { results: users } = await db.prepare('SELECT COUNT(*) as count FROM admin_users').all();
+    const userCount = (users[0] as any)?.count || 0;
+
+    // SECURITY: Only authenticated admins can create users (unless no users exist)
+    if (userCount > 0) {
+      const isAuthenticated = await checkAuth(cookies);
+      if (!isAuthenticated) {
+        return errorResponse('Unauthorized', 401);
+      }
     }
 
     // Rate limiting: 5 requests per hour per IP
@@ -20,7 +28,6 @@ export const POST: APIRoute = async ({ request, cookies }) => {
       return errorResponse('Too many requests. Try again later.', 429);
     }
 
-    const db = env.DB;
     const { username, password } = await request.json();
 
     // Validate input
@@ -48,7 +55,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
     }
 
     // Hash password
-    const passwordHash = await bcrypt.hash(password, 10);
+    const passwordHash = await hashPassword(password);
 
     // Create user
     await db.prepare(

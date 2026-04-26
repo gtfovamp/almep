@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro';
 import { env } from 'cloudflare:workers';
-import bcrypt from 'bcryptjs';
+import { verifyPassword } from '../../../lib/password';
 import { errorResponse, successResponse, checkRateLimit, cleanupExpiredSessions } from '../../../lib/api-helpers';
 
 export const prerender = false;
@@ -28,10 +28,10 @@ export const POST: APIRoute = async ({ request, cookies }) => {
       'SELECT * FROM admin_users WHERE username = ?'
     ).bind(username).first();
 
-    // Always hash password even if user doesn't exist (timing attack prevention)
-    const dummyHash = '$2a$10$abcdefghijklmnopqrstuv1234567890123456789012';
+    // Always verify password even if user doesn't exist (timing attack prevention)
+    const dummyHash = 'AAAAAAAAAAAAAAAAAAAAAP8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==';
     const passwordHash = user?.password_hash || dummyHash;
-    const isValid = await bcrypt.compare(password, passwordHash as string);
+    const isValid = await verifyPassword(password, passwordHash as string);
 
     if (!user || !isValid) {
       // Generic error message to prevent username enumeration
