@@ -11,6 +11,11 @@
       "binding": "KV",
       "id": "8a8d3a3879a54b1cb0d40f4da79a5683",
       "preview_id": "8a8d3a3879a54b1cb0d40f4da79a5683"
+    },
+    {
+      "binding": "SESSION",
+      "id": "7344676c2fcd474e99ca5ee676fa1288",
+      "preview_id": "7344676c2fcd474e99ca5ee676fa1288"
     }
   ],
 
