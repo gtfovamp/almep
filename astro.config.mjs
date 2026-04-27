@@ -8,6 +8,16 @@ export default defineConfig({
     adapter: cloudflare({
         platformProxy: {
             enabled: true
+        },
+        runtime: {
+            mode: 'local',
+            type: 'pages',
+            bindings: {
+                SESSION: {
+                    type: 'kv',
+                    id: '7344676c2fcd474e99ca5ee676fa1288'
+                }
+            }
         }
     })
 });
