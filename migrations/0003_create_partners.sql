@@ -15,4 +15,4 @@ CREATE TABLE IF NOT EXISTS partners (
   updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE INDEX idx_partners_order ON partners(order_index);
+CREATE INDEX IF NOT EXISTS idx_partners_order ON partners(order_index);

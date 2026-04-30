@@ -18,5 +18,5 @@ CREATE TABLE IF NOT EXISTS admin_sessions (
   FOREIGN KEY (user_id) REFERENCES admin_users(id) ON DELETE CASCADE
 );
 
-CREATE INDEX idx_sessions_token ON admin_sessions(token);
-CREATE INDEX idx_sessions_expires ON admin_sessions(expires_at);
+CREATE INDEX IF NOT EXISTS idx_sessions_token ON admin_sessions(token);
+CREATE INDEX IF NOT EXISTS idx_sessions_expires ON admin_sessions(expires_at);

@@ -1,5 +1,7 @@
 ---
 import type { Lang } from '../../utils/i18n';
+import { env } from 'cloudflare:workers';
+import { timeAgo } from '../../lib/time-helpers';
 
 interface Props {
   t: any;
@@ -7,12 +9,51 @@ interface Props {
 }
 
 const { t, lang } = Astro.props;
+
+// Load latest blog post from database
+let latestPost: any = null;
+try {
+  const db = env.DB;
+  if (db) {
+    const { results } = await db.prepare(
+      'SELECT * FROM blog ORDER BY published_at DESC LIMIT 1'
+    ).all();
+
+    if (results && results.length > 0) {
+      const post = results[0];
+
+      // Parse blocks
+      const blocks = JSON.parse(post.blocks || '[]');
+
+      // Get title in current language
+      const title = post[`title_${lang}`] || post.title;
+
+      // Extract excerpt from first text block
+      const textBlock = blocks.find((b: any) => b.type === 'text');
+      const excerptText = textBlock?.data?.[`text_${lang}`] || textBlock?.data?.text_ru || '';
+      const excerpt = excerptText.substring(0, 200) + (excerptText.length > 200 ? '...' : '');
+
+      // Calculate time ago
+      const publishedTimeAgo = timeAgo(post.published_at, lang);
+
+      latestPost = {
+        id: post.id,
+        title,
+        excerpt,
+        timeAgo: publishedTimeAgo,
+        coverImage: post.cover_image_url
+      };
+    }
+  }
+} catch (error) {
+  console.error('Error fetching blog post:', error);
+}
 ---
 
 <section class="blog">
 
   <!-- Фоновое изображение -->
-  <div class="blog__bg"></div>
+  <div class="blog__bg" style={latestPost ? `background-image: url('${latestPost.coverImage}')` : ''}></div>
 
   <!-- Белая карточка -->
   <div class="blog__card">
@@ -26,16 +67,21 @@ const { t, lang } = Astro.props;
 
         <div class="blog__text-wrap">
           <!-- Заголовок статьи -->
-          <h3 class="blog__post-title">{t.blog.post_title}</h3>
+          <h3 class="blog__post-title">{latestPost ? latestPost.title : t.blog.post_title}</h3>
 
           <!-- Текст -->
           <p class="blog__post-text">
-            {t.blog.post_text}
+            {latestPost ? latestPost.excerpt : t.blog.post_text}
           </p>
+
+          <!-- Время публикации -->
+          {latestPost && (
+            <p class="blog__post-time">{latestPost.timeAgo}</p>
+          )}
         </div>
 
         <!-- Ссылка "Читать дальше" -->
-        <a href={`/${lang}/blog/1`} class="blog__read-more">
+        <a href={latestPost ? `/${lang}/blog/${latestPost.id}` : `/${lang}/blog/1`} class="blog__read-more">
           <span class="blog__read-more-text">{t.blog.read_more}</span>
           <span class="blog__read-more-line"></span>
         </a>
@@ -158,6 +204,16 @@ const { t, lang } = Astro.props;
     width: 100%;
   }
 
+  /* ===== Время публикации ===== */
+  .blog__post-time {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 130%;
+    color: #666666;
+    margin: 0;
+  }
+
   /* ===== Ссылка "Читать дальше" ===== */
   .blog__read-more {
     display: flex;
@@ -187,5 +243,80 @@ const { t, lang } = Astro.props;
     width: 149px;
     height: 1px;
     background: #0E0E0E;
+  }
+
+  /* === МОБИЛЬНАЯ ВЕРСИЯ === */
+  @media (max-width: 768px) {
+    .blog {
+      height: 706px;
+    }
+
+    .blog__bg {
+      background-position: center;
+    }
+
+    .blog__bg::before {
+      background: linear-gradient(
+        to right,
+        rgba(0, 0, 0, 0.76) 0%,
+        rgba(0, 0, 0, 0.76) 100%
+      );
+    }
+
+    .blog__card {
+      width: 274px;
+      height: 616px;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 17px;
+    }
+
+    .blog__card-inner {
+      width: 244px;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      gap: 25px;
+    }
+
+    .blog__title {
+      font-size: 24px;
+      line-height: 110%;
+    }
+
+    .blog__content {
+      width: 100%;
+      gap: 20px;
+    }
+
+    .blog__text-wrap {
+      gap: 20px;
+    }
+
+    .blog__post-title {
+      font-size: 20px;
+      line-height: 110%;
+    }
+
+    .blog__post-text {
+      font-size: 16px;
+      line-height: 130%;
+    }
+
+    .blog__post-time {
+      font-size: 14px;
+    }
+
+    .blog__read-more {
+      gap: 5px;
+    }
+
+    .blog__read-more-text {
+      font-size: 18px;
+      line-height: 130%;
+    }
+
+    .blog__read-more-line {
+      width: 148px;
+    }
   }
 </style>

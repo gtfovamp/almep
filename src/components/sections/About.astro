@@ -299,4 +299,106 @@ const { t, lang } = Astro.props;
   .about__btn:hover {
     background: #174480;
   }
+
+  /* === МОБИЛЬНАЯ ВЕРСИЯ === */
+  @media (max-width: 768px) {
+    .about {
+      padding: 60px 0 45px;
+    }
+
+    .about__inner {
+      width: 100%;
+      padding: 0 23px;
+      gap: 45px;
+    }
+
+    .about__title {
+      font-size: 24px;
+      line-height: 110%;
+    }
+
+    .about__content {
+      gap: 35px;
+    }
+
+    .about__row {
+      flex-direction: column;
+      gap: 35px;
+    }
+
+    .about__row--first,
+    .about__row--second {
+      gap: 35px;
+      align-items: flex-start;
+    }
+
+    .about__image-wrap {
+      width: 100%;
+      height: 250px;
+    }
+
+    .about__text-col,
+    .about__text-col--left {
+      width: 100%;
+      gap: 35px;
+    }
+
+    .about__text-block {
+      gap: 35px;
+    }
+
+    .about__text {
+      font-size: 16px;
+      line-height: 130%;
+    }
+
+    .about__list {
+      gap: 20px;
+    }
+
+    .about__list li {
+      font-size: 18px;
+      line-height: 130%;
+    }
+
+    .about__features {
+      flex-direction: column;
+      width: 100%;
+      gap: 35px;
+    }
+
+    .about__feature {
+      align-items: center;
+      text-align: center;
+      gap: 25px;
+    }
+
+    .about__feature-icon {
+      width: 88.5px;
+      height: 85.65px;
+      border-radius: 55.67px;
+    }
+
+    .about__feature-icon img {
+      width: 54.96px;
+      height: 54.96px;
+    }
+
+    .about__feature-title {
+      font-size: 18px;
+      line-height: 110%;
+    }
+
+    .about__feature-text {
+      font-size: 16px;
+      line-height: 130%;
+    }
+
+    .about__btn {
+      width: 100%;
+      height: 85px;
+      font-size: 16px;
+      line-height: 130%;
+    }
+  }
 </style>

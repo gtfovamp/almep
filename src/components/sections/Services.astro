@@ -275,4 +275,81 @@ const services = t.services.items.map((item: any) => ({
   .services__btn:hover {
     background: #174480;
   }
+
+  /* === МОБИЛЬНАЯ ВЕРСИЯ === */
+  @media (max-width: 768px) {
+    .services {
+      padding: 45px 0;
+    }
+
+    .services__inner {
+      width: 100%;
+      padding: 0 23px;
+      gap: 45px;
+    }
+
+    .services__title {
+      font-size: 24px;
+      line-height: 110%;
+    }
+
+    .services__content {
+      gap: 35px;
+      align-items: center;
+    }
+
+    .services__grid {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+      width: 100%;
+      grid-template-columns: none;
+      grid-template-rows: none;
+    }
+
+    .services__card {
+      width: 100%;
+      height: 315px;
+    }
+
+    .services__body {
+      padding: 37px 20.5px 30px;
+    }
+
+    .services__top {
+      gap: 20px;
+    }
+
+    .services__card-title {
+      font-size: 20px;
+      line-height: 110%;
+    }
+
+    .services__card-desc {
+      font-size: 16px;
+      line-height: 130%;
+      max-width: 100%;
+    }
+
+    .services__footer {
+      justify-content: space-between;
+    }
+
+    .services__number {
+      font-size: 20px;
+      line-height: 110%;
+    }
+
+    .arrow-diagonal,
+    .arrow-down {
+      position: static;
+    }
+
+    .services__btn {
+      width: 100%;
+      height: 85px;
+      font-size: 16px;
+      line-height: 130%;
+    }
+  }
 </style>

@@ -1,5 +1,7 @@
 ---
 import type { Lang } from '../../utils/i18n';
+import { env } from 'cloudflare:workers';
+import { timeAgo } from '../../lib/time-helpers';
 
 interface Props {
   t: any;
@@ -8,14 +10,96 @@ interface Props {
 
 const { t, lang } = Astro.props;
 
-// Получаем новости из переводов и добавляем изображения + ссылки
-const newsItems = t.news.items.map((item: any, index: number) => ({
-  ...item,
-  image: `/assets/images/news-${(index % 3) + 1}.png`, // Циклично используем 3 изображения
-  link: `/${lang}/news/${index + 1}`,
-  category: t.news.category_company,
-  readTimeFormatted: `${item.readTime} ${item.readTime === '1' ? t.news.minute : t.news.minutes}`
-}));
+export const prerender = false;
+
+// Функция для подсчета времени чтения
+function calculateReadTime(blocks: any[], lang: Lang): number {
+  let totalWords = 0;
+
+  blocks.forEach((block: any) => {
+    if (block.type === 'text' || block.type === 'heading') {
+      const text = block.data?.[`text_${lang}`] || block.data?.text_ru || '';
+      // Считаем слова (примерно)
+      const words = text.trim().split(/\s+/).filter((w: string) => w.length > 0);
+      totalWords += words.length;
+    }
+  });
+
+  // Средняя скорость чтения: 200 слов в минуту
+  const minutes = Math.ceil(totalWords / 200);
+  return minutes > 0 ? minutes : 1;
+}
+
+// Функция для форматирования времени чтения
+function formatReadTime(minutes: number, lang: Lang, t: any): string {
+  if (lang === 'ru') {
+    if (minutes === 1) return '1 минута';
+    if (minutes >= 2 && minutes <= 4) return `${minutes} минуты`;
+    return `${minutes} минут`;
+  } else if (lang === 'en') {
+    return minutes === 1 ? '1 minute' : `${minutes} minutes`;
+  } else { // az
+    return `${minutes} dəqiqə`;
+  }
+}
+
+// Загружаем новости из базы данных
+let newsItems = [];
+try {
+  const db = env.DB;
+  if (db) {
+    const { results } = await db.prepare(
+      'SELECT * FROM news ORDER BY published_at DESC LIMIT 9'
+    ).all();
+
+    newsItems = results.map((item: any) => {
+      // Парсим блоки контента
+      let blocks = [];
+      try {
+        blocks = JSON.parse(item.blocks);
+      } catch (e) {
+        console.error('Failed to parse blocks:', e);
+      }
+
+      // Получаем первый текстовый блок как excerpt
+      const textBlock = blocks.find((b: any) => b.type === 'text');
+      const excerptText = textBlock?.data?.[`text_${lang}`] || textBlock?.data?.text_ru || '';
+      const excerpt = excerptText.substring(0, 150) + (excerptText.length > 150 ? '...' : '');
+
+      // Получаем заголовок на нужном языке
+      const title = item[`title_${lang}`] || item.title;
+
+      // Рассчитываем время чтения
+      const readTime = calculateReadTime(blocks, lang);
+
+      return {
+        id: item.id,
+        title,
+        excerpt,
+        image: item.cover_image_url,
+        link: `/${lang}/news/${item.id}`,
+        category: t.news.category_company,
+        date: new Date(item.published_at).toLocaleDateString(lang === 'ru' ? 'ru-RU' : lang === 'en' ? 'en-US' : 'az-AZ'),
+        timeAgo: timeAgo(item.published_at, lang),
+        readTime: readTime.toString(),
+        readTimeFormatted: formatReadTime(readTime, lang, t)
+      };
+    });
+  }
+} catch (error) {
+  console.error('Error fetching news:', error);
+}
+
+// Если новостей нет, показываем заглушку
+if (newsItems.length === 0) {
+  newsItems = t.news.items.map((item: any, index: number) => ({
+    ...item,
+    image: `/assets/images/news-${(index % 3) + 1}.png`,
+    link: `/${lang}/news/${index + 1}`,
+    category: t.news.category_company,
+    readTimeFormatted: `${item.readTime} ${item.readTime === '1' ? t.news.minute : t.news.minutes}`
+  }));
+}
 
 // Разбиваем по 3 карточки на слайд
 const slides = [];
@@ -57,7 +141,7 @@ for (let i = 0; i < newsItems.length; i += 3) {
                         <span class="news__card-category-text">{item.category}</span>
                       </div>
 
-                      <!-- Дата и время чтения -->
+                      <!-- Дата и время публикации -->
                       <div class="news__card-meta">
                         <div class="news__card-date">
                           <img src="/assets/icons/calendar.svg" alt={t.news.date_alt} class="news__card-icon" width="28" height="28" />
@@ -65,7 +149,7 @@ for (let i = 0; i < newsItems.length; i += 3) {
                         </div>
                         <div class="news__card-time">
                           <img src="/assets/icons/time.svg" alt={t.news.time_alt} class="news__card-icon" width="29" height="29" />
-                          <span class="news__card-meta-text">{item.readTimeFormatted}</span>
+                          <span class="news__card-meta-text">{item.timeAgo}</span>
                         </div>
                       </div>
 
@@ -113,8 +197,6 @@ for (let i = 0; i < newsItems.length; i += 3) {
     <!-- Нижняя панель: точки + ссылка -->
     <div class="news__bottom">
 
-      <div></div>
-
       <div class="news__dots" id="newsDots">
         {slides.map((_, i) => (
           <button
@@ -128,10 +210,20 @@ for (let i = 0; i < newsItems.length; i += 3) {
       <a href={`/${lang}/news`} class="news__more">
         {t.news.read_news}
         <svg width="27" height="20" viewBox="0 0 27 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M0.013702 10.394L26.1767 9.68691M26.1767 9.68691L16.8428 0.353097M26.1767 9.68691L16.9401 18.9235" stroke="#1C508F"/>
+          <path d="M0.013702 10.394L26.1767 9.68691M26.1767 9.68691L16.8428 0.353097M26.1767 9.68691L16.9401 18.9235" stroke="#000000"/>
         </svg>
       </a>
 
+      <div class="news__scrollbar" id="newsScrollbar">
+        <div class="news__scrollbar-track"></div>
+        <div class="news__scrollbar-thumb" id="newsScrollbarThumb"></div>
+      </div>
+
+    </div>
+
+    <!-- Кнопка консультации (только на мобилке) -->
+    <div class="news__cta">
+      <a href={`/${lang}/contacts`} class="news__btn">{t.news.btn_consultation}</a>
     </div>
 
   </div>
@@ -441,6 +533,234 @@ for (let i = 0; i < newsItems.length; i += 3) {
   .news__more svg {
     flex-shrink: 0;
   }
+
+  /* Кнопка консультации (скрыта на десктопе) */
+  .news__cta {
+    display: none;
+  }
+
+  /* === МОБИЛЬНАЯ ВЕРСИЯ === */
+  @media (max-width: 768px) {
+    .news {
+      padding: 45px 0;
+    }
+
+    .news__inner {
+      width: 100%;
+      padding: 0 23px;
+      gap: 45px;
+    }
+
+    .news__title {
+      font-size: 24px;
+      line-height: 110%;
+    }
+
+    .news__slider-wrap {
+      width: 100%;
+      overflow: visible;
+    }
+
+    .news__slider {
+      overflow: visible;
+    }
+
+    .news__slide {
+      display: none;
+    }
+
+    .news__slide--active {
+      display: flex;
+      overflow-x: auto;
+      overflow-y: hidden;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    .news__slide--active::-webkit-scrollbar {
+      display: none;
+    }
+
+    .news__grid {
+      display: flex;
+      flex-direction: row;
+      gap: 15px;
+      grid-template-columns: none;
+      padding: 0;
+    }
+
+    .news__card {
+      width: 274px;
+      min-height: 684px;
+      flex-shrink: 0;
+      scroll-snap-align: start;
+    }
+
+    .news__card-img-wrap {
+      height: 300px;
+    }
+
+    .news__card-body {
+      padding: 20px 15px;
+      gap: 19px;
+    }
+
+    .news__card-meta-wrap {
+      gap: 15px;
+    }
+
+    .news__card-category {
+      width: 161px;
+      height: 37.72px;
+      border-radius: 15.64px;
+    }
+
+    .news__card-category-text {
+      font-size: 14.72px;
+      line-height: 110%;
+    }
+
+    .news__card-meta {
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .news__card-date,
+    .news__card-time {
+      gap: 10px;
+    }
+
+    .news__card-icon {
+      width: 25px;
+      height: 25px;
+    }
+
+    .news__card-meta-text {
+      font-size: 16px;
+      line-height: 110%;
+    }
+
+    .news__card-content {
+      gap: 25px;
+    }
+
+    .news__card-title {
+      font-size: 18px;
+      line-height: 130%;
+    }
+
+    .news__card-excerpt {
+      font-size: 16px;
+      line-height: 130%;
+    }
+
+    .news__card-link {
+      font-size: 16px;
+      line-height: 130%;
+      gap: 11px;
+    }
+
+    .news__card-link svg {
+      width: 18.5px;
+      height: 13.44px;
+    }
+
+    .news__card-link svg path {
+      stroke: #1C508F;
+    }
+
+    .news__arrow {
+      display: none;
+    }
+
+    .news__bottom {
+      width: 100%;
+      flex-direction: column;
+      gap: 35px;
+      align-items: flex-end;
+    }
+
+    .news__scrollbar {
+      display: block;
+      position: relative;
+      width: 100%;
+      height: 13px;
+      order: 1;
+    }
+
+    .news__scrollbar-track {
+      position: absolute;
+      width: 100%;
+      height: 7px;
+      left: 0;
+      top: 3px;
+      background: #C0C0C0;
+      border-radius: 100px;
+    }
+
+    .news__scrollbar-thumb {
+      position: absolute;
+      width: 94px;
+      height: 13px;
+      left: 0;
+      top: 0;
+      background: #1C508F;
+      border-radius: 100px;
+      cursor: pointer;
+      transition: left 0.1s ease-out;
+    }
+
+    .news__dots {
+      display: none;
+    }
+
+    .news__more {
+      font-size: 16px;
+      line-height: 130%;
+      order: 0;
+      flex-shrink: 0;
+      color: #000000;
+    }
+
+    .news__more svg {
+      width: 12.73px;
+      height: 13.44px;
+    }
+
+    .news__more svg path {
+      stroke: #000000;
+    }
+
+    .news__cta {
+      display: block;
+      width: 100%;
+    }
+
+    .news__btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 85px;
+      background: #1C508F;
+      box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.3);
+      border-radius: 9px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 130%;
+      letter-spacing: -0.01em;
+      color: #FFFFFF;
+      text-decoration: none;
+      transition: background 0.2s ease;
+    }
+
+    .news__btn:hover {
+      background: #174480;
+    }
+  }
 </style>
 
 <script>
@@ -479,5 +799,112 @@ for (let i = 0; i < newsItems.length; i += 3) {
 
   newsDots.forEach((dot, i) => {
     dot.addEventListener('click', () => newsGoTo(i));
+  });
+
+  // Мобильный скроллбар для News
+  function initNewsScrollbar() {
+    if (window.innerWidth > 768) return;
+
+    const activeSlide = document.querySelector('.news__slide--active') as HTMLElement;
+    const scrollbarThumb = document.getElementById('newsScrollbarThumb') as HTMLElement;
+    const scrollbar = document.getElementById('newsScrollbar') as HTMLElement;
+
+    if (!activeSlide || !scrollbarThumb || !scrollbar) return;
+
+    function updateThumbPosition() {
+      const scrollLeft = activeSlide.scrollLeft;
+      const scrollWidth = activeSlide.scrollWidth;
+      const clientWidth = activeSlide.clientWidth;
+
+      if (scrollWidth <= clientWidth) return;
+
+      const scrollableWidth = scrollWidth - clientWidth;
+      const scrollbarWidth = scrollbar.clientWidth;
+      const thumbWidth = scrollbarThumb.clientWidth;
+      const maxThumbPosition = scrollbarWidth - thumbWidth;
+
+      const thumbPosition = (scrollLeft / scrollableWidth) * maxThumbPosition;
+      scrollbarThumb.style.left = `${thumbPosition}px`;
+    }
+
+    // Синхронизация при скролле контента
+    activeSlide.addEventListener('scroll', updateThumbPosition);
+
+    // Драг скроллбара
+    let isDragging = false;
+    let startX = 0;
+    let startLeft = 0;
+
+    scrollbarThumb.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      startX = e.clientX;
+      startLeft = parseInt(scrollbarThumb.style.left || '0');
+      e.preventDefault();
+    });
+
+    scrollbarThumb.addEventListener('touchstart', (e) => {
+      isDragging = true;
+      startX = e.touches[0].clientX;
+      startLeft = parseInt(scrollbarThumb.style.left || '0');
+      e.preventDefault();
+    });
+
+    const handleMove = (clientX: number) => {
+      if (!isDragging) return;
+
+      const deltaX = clientX - startX;
+      const scrollbarWidth = scrollbar.clientWidth;
+      const thumbWidth = scrollbarThumb.clientWidth;
+      const maxThumbPosition = scrollbarWidth - thumbWidth;
+
+      let newLeft = startLeft + deltaX;
+      newLeft = Math.max(0, Math.min(newLeft, maxThumbPosition));
+
+      const scrollWidth = activeSlide.scrollWidth;
+      const clientWidth = activeSlide.clientWidth;
+      const scrollableWidth = scrollWidth - clientWidth;
+
+      const scrollPosition = (newLeft / maxThumbPosition) * scrollableWidth;
+      activeSlide.scrollLeft = scrollPosition;
+    };
+
+    document.addEventListener('mousemove', (e) => handleMove(e.clientX));
+    document.addEventListener('touchmove', (e) => handleMove(e.touches[0].clientX));
+
+    document.addEventListener('mouseup', () => {
+      isDragging = false;
+    });
+
+    document.addEventListener('touchend', () => {
+      isDragging = false;
+    });
+
+    // Клик по треку
+    scrollbar.addEventListener('click', (e) => {
+      if (e.target === scrollbarThumb) return;
+
+      const rect = scrollbar.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const thumbWidth = scrollbarThumb.clientWidth;
+      const scrollbarWidth = scrollbar.clientWidth;
+      const maxThumbPosition = scrollbarWidth - thumbWidth;
+
+      const newLeft = Math.max(0, Math.min(clickX - thumbWidth / 2, maxThumbPosition));
+
+      const scrollWidth = activeSlide.scrollWidth;
+      const clientWidth = activeSlide.clientWidth;
+      const scrollableWidth = scrollWidth - clientWidth;
+
+      const scrollPosition = (newLeft / maxThumbPosition) * scrollableWidth;
+      activeSlide.scrollLeft = scrollPosition;
+    });
+
+    updateThumbPosition();
+  }
+
+  initNewsScrollbar();
+
+  window.addEventListener('resize', () => {
+    initNewsScrollbar();
   });
 </script>

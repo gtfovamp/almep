@@ -12,7 +12,8 @@
     },
     "header": {
         "catalog": "Kataloq",
-        "phone": "+994 10 241 99 10"
+        "phone": "+994 10 241 99 10",
+        "search_placeholder": "Məhsul, artikul və ya kateqoriya tapın"
     },
     "hero": {
         "title": "Almep Trading — Peşəkar həllərdə strateji tərəfdaşınız",
@@ -186,6 +187,7 @@
         "minute": "dəqiqə",
         "learn_more": "Ətraflı",
         "read_news": "Xəbərləri oxu",
+        "btn_consultation": "Konsultasiya tələb edin",
         "aria_next": "Növbəti slayd",
         "aria_prev": "Əvvəlki slayd",
         "aria_slide": "Slayd",

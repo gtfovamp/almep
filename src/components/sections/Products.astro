@@ -80,6 +80,10 @@ const products = t.products.items.map((item: any, index: number) => ({
 
       <!-- Кнопка -->
       <div class="products__cta">
+        <div class="products__scrollbar" id="productsScrollbar">
+          <div class="products__scrollbar-track"></div>
+          <div class="products__scrollbar-thumb" id="productsScrollbarThumb"></div>
+        </div>
         <a href={`/${lang}/products`} class="products__btn">{t.products.btn_catalog}</a>
       </div>
 
@@ -323,4 +327,312 @@ const products = t.products.items.map((item: any, index: number) => ({
   .products__btn:hover {
     background: #174480;
   }
+
+  /* === МОБИЛЬНАЯ ВЕРСИЯ === */
+  @media (max-width: 768px) {
+    .products {
+      padding: 45px 0;
+    }
+
+    .products__inner {
+      width: 100%;
+      padding: 0 23px;
+      gap: 45px;
+    }
+
+    .products__title {
+      font-size: 24px;
+      line-height: 110%;
+    }
+
+    .products__content {
+      gap: 35px;
+    }
+
+    .products__download {
+      font-size: 16px;
+      line-height: 130%;
+    }
+
+    .products__download svg {
+      width: 12.73px;
+      height: 13.44px;
+      transform: rotate(45deg);
+    }
+
+    .products__grid {
+      display: flex;
+      flex-direction: row;
+      overflow-x: auto;
+      overflow-y: hidden;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      gap: 12px;
+      grid-template-columns: none;
+      grid-template-rows: none;
+      width: 100%;
+      padding: 0 calc(50% - 137px);
+    }
+
+    .products__grid::-webkit-scrollbar {
+      display: none;
+    }
+
+    .products__card {
+      width: 274px;
+      height: 440px;
+      flex-shrink: 0;
+      scroll-snap-align: center;
+      transform: scale(0.85);
+      transition: transform 0.3s ease;
+      opacity: 0.6;
+    }
+
+    .products__card.is-active {
+      transform: scale(1);
+      opacity: 1;
+    }
+
+    .products__card-caption {
+      height: 124px;
+      padding: 20px;
+    }
+
+    .products__card-title {
+      font-size: 18px;
+      line-height: 24px;
+      font-weight: 600;
+      max-width: 204px;
+    }
+
+    .products__card-caption svg {
+      width: 24px;
+      height: 26px;
+    }
+
+    .products__card-hover-body {
+      padding: 45px 15px 30px;
+    }
+
+    .products__card-hover-top {
+      gap: 27px;
+    }
+
+    .products__card-hover-title {
+      font-size: 18px;
+      line-height: 24px;
+      font-weight: 600;
+    }
+
+    .products__card-hover-desc {
+      font-size: 16px;
+      line-height: 130%;
+    }
+
+    .products__card-hover-link {
+      font-size: 18px;
+      line-height: 130%;
+    }
+
+    .products__card:hover .products__card-hover-arrow {
+      width: 21.86px;
+      height: 23.48px;
+    }
+
+    /* Активная карточка (в центре) на мобилке */
+    .products__card.is-active .products__card-img {
+      transform: scale(1.04);
+    }
+
+    .products__card.is-active .products__card-overlay {
+      opacity: 1;
+    }
+
+    .products__card.is-active .products__card-caption {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+
+    .products__card.is-active .products__card-hover-body {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .products__cta {
+      display: flex;
+      flex-direction: column;
+      gap: 35px;
+    }
+
+    .products__scrollbar {
+      display: block;
+      position: relative;
+      width: 100%;
+      height: 13px;
+      order: 0;
+    }
+
+    .products__scrollbar-track {
+      position: absolute;
+      width: 100%;
+      height: 7px;
+      left: 0;
+      top: 3px;
+      background: #C0C0C0;
+      border-radius: 100px;
+    }
+
+    .products__scrollbar-thumb {
+      position: absolute;
+      width: 94px;
+      height: 13px;
+      left: 0;
+      top: 0;
+      background: #1C508F;
+      border-radius: 100px;
+      cursor: pointer;
+      transition: left 0.1s ease-out;
+    }
+
+    .products__btn {
+      width: 100%;
+      height: 85px;
+      font-size: 16px;
+      line-height: 130%;
+    }
+  }
 </style>
+
+<script>
+  // Мобильный скроллбар для Products
+  function initProductsScrollbar() {
+    if (window.innerWidth > 768) return;
+
+    const grid = document.querySelector('.products__grid') as HTMLElement;
+    const scrollbarThumb = document.getElementById('productsScrollbarThumb') as HTMLElement;
+    const scrollbar = document.getElementById('productsScrollbar') as HTMLElement;
+    const cards = document.querySelectorAll('.products__card') as NodeListOf<HTMLElement>;
+
+    if (!grid || !scrollbarThumb || !scrollbar || !cards.length) return;
+
+    function updateThumbPosition() {
+      const scrollLeft = grid.scrollLeft;
+      const scrollWidth = grid.scrollWidth;
+      const clientWidth = grid.clientWidth;
+
+      if (scrollWidth <= clientWidth) return;
+
+      const scrollableWidth = scrollWidth - clientWidth;
+      const scrollbarWidth = scrollbar.clientWidth;
+      const thumbWidth = scrollbarThumb.clientWidth;
+      const maxThumbPosition = scrollbarWidth - thumbWidth;
+
+      const thumbPosition = (scrollLeft / scrollableWidth) * maxThumbPosition;
+      scrollbarThumb.style.left = `${thumbPosition}px`;
+    }
+
+    function updateActiveCard() {
+      const gridRect = grid.getBoundingClientRect();
+      const centerX = gridRect.left + gridRect.width / 2;
+
+      cards.forEach((card) => {
+        const cardRect = card.getBoundingClientRect();
+        const cardCenterX = cardRect.left + cardRect.width / 2;
+        const distance = Math.abs(centerX - cardCenterX);
+
+        // Если карточка в центре (с небольшим допуском)
+        if (distance < cardRect.width / 2) {
+          card.classList.add('is-active');
+        } else {
+          card.classList.remove('is-active');
+        }
+      });
+    }
+
+    // Синхронизация при скролле контента
+    grid.addEventListener('scroll', () => {
+      updateThumbPosition();
+      updateActiveCard();
+    });
+
+    // Драг скроллбара
+    let isDragging = false;
+    let startX = 0;
+    let startLeft = 0;
+
+    scrollbarThumb.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      startX = e.clientX;
+      startLeft = parseInt(scrollbarThumb.style.left || '0');
+      e.preventDefault();
+    });
+
+    scrollbarThumb.addEventListener('touchstart', (e) => {
+      isDragging = true;
+      startX = e.touches[0].clientX;
+      startLeft = parseInt(scrollbarThumb.style.left || '0');
+      e.preventDefault();
+    });
+
+    const handleMove = (clientX: number) => {
+      if (!isDragging) return;
+
+      const deltaX = clientX - startX;
+      const scrollbarWidth = scrollbar.clientWidth;
+      const thumbWidth = scrollbarThumb.clientWidth;
+      const maxThumbPosition = scrollbarWidth - thumbWidth;
+
+      let newLeft = startLeft + deltaX;
+      newLeft = Math.max(0, Math.min(newLeft, maxThumbPosition));
+
+      const scrollWidth = grid.scrollWidth;
+      const clientWidth = grid.clientWidth;
+      const scrollableWidth = scrollWidth - clientWidth;
+
+      const scrollPosition = (newLeft / maxThumbPosition) * scrollableWidth;
+      grid.scrollLeft = scrollPosition;
+    };
+
+    document.addEventListener('mousemove', (e) => handleMove(e.clientX));
+    document.addEventListener('touchmove', (e) => handleMove(e.touches[0].clientX));
+
+    document.addEventListener('mouseup', () => {
+      isDragging = false;
+    });
+
+    document.addEventListener('touchend', () => {
+      isDragging = false;
+    });
+
+    // Клик по треку
+    scrollbar.addEventListener('click', (e) => {
+      if (e.target === scrollbarThumb) return;
+
+      const rect = scrollbar.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const thumbWidth = scrollbarThumb.clientWidth;
+      const scrollbarWidth = scrollbar.clientWidth;
+      const maxThumbPosition = scrollbarWidth - thumbWidth;
+
+      const newLeft = Math.max(0, Math.min(clickX - thumbWidth / 2, maxThumbPosition));
+
+      const scrollWidth = grid.scrollWidth;
+      const clientWidth = grid.clientWidth;
+      const scrollableWidth = scrollWidth - clientWidth;
+
+      const scrollPosition = (newLeft / maxThumbPosition) * scrollableWidth;
+      grid.scrollLeft = scrollPosition;
+    });
+
+    updateThumbPosition();
+    updateActiveCard();
+  }
+
+  initProductsScrollbar();
+
+  window.addEventListener('resize', () => {
+    initProductsScrollbar();
+  });
+</script>

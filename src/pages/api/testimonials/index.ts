@@ -1,0 +1,23 @@
+import type { APIRoute } from 'astro';
+import { env } from 'cloudflare:workers';
+import { errorResponse, successResponse } from '../../../lib/api-helpers';
+
+export const prerender = false;
+
+export const GET: APIRoute = async () => {
+  try {
+    const db = env.DB;
+    if (!db) {
+      return errorResponse('Database not available', 500);
+    }
+
+    const { results } = await db.prepare(
+      'SELECT * FROM testimonials WHERE approved = 1 ORDER BY order_index ASC'
+    ).all();
+
+    return successResponse(results || []);
+  } catch (error) {
+    console.error('Get testimonials error:', error);
+    return errorResponse('Failed to fetch testimonials', 500);
+  }
+};

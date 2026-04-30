@@ -7,3 +7,5 @@ dist/
 wrangler.toml
 *.log
 .DS_Store
+node_modules/.bin/wrangler
+.wrangler/

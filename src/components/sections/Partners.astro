@@ -192,32 +192,69 @@ const { results: partners } = await db.prepare(
         background: #174480;
     }
 
-    /* ── Адаптивность (опционально) ── */
-    @media (max-width: 1440px) {
-        .partners__inner {
-            width: 90%;
-        }
-    }
-
-    @media (max-width: 1024px) {
-        .partners__row {
-            gap: 80px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-    }
-
+    /* === МОБИЛЬНАЯ ВЕРСИЯ === */
     @media (max-width: 768px) {
+        .partners {
+            padding: 45px 0;
+        }
+
+        .partners__inner {
+            width: 100%;
+            padding: 0 23px;
+            gap: 45px;
+        }
+
         .partners__title {
-            font-size: 36px;
+            font-size: 24px;
+            line-height: 110%;
+        }
+
+        .partners__content {
+            gap: 35px;
+        }
+
+        .partners__logos {
+            gap: 35px;
+            align-items: center;
+            width: 100%;
         }
 
         .partners__row {
-            gap: 40px;
+            flex-direction: column;
+            align-items: center;
+            gap: 35px;
+            width: 100%;
+        }
+
+        .partners__logo {
+            max-width: 163px;
+        }
+
+        .partners__logo img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .partners__link {
+            gap: 11px;
+        }
+
+        .partners__link-text {
+            font-size: 16px;
+            line-height: 130%;
+        }
+
+        .partners__link svg {
+            width: 12.73px;
+            height: 13.44px;
+            transform: rotate(45deg);
         }
 
         .partners__btn {
             width: 100%;
+            height: 85px;
+            font-size: 16px;
+            line-height: 130%;
         }
     }
 </style>

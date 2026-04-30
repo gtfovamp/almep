@@ -1,0 +1,862 @@
+---
+import Nav from './Nav.astro';
+import { getLangLabel, type Lang } from '../../utils/i18n';
+
+interface Props {
+  t: any;
+  lang: Lang;
+}
+
+const { t, lang } = Astro.props;
+
+const currentPath = new URL(Astro.request.url).pathname;
+const pathWithoutLang = currentPath.replace(/^\/(ru|en|az)/, '') || '/';
+
+const navLinks = [
+  { label: t.nav.home, href: `/${lang}`, active: pathWithoutLang === '/' },
+  { label: t.nav.about, href: `/${lang}/about`, dropdown: true },
+  { label: t.nav.services, href: `/${lang}/services` },
+  { label: t.nav.products, href: `/${lang}/products` },
+  { label: t.nav.partners, href: `/${lang}/partners` },
+  { label: t.nav.portfolio, href: `/${lang}/portfolio` },
+  { label: t.nav.news, href: `/${lang}/news` },
+  { label: t.nav.reviews, href: `/${lang}/reviews` },
+  { label: t.nav.contacts, href: `/${lang}/contacts` },
+];
+
+const currentLangLabel = getLangLabel(lang);
+const otherLangs = [
+  { code: 'ru', label: 'RU' },
+  { code: 'en', label: 'EN' },
+  { code: 'az', label: 'AZ' },
+].filter(l => l.code !== lang);
+---
+
+<header class="header">
+  <div class="header__inner">
+    <div class="header__top">
+      <div class="header__left">
+        <a href={`/${lang}`} class="header__logo">
+          <img src="/assets/icons/logo.svg" alt="Almep Trading" width="162" height="56" />
+        </a>
+        <a href={`/${lang}/products`} class="header__catalog-btn">
+          {t.header.catalog}
+        </a>
+      </div>
+
+      <div class="header__right">
+        <!-- Контейнер поиска -->
+        <div class="header__search-container">
+          <!-- Иконка поиска (триггер) -->
+          <button class="header__search-trigger" id="searchTrigger" aria-label="Поиск">
+            <img src="/assets/icons/search.svg" alt="Поиск" width="28" height="28" />
+          </button>
+
+          <!-- Поисковая панель -->
+          <div class="search-panel" id="searchPanel">
+            <div class="search-panel__input-wrapper">
+              <input
+                type="text"
+                class="search-panel__input"
+                placeholder={t.header.search_placeholder || "Найти товар, артикул или категорию"}
+                id="searchInput"
+                autocomplete="off"
+              />
+              <button class="search-panel__icon" id="searchSubmit" aria-label="Найти">
+                <svg width="25" height="25" viewBox="0 0 25 25" fill="none">
+                  <circle cx="10" cy="10" r="8.5" stroke="#000000" stroke-width="2"/>
+                  <line x1="16" y1="16" x2="23" y2="23" stroke="#000000" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </button>
+            </div>
+
+            <div class="search-dropdown" id="searchDropdown">
+              <div class="search-dropdown__results" id="searchResults"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Языковой переключатель -->
+        <div class="header__lang" id="langSwitcher">
+          <div class="header__lang-trigger">
+            <img src="/assets/icons/globe.svg" alt="Язык" width="28" height="28" />
+            <span class="header__lang-current">{currentLangLabel}</span>
+            <svg class="header__lang-arrow" width="15" height="8" viewBox="0 0 15 8" fill="none">
+              <path d="M1 1L7.5 7L14 1" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+
+          <div class="header__lang-dropdown">
+            <div class="header__lang-dropdown-top">
+              <img src="/assets/icons/globe.svg" alt="Язык" width="28" height="28" />
+              <span class="header__lang-dropdown-label">{currentLangLabel}</span>
+              <svg width="15" height="8" viewBox="0 0 15 8" fill="none">
+                <path d="M1 1L7.5 7L14 1" stroke="black" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </div>
+
+            <div class="header__lang-divider"></div>
+
+            <ul class="header__lang-list">
+              {otherLangs.map(l => (
+                <li>
+                  <a 
+                    href={`/${l.code}${pathWithoutLang}`}
+                    class="header__lang-option"
+                    data-lang={l.code}
+                  >
+                    {l.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        <a href={`tel:${t.header.phone.replace(/\s/g, '')}`} class="header__phone">
+          {t.header.phone}
+        </a>
+      </div>
+    </div>
+
+    <div class="header__bottom">
+      <Nav links={navLinks} />
+      <div class="header__socials">
+        <a href="#" class="header__social-link" aria-label="Instagram">
+          <img src="/assets/icons/instagram.svg" alt="Instagram" width="30" height="30" />
+        </a>
+        <a href="#" class="header__social-link" aria-label="YouTube">
+          <img src="/assets/icons/youtube.svg" alt="YouTube" width="37" height="37" />
+        </a>
+        <a href="#" class="header__social-link" aria-label="Facebook">
+          <img src="/assets/icons/facebook.svg" alt="Facebook" width="32" height="32" />
+        </a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<style>
+  .header {
+    position: absolute;
+    top: 35px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 1410px;
+    z-index: 100;
+  }
+
+  .header__inner {
+    display: flex;
+    flex-direction: column;
+    gap: 33px;
+  }
+
+  .header__top {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 56px;
+  }
+
+  .header__left {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 31px;
+  }
+
+  .header__logo img {
+    display: block;
+    width: 162px;
+    height: 56px;
+    object-fit: contain;
+  }
+
+  .header__catalog-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 164px;
+    height: 50px;
+    background: #1C508F;
+    border-radius: 2px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 110%;
+    color: #FFFFFF;
+    transition: background 0.2s;
+  }
+
+  .header__catalog-btn:hover {
+    background: #174480;
+  }
+
+  .header__right {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+  }
+
+  /* === ПОИСК === */
+  .header__search-container {
+    position: static;
+  }
+
+  .header__search-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+
+  .header__search-trigger:hover {
+    opacity: 0.8;
+  }
+
+  .header__search-trigger img {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+    filter: brightness(0) invert(1);
+  }
+
+  .header__search-container.is-open .header__search-trigger {
+    display: none;
+  }
+
+  /* Поисковая панель — фиксированная, не ломает layout */
+  .search-panel {
+    position: fixed;
+    top: 35px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 1410px;
+    display: none;
+    flex-direction: column;
+    align-items: flex-end;
+    z-index: 200;
+    pointer-events: none;
+  }
+
+  .header__search-container.is-open .search-panel {
+    display: flex;
+  }
+
+  .search-panel__input-wrapper {
+    pointer-events: all;
+    position: relative;
+    box-sizing: border-box;
+    width: 570px;
+    height: 56px;
+    border: 1px solid #000000;
+    border-radius: 5px;
+    background: #FFFFFF;
+    display: flex;
+    align-items: center;
+  }
+
+  .search-panel__input {
+    width: 100%;
+    height: 100%;
+    border: none;
+    outline: none;
+    padding: 0 50px 0 20px;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    color: #000000;
+    background: transparent;
+  }
+
+  .search-panel__input::placeholder {
+    color: #636363;
+  }
+
+  .search-panel__icon {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 25px;
+    height: 25px;
+    padding: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: all;
+  }
+
+  .search-panel__icon:hover svg circle,
+  .search-panel__icon:hover svg line {
+    stroke: #1C508F;
+  }
+
+  /* Выпадающий список */
+  .search-dropdown {
+    pointer-events: all;
+    box-sizing: border-box;
+    width: 570px;
+    max-height: 512px;
+    background: #FFFFFF;
+    border: 1px solid #000000;
+    border-radius: 5px;
+    margin-top: 4px;
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .search-dropdown.is-visible {
+    display: flex;
+  }
+
+  .search-dropdown__results {
+    display: flex;
+    flex-direction: column;
+    padding: 8px 0;
+    max-height: 460px;
+    overflow-y: auto;
+  }
+
+  .search-dropdown__results::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .search-dropdown__results::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  .search-dropdown__results::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 3px;
+  }
+
+  /* Элемент результата */
+  .search-result-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 19px;
+    padding: 10px 20px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.15s;
+  }
+
+  .search-result-item:hover {
+    background: rgba(164, 164, 164, 0.15);
+  }
+
+  .search-result-item.is-active {
+    background: #A4A4A4;
+  }
+
+  .search-result-item__image {
+    width: 49px;
+    height: 41px;
+    background: #D9D9D9;
+    flex-shrink: 0;
+    object-fit: cover;
+    border-radius: 2px;
+  }
+
+  .search-result-item__text {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 130%;
+    letter-spacing: -0.01em;
+    color: #000000;
+  }
+
+  .search-result-item.is-active .search-result-item__text {
+    font-family: 'Raleway', sans-serif;
+  }
+
+  .search-dropdown__empty {
+    padding: 30px 20px;
+    text-align: center;
+    font-family: 'Raleway', sans-serif;
+    font-size: 16px;
+    color: #636363;
+  }
+    width: 1px;
+    height: 25px;
+    background: #706F6F;
+    flex-shrink: 0;
+  }
+
+  .search-dropdown__search-icon {
+    width: 25px;
+    height: 25px;
+    padding: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .search-dropdown__search-icon:hover svg circle,
+  .search-dropdown__search-icon:hover svg line {
+    stroke: #1C508F;
+  }
+
+  /* Разделительная линия */
+  .search-dropdown__divider {
+    width: calc(100% - 40px);
+    height: 1px;
+    background: #000000;
+    margin: 0 20px;
+  }
+
+  /* Список результатов */
+  .search-dropdown__results {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 15px 20px;
+    max-height: 400px;
+    overflow-y: auto;
+  }
+
+  /* Кастомный скроллбар */
+  .search-dropdown__results::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .search-dropdown__results::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+  }
+
+  .search-dropdown__results::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 3px;
+  }
+
+  .search-dropdown__results::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+
+  /* Элемент результата */
+  .search-result-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 19px;
+    min-height: 41px;
+    padding: 12px 0;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.15s;
+    border-radius: 3px;
+  }
+
+  .search-result-item:hover {
+    background: rgba(164, 164, 164, 0.2);
+  }
+
+  .search-result-item.is-active {
+    background: #A4A4A4;
+    margin: 0 -20px;
+    padding: 12px 20px;
+  }
+
+  .search-result-item__image {
+    width: 49px;
+    height: 41px;
+    background: #D9D9D9;
+    flex-shrink: 0;
+    object-fit: cover;
+    border-radius: 2px;
+  }
+
+  .search-result-item__text {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 130%;
+    letter-spacing: -0.01em;
+    color: #000000;
+    flex: 1;
+  }
+
+  .search-result-item.is-active .search-result-item__text {
+    font-family: 'Raleway', sans-serif;
+    line-height: 110%;
+  }
+
+  /* Сообщение "Ничего не найдено" */
+  .search-dropdown__empty {
+    padding: 30px 20px;
+    text-align: center;
+    font-family: 'Raleway', sans-serif;
+    font-size: 16px;
+    color: #636363;
+  }
+
+  /* === ЯЗЫК === */
+  .header__lang {
+    position: relative;
+    cursor: pointer;
+  }
+
+  .header__lang-trigger {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    height: 28px;
+  }
+
+  .header__lang-trigger img {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+    filter: brightness(0) invert(1);
+  }
+
+  .header__lang-current {
+    font-family: 'Raleway', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 110%;
+    color: #FFFFFF;
+  }
+
+  .header__lang-arrow {
+    transition: transform 0.2s ease;
+    flex-shrink: 0;
+  }
+
+  .header__lang-dropdown {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 160px;
+    background: #FFFFFF;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 5px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-4px);
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+    z-index: 300;
+  }
+
+  .header__lang.is-open .header__lang-dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  .header__lang.is-open .header__lang-arrow {
+    transform: rotate(180deg);
+  }
+
+  .header__lang-dropdown-top {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 17px 0;
+  }
+
+  .header__lang-dropdown-top img {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+  }
+
+  .header__lang-dropdown-label {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 110%;
+    color: #000000;
+  }
+
+  .header__lang-divider {
+    width: 86px;
+    height: 1px;
+    background: rgba(0, 0, 0, 0.3);
+    margin: 10px auto 0;
+  }
+
+  .header__lang-list {
+    list-style: none;
+    padding: 11px 0 16px;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 11px;
+  }
+
+  .header__lang-option {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 110%;
+    text-align: center;
+    color: #636363;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+    width: 28px;
+    transition: color 0.15s;
+    text-decoration: none;
+    display: block;
+  }
+
+  .header__lang-option:hover {
+    color: #1C508F;
+  }
+
+  .header__phone {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 110%;
+    color: #FFFFFF;
+    white-space: nowrap;
+  }
+
+  .header__bottom {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 37px;
+  }
+
+  .header__socials {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .header__social-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .header__social-link img {
+    object-fit: contain;
+    filter: brightness(0) invert(1);
+    transition: opacity 0.2s;
+  }
+
+  .header__social-link:hover img {
+    opacity: 0.75;
+  }
+</style>
+
+<script>
+  // === LANGUAGE SWITCHER ===
+  function initLangSwitcher() {
+    const langSwitcher = document.getElementById('langSwitcher');
+    
+    if (!langSwitcher) return;
+
+    langSwitcher.addEventListener('click', (e) => {
+      e.stopPropagation();
+      langSwitcher.classList.toggle('is-open');
+    });
+
+    document.addEventListener('click', () => {
+      langSwitcher.classList.remove('is-open');
+    });
+  }
+
+  // === SEARCH ===
+  function initSearch() {
+    const searchTrigger = document.getElementById('searchTrigger');
+    const searchContainer = searchTrigger?.closest('.header__search-container') as HTMLElement;
+    const searchInput = document.getElementById('searchInput') as HTMLInputElement;
+    const searchDropdown = document.getElementById('searchDropdown');
+    const searchResults = document.getElementById('searchResults');
+    const currentQuery = document.getElementById('currentQuery');
+    const clearSearch = document.getElementById('clearSearch');
+    
+    let searchTimeout: number;
+    let activeIndex = -1;
+
+    if (!searchTrigger || !searchContainer || !searchInput) return;
+
+    // Открыть поиск
+    searchTrigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      searchContainer.classList.add('is-open');
+      searchInput.focus();
+    });
+
+    // Закрыть при клике вне
+    document.addEventListener('click', (e) => {
+      if (!searchContainer.contains(e.target as Node)) {
+        closeSearch();
+      }
+    });
+
+    // Клик внутри не закрывает
+    searchContainer.addEventListener('click', (e) => {
+      e.stopPropagation();
+    });
+
+    // Поиск при вводе
+    searchInput.addEventListener('input', (e) => {
+      const query = (e.target as HTMLInputElement).value.trim();
+
+      clearTimeout(searchTimeout);
+
+      if (query.length === 0) {
+        searchDropdown?.classList.remove('is-visible');
+        return;
+      }
+
+      if (currentQuery) {
+        currentQuery.textContent = query;
+      }
+
+      searchTimeout = window.setTimeout(() => {
+        performSearch(query);
+      }, 300);
+    });
+
+    // Очистить поиск
+    clearSearch?.addEventListener('click', () => {
+      searchInput.value = '';
+      searchDropdown?.classList.remove('is-visible');
+      searchInput.focus();
+      activeIndex = -1;
+    });
+
+    // Навигация по результатам
+    searchInput.addEventListener('keydown', (e) => {
+      if (!searchResults) return;
+      
+      const items = Array.from(searchResults.querySelectorAll('.search-result-item'));
+      
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        activeIndex = Math.min(activeIndex + 1, items.length - 1);
+        updateActiveItem(items);
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        activeIndex = Math.max(activeIndex - 1, 0);
+        updateActiveItem(items);
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        if (activeIndex >= 0 && items[activeIndex]) {
+          (items[activeIndex] as HTMLAnchorElement).click();
+        }
+      } else if (e.key === 'Escape') {
+        closeSearch();
+      }
+    });
+
+    function updateActiveItem(items: Element[]) {
+      items.forEach((item, index) => {
+        item.classList.toggle('is-active', index === activeIndex);
+      });
+    }
+
+    function closeSearch() {
+      searchContainer.classList.remove('is-open');
+      searchDropdown?.classList.remove('is-visible');
+      searchInput.value = '';
+      activeIndex = -1;
+    }
+
+    // Функция поиска
+    async function performSearch(query: string) {
+      try {
+        const response = await fetch(`/api/products?search=${encodeURIComponent(query)}`);
+        if (!response.ok) throw new Error('Search failed');
+
+        const data = await response.json();
+        displayResults(data.data || []);
+      } catch (error) {
+        console.error('Search error:', error);
+        displayResults([]);
+      }
+    }
+
+    // Отображение результатов
+    function displayResults(results: any[]) {
+      if (!searchResults || !searchDropdown) return;
+
+      searchResults.innerHTML = '';
+      activeIndex = -1;
+
+      if (results.length === 0) {
+        searchResults.innerHTML = '<div class="search-dropdown__empty">Ничего не найдено</div>';
+        searchDropdown.classList.add('is-visible');
+        return;
+      }
+
+      results.slice(0, 7).forEach((item, index) => {
+        const resultItem = document.createElement('a');
+        resultItem.className = 'search-result-item';
+        if (index === 0) {
+          resultItem.classList.add('is-active');
+          activeIndex = 0;
+        }
+        resultItem.href = `/ru/products/${item.id}`;
+
+        const img = document.createElement('img');
+        img.className = 'search-result-item__image';
+        img.src = item.image_url || '/assets/placeholder.png';
+        img.alt = item.name || '';
+
+        const text = document.createElement('span');
+        text.className = 'search-result-item__text';
+        text.textContent = item.name || 'Без названия';
+
+        resultItem.appendChild(img);
+        resultItem.appendChild(text);
+        
+        // Hover эффект
+        resultItem.addEventListener('mouseenter', () => {
+          activeIndex = index;
+          updateActiveItem(Array.from(searchResults.querySelectorAll('.search-result-item')));
+        });
+
+        searchResults.appendChild(resultItem);
+      });
+
+      searchDropdown.classList.add('is-visible');
+    }
+  }
+
+  // Инициализация
+  initLangSwitcher();
+  initSearch();
+
+  // Переинициализация после View Transition
+  document.addEventListener('astro:page-load', () => {
+    initLangSwitcher();
+    initSearch();
+  });
+</script>

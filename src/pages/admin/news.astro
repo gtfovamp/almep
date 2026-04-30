@@ -1,0 +1,349 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import { env } from 'cloudflare:workers';
+
+export const prerender = false;
+
+let newsItems = [];
+try {
+  const db = env.DB;
+  if (db) {
+    const { results } = await db.prepare(
+      'SELECT * FROM news ORDER BY order_index ASC'
+    ).all();
+    newsItems = results || [];
+  }
+} catch (error) {
+  console.error('Error fetching news:', error);
+}
+---
+
+<AdminLayout title="News" activeSection="news">
+  <link rel="stylesheet" href="/admin-styles.css">
+  <style>
+    .time-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 8px;
+      background: #dbeafe;
+      color: #1e40af;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .editor-hint {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px 16px;
+      background: #eff6ff;
+      border: 1px solid #dbeafe;
+      border-radius: 10px;
+      color: #1e40af;
+      font-size: 13px;
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    .editor-hint svg {
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+  </style>
+
+  <div class="admin-content">
+    <section class="form-section" id="formSection">
+      <div class="section-header">
+        <h2 id="formTitle">Add New Article</h2>
+        <button type="button" class="btn btn-ghost" id="cancelEdit" style="display: none;">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M12 4L4 12M4 4L12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          Cancel
+        </button>
+      </div>
+
+      <form id="newsForm" class="admin-form" enctype="multipart/form-data">
+        <div class="form-group">
+          <label for="title">Title (RU) *</label>
+          <input type="text" id="title" name="title" required />
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="title_en">Title (EN)</label>
+            <input type="text" id="title_en" name="title_en" />
+          </div>
+          <div class="form-group">
+            <label for="title_az">Title (AZ)</label>
+            <input type="text" id="title_az" name="title_az" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="published_at">Publication Date & Time *</label>
+          <input type="datetime-local" id="published_at" name="published_at" required />
+        </div>
+
+        <div class="form-group">
+          <label for="cover_image">
+            Cover Image *
+            <span class="label-hint">Recommended size: 1200×630px</span>
+          </label>
+          <div class="file-upload" id="fileUpload">
+            <input type="file" id="cover_image" name="cover_image" accept="image/*" required />
+            <div class="file-upload-placeholder">
+              <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                <path d="M24 16V32M16 24H32" stroke="#7c3aed" stroke-width="2" stroke-linecap="round"/>
+                <rect x="4" y="4" width="40" height="40" rx="4" stroke="#7c3aed" stroke-width="2"/>
+              </svg>
+              <span>Click or drag image here</span>
+            </div>
+            <div class="file-upload-preview" style="display: none;">
+              <img src="" alt="Preview" />
+              <button type="button" class="file-upload-remove">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <path d="M15 5L5 15M5 5L15 15" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Article Content *</label>
+          <div class="editor-hint">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M10 6v4M10 13h.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            <span>Add headings, text blocks, and images. Images are shared across all languages, but text can be translated.</span>
+          </div>
+          <div id="contentEditor"></div>
+          <input type="hidden" id="blocksJSON" name="blocks" required />
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary" id="submitBtn">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path d="M10 4V16M4 10H16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            Add Article
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <section class="list-section">
+      <div class="section-header">
+        <h2>Existing Articles</h2>
+        <span class="item-count">{newsItems.length} {newsItems.length === 1 ? 'article' : 'articles'}</span>
+      </div>
+
+      {newsItems.length === 0 ? (
+        <div class="empty-state">
+          <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+            <path d="M32 20v24M20 32h24" stroke="#ccc" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="32" cy="32" r="24" stroke="#ccc" stroke-width="2"/>
+          </svg>
+          <p>No news articles yet</p>
+          <span>Add your first article using the form on the left</span>
+        </div>
+      ) : (
+        <div class="item-list" id="newsList">
+          {newsItems.map((item: any) => (
+            <div class="item-card" data-id={item.id} data-order={item.order_index} draggable="true">
+              <div class="item-drag">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <circle cx="7" cy="5" r="1.5" fill="#999"/>
+                  <circle cx="13" cy="5" r="1.5" fill="#999"/>
+                  <circle cx="7" cy="10" r="1.5" fill="#999"/>
+                  <circle cx="13" cy="10" r="1.5" fill="#999"/>
+                  <circle cx="7" cy="15" r="1.5" fill="#999"/>
+                  <circle cx="13" cy="15" r="1.5" fill="#999"/>
+                </svg>
+              </div>
+              <div class="item-image">
+                <img src={item.cover_image_url} alt={item.title} />
+              </div>
+              <div class="item-info">
+                <h3>{item.title}</h3>
+                <div class="item-meta">
+                  <span class="meta-badge time-badge" data-published={item.published_at}>
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                      <circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5"/>
+                      <path d="M8 4V8L11 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                    <span class="time-text">{new Date(item.published_at).toLocaleDateString()}</span>
+                  </span>
+                  {item.title_en && <span class="meta-lang">EN</span>}
+                  {item.title_az && <span class="meta-lang">AZ</span>}
+                </div>
+              </div>
+              <div class="item-actions">
+                <button class="btn btn-icon btn-edit" onclick={`newsManager.edit(${item.id})`}>
+                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                    <path d="M12.5 2.5L15.5 5.5L6 15H3V12L12.5 2.5Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+                <button class="btn btn-icon btn-danger" onclick={`newsManager.delete(${item.id})`}>
+                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                    <path d="M3 5H15M7 8V13M11 8V13M4 5L5 15H13L14 5M7 5V3H11V5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </section>
+  </div>
+
+  <script src="/admin-manager.js" is:inline></script>
+  <script src="/news-editor.js" is:inline></script>
+  <script is:inline>
+    // Setup cover image preview
+    const coverImageInput = document.getElementById('cover_image');
+    const fileUpload = document.getElementById('fileUpload');
+    const placeholder = fileUpload.querySelector('.file-upload-placeholder');
+    const preview = fileUpload.querySelector('.file-upload-preview');
+    const previewImg = preview.querySelector('img');
+    const removeBtn = fileUpload.querySelector('.file-upload-remove');
+
+    coverImageInput.addEventListener('change', (e) => {
+      const file = e.target.files?.[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          previewImg.src = e.target.result;
+          placeholder.style.display = 'none';
+          preview.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    removeBtn?.addEventListener('click', () => {
+      coverImageInput.value = '';
+      placeholder.style.display = 'flex';
+      preview.style.display = 'none';
+      previewImg.src = '';
+    });
+
+    // Initialize content editor
+    console.log('Initializing NewsContentEditor...');
+    const editor = new NewsContentEditor('contentEditor');
+    console.log('Editor initialized:', editor);
+
+    // Update hidden input
+    editor.updateJSON = function() {
+      const json = this.getJSON();
+      console.log('Updating JSON:', json);
+      document.getElementById('blocksJSON').value = json;
+    };
+
+    // Set default published_at to now
+    const now = new Date();
+    now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+    document.getElementById('published_at').value = now.toISOString().slice(0, 16);
+
+    // Time ago updates
+    function updateTimeAgo() {
+      document.querySelectorAll('.time-badge').forEach(badge => {
+        const published = badge.dataset.published;
+        if (published) {
+          const timeText = badge.querySelector('.time-text');
+          if (timeText) {
+            timeText.textContent = getTimeAgo(published);
+          }
+        }
+      });
+    }
+
+    function getTimeAgo(dateStr) {
+      const now = new Date();
+      const past = new Date(dateStr);
+      const diffMs = now - past;
+      const diffSec = Math.floor(diffMs / 1000);
+      const diffMin = Math.floor(diffSec / 60);
+      const diffHour = Math.floor(diffMin / 60);
+      const diffDay = Math.floor(diffHour / 24);
+
+      if (diffSec < 60) return 'только что';
+      if (diffMin < 60) return `${diffMin} ${diffMin === 1 ? 'минуту' : diffMin < 5 ? 'минуты' : 'минут'} назад`;
+      if (diffHour < 24) return `${diffHour} ${diffHour === 1 ? 'час' : diffHour < 5 ? 'часа' : 'часов'} назад`;
+      if (diffDay < 7) return `${diffDay} ${diffDay === 1 ? 'день' : diffDay < 5 ? 'дня' : 'дней'} назад`;
+      return past.toLocaleDateString();
+    }
+
+    updateTimeAgo();
+    setInterval(updateTimeAgo, 60000); // Update every minute
+
+    // News manager
+    class NewsManager extends PortfolioManager {
+      constructor(config) {
+        super(config);
+        // Override image input reference for cover_image
+        this.imageInput = document.getElementById('cover_image');
+      }
+
+      async edit(id) {
+        try {
+          const response = await fetch(`/api/news/${id}`);
+          const item = await response.json();
+
+          this.editingId = id;
+          document.getElementById('formTitle').textContent = 'Edit Article';
+          document.getElementById('submitBtn').innerHTML = `
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path d="M16 5L7 14L3 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            Update Article
+          `;
+          document.getElementById('cancelEdit').style.display = 'flex';
+
+          document.getElementById('title').value = item.title || '';
+          document.getElementById('title_en').value = item.title_en || '';
+          document.getElementById('title_az').value = item.title_az || '';
+          document.getElementById('published_at').value = item.published_at ? new Date(item.published_at).toISOString().slice(0, 16) : '';
+
+          // Load blocks into editor
+          console.log('Loading blocks:', item.blocks);
+          if (item.blocks) editor.loadFromJSON(item.blocks);
+
+          document.getElementById('cover_image').required = false;
+        } catch (error) {
+          console.error('Edit error:', error);
+          alert('Failed to load article');
+        }
+      }
+
+      resetForm() {
+        super.resetForm();
+        console.log('Resetting editor');
+        editor.blocks = [];
+        editor.render();
+
+        // Reset cover image
+        coverImageInput.value = '';
+        placeholder.style.display = 'flex';
+        preview.style.display = 'none';
+        previewImg.src = '';
+
+        document.getElementById('cover_image').required = true;
+
+        const now = new Date();
+        now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+        document.getElementById('published_at').value = now.toISOString().slice(0, 16);
+      }
+    }
+
+    window.newsManager = new NewsManager({
+      apiEndpoint: '/api/news',
+      formId: 'newsForm',
+      listId: 'newsList'
+    });
+  </script>
+</AdminLayout>

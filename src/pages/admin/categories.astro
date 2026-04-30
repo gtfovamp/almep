@@ -1,0 +1,227 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import { env } from 'cloudflare:workers';
+
+export const prerender = false;
+
+let categories = [];
+try {
+  const db = env.DB;
+  if (db) {
+    const { results } = await db.prepare(
+      'SELECT * FROM categories ORDER BY order_index ASC'
+    ).all();
+    categories = results || [];
+  }
+} catch (error) {
+  console.error('Error fetching categories:', error);
+}
+---
+
+<AdminLayout title="Categories" activeSection="categories">
+  <link rel="stylesheet" href="/admin-styles.css">
+
+  <div class="admin-content">
+    <section class="form-section" id="formSection">
+      <div class="section-header">
+        <h2 id="formTitle">Add New Category</h2>
+        <button type="button" class="btn btn-ghost" id="cancelEdit" style="display: none;">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M12 4L4 12M4 4L12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          Cancel
+        </button>
+      </div>
+
+      <form id="categoryForm" class="admin-form" enctype="multipart/form-data">
+        <div class="form-group">
+          <label for="name">Name (RU) *</label>
+          <input type="text" id="name" name="name" required />
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="name_en">Name (EN)</label>
+            <input type="text" id="name_en" name="name_en" />
+          </div>
+          <div class="form-group">
+            <label for="name_az">Name (AZ)</label>
+            <input type="text" id="name_az" name="name_az" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="description">Description (RU)</label>
+          <textarea id="description" name="description" rows="3"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="description_en">Description (EN)</label>
+          <textarea id="description_en" name="description_en" rows="3"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="description_az">Description (AZ)</label>
+          <textarea id="description_az" name="description_az" rows="3"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="icon">
+            Category Icon
+            <span class="label-hint">Optional icon for the category</span>
+          </label>
+          <div class="file-upload" id="fileUpload">
+            <input type="file" id="icon" name="icon" accept="image/*" />
+            <div class="file-upload-placeholder">
+              <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                <path d="M24 16V32M16 24H32" stroke="#7c3aed" stroke-width="2" stroke-linecap="round"/>
+                <rect x="4" y="4" width="40" height="40" rx="4" stroke="#7c3aed" stroke-width="2"/>
+              </svg>
+              <span>Click or drag icon here</span>
+            </div>
+            <div class="file-upload-preview" style="display: none;">
+              <img src="" alt="Preview" />
+              <button type="button" class="file-upload-remove">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <path d="M15 5L5 15M5 5L15 15" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary" id="submitBtn">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path d="M10 4V16M4 10H16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            Add Category
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <section class="list-section">
+      <div class="section-header">
+        <h2>Existing Categories</h2>
+        <span class="item-count">{categories.length} {categories.length === 1 ? 'category' : 'categories'}</span>
+      </div>
+
+      {categories.length === 0 ? (
+        <div class="empty-state">
+          <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+            <path d="M32 20v24M20 32h24" stroke="#ccc" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="32" cy="32" r="24" stroke="#ccc" stroke-width="2"/>
+          </svg>
+          <p>No categories yet</p>
+          <span>Add your first category using the form on the left</span>
+        </div>
+      ) : (
+        <div class="item-list" id="categoryList">
+          {categories.map((item: any) => (
+            <div class="item-card" data-id={item.id} data-order={item.order_index} draggable="true">
+              <div class="item-drag">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <circle cx="7" cy="5" r="1.5" fill="#999"/>
+                  <circle cx="13" cy="5" r="1.5" fill="#999"/>
+                  <circle cx="7" cy="10" r="1.5" fill="#999"/>
+                  <circle cx="13" cy="10" r="1.5" fill="#999"/>
+                  <circle cx="7" cy="15" r="1.5" fill="#999"/>
+                  <circle cx="13" cy="15" r="1.5" fill="#999"/>
+                </svg>
+              </div>
+              {item.icon_url && (
+                <div class="item-image">
+                  <img src={item.icon_url} alt={item.name} />
+                </div>
+              )}
+              <div class="item-info">
+                <h3>{item.name}</h3>
+                {item.description && (
+                  <p class="item-description">{item.description.substring(0, 100)}{item.description.length > 100 ? '...' : ''}</p>
+                )}
+                <div class="item-meta">
+                  {item.name_en && <span class="meta-lang">EN</span>}
+                  {item.name_az && <span class="meta-lang">AZ</span>}
+                </div>
+              </div>
+              <div class="item-actions">
+                <button class="btn btn-icon btn-edit" onclick={`categoryManager.edit(${item.id})`}>
+                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                    <path d="M12.5 2.5L15.5 5.5L6 15H3V12L12.5 2.5Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+                <button class="btn btn-icon btn-danger" onclick={`categoryManager.delete(${item.id})`}>
+                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                    <path d="M3 5H15M7 8V13M11 8V13M4 5L5 15H13L14 5M7 5V3H11V5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </section>
+  </div>
+
+  <script src="/admin-manager.js" is:inline></script>
+  <script is:inline>
+    class CategoryManager extends PortfolioManager {
+      constructor(config) {
+        super(config);
+        this.imageInput = document.getElementById('icon');
+      }
+
+      async edit(id) {
+        try {
+          const response = await fetch(`/api/categories/${id}`);
+          const item = await response.json();
+
+          this.editingId = id;
+          document.getElementById('formTitle').textContent = 'Edit Category';
+          document.getElementById('submitBtn').innerHTML = `
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path d="M16 5L7 14L3 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            Update Category
+          `;
+          document.getElementById('cancelEdit').style.display = 'flex';
+
+          document.getElementById('name').value = item.name || '';
+          document.getElementById('name_en').value = item.name_en || '';
+          document.getElementById('name_az').value = item.name_az || '';
+          document.getElementById('description').value = item.description || '';
+          document.getElementById('description_en').value = item.description_en || '';
+          document.getElementById('description_az').value = item.description_az || '';
+
+          // Show icon preview if exists
+          if (item.icon_url) {
+            const preview = document.querySelector('.file-upload-preview');
+            const previewImg = preview?.querySelector('img');
+            const placeholder = document.querySelector('.file-upload-placeholder');
+
+            if (previewImg) previewImg.src = item.icon_url;
+            if (placeholder) placeholder.style.display = 'none';
+            if (preview) preview.style.display = 'block';
+          }
+
+          document.getElementById('icon').required = false;
+        } catch (error) {
+          console.error('Edit error:', error);
+          alert('Failed to load category');
+        }
+      }
+
+      resetForm() {
+        super.resetForm();
+        document.getElementById('icon').required = false;
+      }
+    }
+
+    window.categoryManager = new CategoryManager({
+      apiEndpoint: '/api/categories',
+      formId: 'categoryForm',
+      listId: 'categoryList'
+    });
+  </script>
+</AdminLayout>

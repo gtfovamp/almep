@@ -12,26 +12,34 @@ const { t, lang } = Astro.props;
   <div class="hero__bg"></div>
 
   <div class="hero__content">
-    <h1 class="hero__title">
-      {t.hero.title}
-    </h1>
+    <!-- Заголовок и описание -->
+    <div class="hero__text-block">
+      <h1 class="hero__title">
+        {t.hero.title}
+      </h1>
+      <p class="hero__description">
+        {t.hero.description}
+      </p>
+    </div>
 
-    <p class="hero__description">
-      {t.hero.description}
-    </p>
-
+    <!-- Кнопки -->
     <div class="hero__buttons">
-      <a href={`/${lang}/contacts`} class="hero__btn hero__btn--primary">
-        {t.hero.btn_consultation}
-      </a>
-      <a href={`/${lang}/products`} class="hero__btn hero__btn--outline">
-        {t.hero.btn_catalog}
-      </a>
+      <div class="hero__btn-group">
+        <a href={`/${lang}/contacts`} class="hero__btn hero__btn--primary">
+          {t.hero.btn_consultation}
+        </a>
+      </div>
+      <div class="hero__btn-group">
+        <a href={`/${lang}/products`} class="hero__btn hero__btn--outline">
+          {t.hero.btn_catalog}
+        </a>
+      </div>
     </div>
   </div>
 </section>
 
 <style>
+  /* === ДЕСКТОП === */
   .hero {
     position: relative;
     width: 100%;
@@ -47,6 +55,7 @@ const { t, lang } = Astro.props;
     position: absolute;
     inset: 0;
     background:
+      linear-gradient(0deg, rgba(0, 0, 0, 0.67), rgba(0, 0, 0, 0.67)),
       url('/assets/images/hero-bg.png') center center / cover no-repeat;
     z-index: 0;
   }
@@ -63,6 +72,14 @@ const { t, lang } = Astro.props;
     text-align: center;
   }
 
+  .hero__text-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 35px;
+    width: 100%;
+  }
+
   .hero__title {
     font-family: 'Montserrat', sans-serif;
     font-weight: 500;
@@ -71,6 +88,7 @@ const { t, lang } = Astro.props;
     letter-spacing: -0.04em;
     color: #FFFFFF;
     max-width: 1119px;
+    margin: 0;
   }
 
   .hero__description {
@@ -81,6 +99,7 @@ const { t, lang } = Astro.props;
     letter-spacing: -0.01em;
     color: #FFFFFF;
     max-width: 1110px;
+    margin: 0;
   }
 
   .hero__buttons {
@@ -88,6 +107,12 @@ const { t, lang } = Astro.props;
     flex-direction: row;
     align-items: center;
     gap: 30px;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .hero__btn-group {
+    width: auto;
   }
 
   .hero__btn {
@@ -104,6 +129,8 @@ const { t, lang } = Astro.props;
     letter-spacing: -0.01em;
     color: #FFFFFF;
     transition: all 0.25s ease;
+    text-decoration: none;
+    box-sizing: border-box;
   }
 
   .hero__btn--primary {
@@ -122,5 +149,69 @@ const { t, lang } = Astro.props;
 
   .hero__btn--outline:hover {
     background: rgba(255, 255, 255, 0.1);
+  }
+
+  /* === МОБИЛЬНАЯ ВЕРСИЯ === */
+  @media (max-width: 768px) {
+    .hero {
+      /* Фиксированная высота как на скриншоте */
+      height: 775px;
+      min-height: 775px;
+      /* Контент прижат к низу */
+      align-items: flex-end;
+      justify-content: center;
+    }
+
+    .hero__content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 50px;
+      /* Отступ снизу + по бокам */
+      padding: 0 23px 60px;
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+
+    .hero__text-block {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 35px;
+      width: 100%;
+    }
+
+    .hero__title {
+      font-size: 25px;
+      line-height: 110%;
+      text-align: center;
+      letter-spacing: -0.04em;
+      margin: 0;
+    }
+
+    .hero__description {
+      font-size: 16px;
+      line-height: 130%;
+      text-align: center;
+      letter-spacing: -0.01em;
+      margin: 0;
+    }
+
+    .hero__buttons {
+      flex-direction: column;
+      gap: 35px;
+      width: 100%;
+    }
+
+    .hero__btn-group {
+      width: 100%;
+    }
+
+    .hero__btn {
+      width: 100%;
+      height: 85px;
+      font-size: 16px;
+    }
   }
 </style>

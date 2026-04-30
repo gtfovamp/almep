@@ -1,5 +1,6 @@
 ---
 import type { Lang } from '../../utils/i18n';
+import { env } from 'cloudflare:workers';
 
 interface Props {
   t: any;
@@ -8,8 +9,23 @@ interface Props {
 
 const { t, lang } = Astro.props;
 
-// Получаем отзывы из переводов
-const reviews = t.reviews.items;
+// Получаем отзывы напрямую из базы данных
+let reviews = [];
+try {
+  const db = env.DB;
+  if (db) {
+    const { results } = await db.prepare(
+      'SELECT * FROM testimonials WHERE approved = 1 ORDER BY order_index ASC'
+    ).all();
+
+    reviews = (results || []).map((item: any) => ({
+      text: item[`text_${lang}`] || item.text,
+      author: item[`name_${lang}`] || item.name
+    }));
+  }
+} catch (error) {
+  console.error('Failed to fetch testimonials:', error);
+}
 
 // По 3 карточки на слайд
 const slides = [];
@@ -33,7 +49,7 @@ for (let i = 0; i < reviews.length; i += 3) {
                 <div class="reviews__card">
 
                   <!-- Кавычка -->
-                  <span class="reviews__quote">"</span>
+                  <span class="reviews__quote">&ldquo;</span>
 
                   <!-- Контент карточки -->
                   <div class="reviews__card-inner">
@@ -78,8 +94,6 @@ for (let i = 0; i < reviews.length; i += 3) {
     <!-- Нижняя панель -->
     <div class="reviews__bottom">
 
-      <div></div>
-
       <div class="reviews__dots" id="reviewsDots">
         {slides.map((_, i) => (
           <button
@@ -93,9 +107,14 @@ for (let i = 0; i < reviews.length; i += 3) {
       <a href={`/${lang}/reviews`} class="reviews__more">
         {t.reviews.all_reviews}
         <svg width="27" height="20" viewBox="0 0 27 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M0.013702 10.394L26.1767 9.68691M26.1767 9.68691L16.8428 0.353097M26.1767 9.68691L16.9401 18.9235" stroke="#1C508F"/>
+          <path d="M0.013702 10.394L26.1767 9.68691M26.1767 9.68691L16.8428 0.353097M26.1767 9.68691L16.9401 18.9235" stroke="#000000"/>
         </svg>
       </a>
+
+      <div class="reviews__scrollbar" id="reviewsScrollbar">
+        <div class="reviews__scrollbar-track"></div>
+        <div class="reviews__scrollbar-thumb" id="reviewsScrollbarThumb"></div>
+      </div>
 
     </div>
 
@@ -163,7 +182,7 @@ for (let i = 0; i < reviews.length; i += 3) {
   /* ===== Карточка ===== */
   .reviews__card {
     position: relative;
-    width: 435px;
+    width: 450px;
     height: 420px;
     background: #FFFFFF;
     box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.3);
@@ -193,9 +212,9 @@ for (let i = 0; i < reviews.length; i += 3) {
     align-items: flex-start;
     gap: 22px;
     width: 400px;
+    height: 271px;
     left: 25px;
     top: 116px;
-    bottom: 25px;
   }
 
   /* ===== Верхняя часть: текст + линия ===== */
@@ -203,9 +222,10 @@ for (let i = 0; i < reviews.length; i += 3) {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 85px;
+    justify-content: space-between;
     width: 400px;
-    flex: 1;
+    height: 223px;
+    flex: none;
   }
 
   /* ===== Текст отзыва ===== */
@@ -232,6 +252,7 @@ for (let i = 0; i < reviews.length; i += 3) {
   /* ===== Автор ===== */
   .reviews__card-author-wrap {
     width: 400px;
+    height: 26px;
   }
 
   .reviews__card-author {
@@ -241,6 +262,8 @@ for (let i = 0; i < reviews.length; i += 3) {
     line-height: 110%;
     letter-spacing: -0.01em;
     color: #000000;
+    width: 400px;
+    height: 26px;
   }
 
   /* ===== Стрелки ===== */
@@ -363,6 +386,179 @@ for (let i = 0; i < reviews.length; i += 3) {
   .reviews__btn:hover {
     background: #174480;
   }
+
+  /* === МОБИЛЬНАЯ ВЕРСИЯ === */
+  @media (max-width: 768px) {
+    .reviews {
+      padding: 45px 0;
+    }
+
+    .reviews__inner {
+      width: 100%;
+      padding: 0 23px;
+      gap: 45px;
+    }
+
+    .reviews__title {
+      font-size: 24px;
+      line-height: 110%;
+    }
+
+    .reviews__slider-wrap {
+      width: 100%;
+      overflow: visible;
+      min-height: 440px;
+      padding: 10px 0;
+    }
+
+    .reviews__slider {
+      overflow: visible;
+      min-height: 440px;
+    }
+
+    .reviews__slide {
+      display: none;
+    }
+
+    .reviews__slide--active {
+      display: flex;
+      overflow-x: auto;
+      overflow-y: hidden;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    .reviews__slide--active::-webkit-scrollbar {
+      display: none;
+    }
+
+    .reviews__grid {
+      display: flex;
+      flex-direction: row;
+      gap: 10px;
+      grid-template-columns: none;
+    }
+
+    .reviews__card {
+      width: 274px;
+      height: 400px;
+      flex-shrink: 0;
+      scroll-snap-align: start;
+    }
+
+    .reviews__quote {
+      left: 15px;
+      top: 12px;
+      font-size: 96px;
+      line-height: 110%;
+    }
+
+    .reviews__card-inner {
+      width: 244px;
+      height: 292px;
+      left: 15px;
+      top: 83px;
+      gap: 25px;
+    }
+
+    .reviews__card-top {
+      width: 244px;
+      height: 245px;
+      gap: 77px;
+    }
+
+    .reviews__card-text {
+      width: 244px;
+      font-size: 16px;
+      line-height: 130%;
+    }
+
+    .reviews__card-line {
+      width: 244px;
+    }
+
+    .reviews__card-author-wrap {
+      width: 200px;
+      height: 22px;
+    }
+
+    .reviews__card-author {
+      width: 200px;
+      height: 22px;
+      font-size: 20px;
+      line-height: 110%;
+    }
+
+    .reviews__arrow {
+      display: none;
+    }
+
+    .reviews__bottom {
+      width: 100%;
+      flex-direction: column;
+      gap: 30px;
+      align-items: flex-end;
+    }
+
+    .reviews__scrollbar {
+      display: block;
+      position: relative;
+      width: 100%;
+      height: 13px;
+      order: 1;
+    }
+
+    .reviews__scrollbar-track {
+      position: absolute;
+      width: 100%;
+      height: 7px;
+      left: 0;
+      top: 3px;
+      background: #C0C0C0;
+      border-radius: 100px;
+    }
+
+    .reviews__scrollbar-thumb {
+      position: absolute;
+      width: 94px;
+      height: 13px;
+      left: 0;
+      top: 0;
+      background: #1C508F;
+      border-radius: 100px;
+      cursor: pointer;
+      transition: left 0.1s ease-out;
+    }
+
+    .reviews__dots {
+      display: none;
+    }
+
+    .reviews__more {
+      font-size: 16px;
+      line-height: 130%;
+      order: 0;
+      color: #000000;
+    }
+
+    .reviews__more svg {
+      width: 12.73px;
+      height: 13.44px;
+    }
+
+    .reviews__more svg path {
+      stroke: #000000;
+    }
+
+    .reviews__btn {
+      width: 100%;
+      height: 85px;
+      font-size: 16px;
+      line-height: 130%;
+    }
+  }
 </style>
 
 <script>
@@ -401,5 +597,112 @@ for (let i = 0; i < reviews.length; i += 3) {
 
   reviewsDots.forEach((dot, i) => {
     dot.addEventListener('click', () => reviewsGoTo(i));
+  });
+
+  // Мобильный скроллбар для Reviews
+  function initReviewsScrollbar() {
+    if (window.innerWidth > 768) return;
+
+    const activeSlide = document.querySelector('.reviews__slide--active') as HTMLElement;
+    const scrollbarThumb = document.getElementById('reviewsScrollbarThumb') as HTMLElement;
+    const scrollbar = document.getElementById('reviewsScrollbar') as HTMLElement;
+
+    if (!activeSlide || !scrollbarThumb || !scrollbar) return;
+
+    function updateThumbPosition() {
+      const scrollLeft = activeSlide.scrollLeft;
+      const scrollWidth = activeSlide.scrollWidth;
+      const clientWidth = activeSlide.clientWidth;
+
+      if (scrollWidth <= clientWidth) return;
+
+      const scrollableWidth = scrollWidth - clientWidth;
+      const scrollbarWidth = scrollbar.clientWidth;
+      const thumbWidth = scrollbarThumb.clientWidth;
+      const maxThumbPosition = scrollbarWidth - thumbWidth;
+
+      const thumbPosition = (scrollLeft / scrollableWidth) * maxThumbPosition;
+      scrollbarThumb.style.left = `${thumbPosition}px`;
+    }
+
+    // Синхронизация при скролле контента
+    activeSlide.addEventListener('scroll', updateThumbPosition);
+
+    // Драг скроллбара
+    let isDragging = false;
+    let startX = 0;
+    let startLeft = 0;
+
+    scrollbarThumb.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      startX = e.clientX;
+      startLeft = parseInt(scrollbarThumb.style.left || '0');
+      e.preventDefault();
+    });
+
+    scrollbarThumb.addEventListener('touchstart', (e) => {
+      isDragging = true;
+      startX = e.touches[0].clientX;
+      startLeft = parseInt(scrollbarThumb.style.left || '0');
+      e.preventDefault();
+    });
+
+    const handleMove = (clientX: number) => {
+      if (!isDragging) return;
+
+      const deltaX = clientX - startX;
+      const scrollbarWidth = scrollbar.clientWidth;
+      const thumbWidth = scrollbarThumb.clientWidth;
+      const maxThumbPosition = scrollbarWidth - thumbWidth;
+
+      let newLeft = startLeft + deltaX;
+      newLeft = Math.max(0, Math.min(newLeft, maxThumbPosition));
+
+      const scrollWidth = activeSlide.scrollWidth;
+      const clientWidth = activeSlide.clientWidth;
+      const scrollableWidth = scrollWidth - clientWidth;
+
+      const scrollPosition = (newLeft / maxThumbPosition) * scrollableWidth;
+      activeSlide.scrollLeft = scrollPosition;
+    };
+
+    document.addEventListener('mousemove', (e) => handleMove(e.clientX));
+    document.addEventListener('touchmove', (e) => handleMove(e.touches[0].clientX));
+
+    document.addEventListener('mouseup', () => {
+      isDragging = false;
+    });
+
+    document.addEventListener('touchend', () => {
+      isDragging = false;
+    });
+
+    // Клик по треку
+    scrollbar.addEventListener('click', (e) => {
+      if (e.target === scrollbarThumb) return;
+
+      const rect = scrollbar.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const thumbWidth = scrollbarThumb.clientWidth;
+      const scrollbarWidth = scrollbar.clientWidth;
+      const maxThumbPosition = scrollbarWidth - thumbWidth;
+
+      const newLeft = Math.max(0, Math.min(clickX - thumbWidth / 2, maxThumbPosition));
+
+      const scrollWidth = activeSlide.scrollWidth;
+      const clientWidth = activeSlide.clientWidth;
+      const scrollableWidth = scrollWidth - clientWidth;
+
+      const scrollPosition = (newLeft / maxThumbPosition) * scrollableWidth;
+      activeSlide.scrollLeft = scrollPosition;
+    });
+
+    updateThumbPosition();
+  }
+
+  initReviewsScrollbar();
+
+  window.addEventListener('resize', () => {
+    initReviewsScrollbar();
   });
 </script>

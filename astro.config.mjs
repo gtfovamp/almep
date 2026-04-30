@@ -7,13 +7,7 @@ export default defineConfig({
     output: 'server',
     adapter: cloudflare({
         platformProxy: {
-            enabled: true,
-            persist: {
-                path: '.wrangler/state/v3'
-            }
-        },
-        runtime: {
-            mode: 'remote'
+            enabled: true
         }
     })
 });

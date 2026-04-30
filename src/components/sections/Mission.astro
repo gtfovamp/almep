@@ -263,4 +263,99 @@ const stats = t.mission.stats;
   .mission__btn:hover {
     background: #174480;
   }
+
+  /* === МОБИЛЬНАЯ ВЕРСИЯ === */
+  @media (max-width: 768px) {
+    .mission {
+      padding: 45px 0;
+    }
+
+    .mission__inner {
+      padding: 0 23px;
+      gap: 35px;
+    }
+
+    .mission__top {
+      flex-direction: column;
+      gap: 35px;
+      align-items: flex-start;
+    }
+
+    .mission__block {
+      width: 100%;
+      align-items: center;
+      gap: 30px;
+    }
+
+    .mission__block--left,
+    .mission__block--right {
+      width: 100%;
+      align-items: center;
+    }
+
+    .mission__title {
+      font-size: 24px;
+      line-height: 110%;
+      text-align: center;
+    }
+
+    .mission__title--right {
+      text-align: center;
+    }
+
+    .mission__text {
+      font-size: 16px;
+      line-height: 130%;
+      text-align: center;
+    }
+
+    .mission__text--right {
+      width: 100%;
+      text-align: center;
+    }
+
+    .mission__stats {
+      flex-direction: column;
+      gap: 35px;
+      width: 100%;
+    }
+
+    .mission__stat {
+      width: 100%;
+      gap: 0;
+    }
+
+    .mission__brackets {
+      width: 100%;
+      height: 38px;
+    }
+
+    .mission__bracket {
+      width: 38px;
+      height: 38px;
+    }
+
+    .mission__stat-body {
+      gap: 25px;
+      padding: 10px 0;
+    }
+
+    .mission__stat-number {
+      font-size: 24px;
+      line-height: 110%;
+    }
+
+    .mission__stat-text {
+      font-size: 16px;
+      line-height: 130%;
+      max-width: 100%;
+    }
+
+    .mission__btn {
+      width: 100%;
+      height: 85px;
+      font-size: 16px;
+      line-height: 130%;
+    }
+  }
 </style>

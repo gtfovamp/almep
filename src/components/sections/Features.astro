@@ -108,4 +108,39 @@ const features = [
     color: #000000;
     text-align: center;
   }
+
+  /* === МОБИЛЬНАЯ ВЕРСИЯ === */
+  @media (max-width: 768px) {
+    .features {
+      padding: 45px 0;
+    }
+
+    .features__inner {
+      flex-direction: column;
+      width: 100%;
+      padding: 0 23px;
+      gap: 30px;
+    }
+
+    .features__card {
+      gap: 25px;
+    }
+
+    .features__icon-wrap {
+      width: 90px;
+      height: 90px;
+      box-shadow: 0px 0px 3.91111px rgba(0, 0, 0, 0.3);
+      border-radius: 57.2px;
+    }
+
+    .features__title {
+      font-size: 20px;
+      line-height: 110%;
+    }
+
+    .features__text {
+      font-size: 16px;
+      line-height: 130%;
+    }
+  }
 </style>

@@ -59,14 +59,15 @@ export async function deleteImage(imageUrl: string): Promise<void> {
 export async function createItem(
   table: string,
   fields: Record<string, any>,
-  imageFile?: File
+  imageFile?: File,
+  imageFieldName: string = 'image_url'
 ): Promise<{ id: number; imageUrl?: string }> {
   const db = env.DB;
 
   let imageUrl: string | undefined;
   if (imageFile) {
     imageUrl = await uploadImage(imageFile, table);
-    fields.image_url = imageUrl;
+    fields[imageFieldName] = imageUrl;
   }
 
   // Get max order_index
@@ -90,20 +91,21 @@ export async function updateItem(
   table: string,
   id: string | number,
   fields: Record<string, any>,
-  imageFile?: File
+  imageFile?: File,
+  imageFieldName: string = 'image_url'
 ): Promise<{ imageUrl?: string }> {
   const db = env.DB;
 
   let imageUrl: string | undefined;
   if (imageFile) {
     // Delete old image
-    const oldItem = await db.prepare(`SELECT image_url FROM ${table} WHERE id = ?`).bind(id).first();
-    if (oldItem?.image_url) {
-      await deleteImage(oldItem.image_url as string);
+    const oldItem = await db.prepare(`SELECT ${imageFieldName} FROM ${table} WHERE id = ?`).bind(id).first();
+    if (oldItem?.[imageFieldName]) {
+      await deleteImage(oldItem[imageFieldName] as string);
     }
 
     imageUrl = await uploadImage(imageFile, table);
-    fields.image_url = imageUrl;
+    fields[imageFieldName] = imageUrl;
   }
 
   fields.updated_at = new Date().toISOString();
@@ -118,25 +120,30 @@ export async function updateItem(
   return { imageUrl };
 }
 
-export async function deleteItem(table: string, id: string | number): Promise<void> {
+export async function deleteItem(table: string, id: string | number, imageFieldName: string = 'image_url'): Promise<void> {
   const db = env.DB;
 
-  // Delete image
-  const item = await db.prepare(`SELECT image_url FROM ${table} WHERE id = ?`).bind(id).first();
-  if (item?.image_url) {
-    await deleteImage(item.image_url as string);
+  // Try to delete image if field exists
+  try {
+    const item = await db.prepare(`SELECT ${imageFieldName} FROM ${table} WHERE id = ?`).bind(id).first();
+    if (item?.[imageFieldName]) {
+      await deleteImage(item[imageFieldName] as string);
+    }
+  } catch (error) {
+    // Field might not exist, continue with deletion
+    console.log(`No ${imageFieldName} field in ${table}`);
   }
 
   await db.prepare(`DELETE FROM ${table} WHERE id = ?`).bind(id).run();
 }
 
-export async function reorderItems(table: string, items: Array<{ id: number; order_index: number }>): Promise<void> {
+export async function reorderItems(table: string, items: Array<{ id: number; order: number }>): Promise<void> {
   const db = env.DB;
 
   for (const item of items) {
     await db.prepare(
       `UPDATE ${table} SET order_index = ? WHERE id = ?`
-    ).bind(item.order_index, item.id).run();
+    ).bind(item.order, item.id).run();
   }
 }
 

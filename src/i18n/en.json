@@ -12,7 +12,8 @@
     },
     "header": {
         "catalog": "Catalog",
-        "phone": "+994 10 241 99 10"
+        "phone": "+994 10 241 99 10",
+        "search_placeholder": "Find product, article or category"
     },
     "hero": {
         "title": "Almep Trading — Your strategic partner in professional solutions",
@@ -186,6 +187,7 @@
         "minute": "minute",
         "learn_more": "Learn more",
         "read_news": "Read news",
+        "btn_consultation": "Request consultation",
         "aria_next": "Next slide",
         "aria_prev": "Previous slide",
         "aria_slide": "Slide",

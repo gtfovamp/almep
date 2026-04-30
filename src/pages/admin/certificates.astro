@@ -1,0 +1,155 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import { env } from 'cloudflare:workers';
+
+export const prerender = false;
+
+let certificates = [];
+try {
+  const db = env.DB;
+  if (db) {
+    const { results } = await db.prepare(
+      'SELECT * FROM certificates ORDER BY order_index ASC'
+    ).all();
+    certificates = results || [];
+  }
+} catch (error) {
+  console.error('Error fetching certificates:', error);
+}
+---
+
+<AdminLayout title="Certificates & Licenses" activeSection="certificates">
+  <link rel="stylesheet" href="/admin-styles.css">
+
+  <div class="admin-content">
+    <section class="form-section" id="formSection">
+      <div class="section-header">
+        <h2 id="formTitle">Add New Certificate</h2>
+        <button type="button" class="btn btn-ghost" id="cancelEdit" style="display: none;">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M12 4L4 12M4 4L12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          Cancel
+        </button>
+      </div>
+
+      <form id="certificateForm" class="admin-form" enctype="multipart/form-data">
+        <div class="form-group">
+          <label for="title">Title (RU) *</label>
+          <input type="text" id="title" name="title" required placeholder="e.g., ISO 9001 Certificate" />
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="title_en">Title (EN)</label>
+            <input type="text" id="title_en" name="title_en" placeholder="e.g., ISO 9001 Certificate" />
+          </div>
+          <div class="form-group">
+            <label for="title_az">Title (AZ)</label>
+            <input type="text" id="title_az" name="title_az" placeholder="e.g., ISO 9001 Sertifikatı" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="image">
+            Certificate Image *
+            <span class="label-hint">Recommended size: 800×1000px or A4 ratio</span>
+          </label>
+          <div class="file-upload" id="fileUpload">
+            <input type="file" id="image" name="image" accept="image/*" required />
+            <div class="file-upload-placeholder">
+              <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                <path d="M24 16V32M16 24H32" stroke="#7c3aed" stroke-width="2" stroke-linecap="round"/>
+                <rect x="4" y="4" width="40" height="40" rx="4" stroke="#7c3aed" stroke-width="2"/>
+              </svg>
+              <span>Click or drag certificate image here</span>
+            </div>
+            <div class="file-upload-preview" style="display: none;">
+              <img src="" alt="Preview" />
+              <button type="button" class="file-upload-remove">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <path d="M15 5L5 15M5 5L15 15" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary" id="submitBtn">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path d="M10 4V16M4 10H16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            Add Certificate
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <section class="list-section">
+      <div class="section-header">
+        <h2>Existing Certificates</h2>
+        <span class="item-count">{certificates.length} {certificates.length === 1 ? 'certificate' : 'certificates'}</span>
+      </div>
+
+      {certificates.length === 0 ? (
+        <div class="empty-state">
+          <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+            <path d="M32 20v24M20 32h24" stroke="#ccc" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="32" cy="32" r="24" stroke="#ccc" stroke-width="2"/>
+          </svg>
+          <p>No certificates yet</p>
+          <span>Add your first certificate using the form on the left</span>
+        </div>
+      ) : (
+        <div class="item-list" id="certificateList">
+          {certificates.map((item: any) => (
+            <div class="item-card" data-id={item.id} data-order={item.order_index} draggable="true">
+              <div class="item-drag">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <circle cx="7" cy="5" r="1.5" fill="#999"/>
+                  <circle cx="13" cy="5" r="1.5" fill="#999"/>
+                  <circle cx="7" cy="10" r="1.5" fill="#999"/>
+                  <circle cx="13" cy="10" r="1.5" fill="#999"/>
+                  <circle cx="7" cy="15" r="1.5" fill="#999"/>
+                  <circle cx="13" cy="15" r="1.5" fill="#999"/>
+                </svg>
+              </div>
+              <div class="item-image">
+                <img src={item.image_url} alt={item.title} />
+              </div>
+              <div class="item-info">
+                <h3>{item.title}</h3>
+                <div class="item-meta">
+                  {item.title_en && <span class="meta-lang">EN</span>}
+                  {item.title_az && <span class="meta-lang">AZ</span>}
+                </div>
+              </div>
+              <div class="item-actions">
+                <button class="btn btn-icon btn-edit" onclick={`certificateManager.edit(${item.id})`}>
+                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                    <path d="M12.5 2.5L15.5 5.5L6 15H3V12L12.5 2.5Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+                <button class="btn btn-icon btn-danger" onclick={`certificateManager.delete(${item.id})`}>
+                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                    <path d="M3 5H15M7 8V13M11 8V13M4 5L5 15H13L14 5M7 5V3H11V5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </section>
+  </div>
+
+  <script src="/admin-manager.js" is:inline></script>
+  <script is:inline>
+    window.certificateManager = new PortfolioManager({
+      apiEndpoint: '/api/certificates',
+      formId: 'certificateForm',
+      listId: 'certificateList'
+    });
+  </script>
+</AdminLayout>

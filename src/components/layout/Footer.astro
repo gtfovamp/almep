@@ -337,6 +337,108 @@ const navColumns = [
   .footer__scroll-top:hover {
     background: rgba(255, 255, 255, 0.1);
   }
+
+  /* === МОБИЛЬНАЯ ВЕРСИЯ === */
+  @media (max-width: 768px) {
+    .footer {
+      min-height: 713px;
+    }
+
+    .footer__inner {
+      width: 100%;
+      padding: 60px 23px 0;
+      gap: 45px;
+    }
+
+    .footer__logo {
+      margin-bottom: 0;
+    }
+
+    .footer__logo img {
+      width: 167px;
+      height: 41px;
+    }
+
+    .footer__content {
+      gap: 35px;
+    }
+
+    .footer__nav-row {
+      flex-direction: row;
+      align-items: flex-start;
+      gap: 13px;
+    }
+
+    .footer__nav {
+      flex-direction: column;
+      gap: 25px;
+      width: 105px;
+    }
+
+    .footer__nav-col {
+      gap: 25px;
+    }
+
+    .footer__nav-link {
+      font-size: 16px;
+      line-height: 110%;
+    }
+
+    .footer__contacts {
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 25px;
+    }
+
+    .footer__contacts-info {
+      gap: 20px;
+    }
+
+    .footer__phone,
+    .footer__email {
+      font-size: 14px;
+      line-height: 110%;
+      font-weight: 400;
+    }
+
+    .footer__socials {
+      gap: 20px;
+    }
+
+    .footer__social-link img {
+      width: 31.71px;
+      height: 31.71px;
+    }
+
+    .footer__divider {
+      width: 100%;
+    }
+
+    .footer__bottom {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 30px;
+      padding-bottom: 60px;
+    }
+
+    .footer__bottom-left {
+      gap: 30px;
+    }
+
+    .footer__copyright {
+      font-size: 16px;
+      line-height: 150%;
+    }
+
+    .footer__privacy {
+      font-size: 14px;
+      line-height: 116.4%;
+    }
+
+    .footer__scroll-top {
+      display: none;
+    }
+  }
 </style>
 
 <script>
