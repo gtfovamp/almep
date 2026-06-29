@@ -2,36 +2,46 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\AdminSession;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * Dead-simple admin auth: ONE login / ONE password from .env.
+ * No tokens, no sessions, no DB. Credentials are checked on every request.
+ *
+ * Accepts ANY of these (use whichever is convenient on the front-end):
+ *   1) HTTP Basic Auth:           Authorization: Basic base64(user:pass)
+ *   2) Headers:                   X-Admin-Username / X-Admin-Password
+ *   3) Query / body fields:       username & password
+ */
 class AdminAuth
 {
     public function handle(Request $request, Closure $next): Response
     {
-        $token = $request->bearerToken() ?: $request->header('X-Auth-Token');
+        $expectedUser = env('ADMIN_USERNAME', 'admin');
+        $expectedPass = env('ADMIN_PASSWORD', 'admin');
 
-        if (! $token) {
-            return response()->json(['message' => 'Требуется авторизация.'], 401);
+        // 1) HTTP Basic Auth
+        $user = $request->getUser();
+        $pass = $request->getPassword();
+
+        // 2) custom headers
+        if ($user === null) {
+            $user = $request->header('X-Admin-Username');
+            $pass = $request->header('X-Admin-Password');
         }
 
-        $session = AdminSession::with('user')->where('token', $token)->first();
-
-        if (! $session) {
-            return response()->json(['message' => 'Недействительный токен.'], 401);
+        // 3) query / body
+        if ($user === null) {
+            $user = $request->input('username');
+            $pass = $request->input('password');
         }
 
-        if ($session->isExpired()) {
-            $session->delete();
-            return response()->json(['message' => 'Сессия истекла. Войдите заново.'], 401);
+        if ($user === $expectedUser && $pass === $expectedPass) {
+            return $next($request);
         }
 
-        // Make current admin user & session available to controllers.
-        $request->attributes->set('admin_user', $session->user);
-        $request->attributes->set('admin_session', $session);
-
-        return $next($request);
+        return response()->json(['message' => 'Неверный логин или пароль.'], 401);
     }
 }

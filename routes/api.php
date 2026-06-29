@@ -68,14 +68,7 @@ Route::prefix('')->group(function () {
 |--------------------------------------------------------------------------
 */
 Route::prefix('admin')->middleware('admin.auth')->group(function () {
-    Route::post('logout', [AuthController::class, 'logout']);
     Route::get('me', [AuthController::class, 'me']);
-
-    // Admin users
-    Route::get('admin-users', [AuthController::class, 'listUsers']);
-    Route::post('admin-users', [AuthController::class, 'createUser']);
-    Route::put('admin-users/{id}', [AuthController::class, 'updateUser']);
-    Route::delete('admin-users/{id}', [AuthController::class, 'deleteUser']);
 
     // Categories
     Route::post('categories/reorder', [CategoryController::class, 'reorder']);
