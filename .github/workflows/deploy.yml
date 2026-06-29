@@ -13,13 +13,12 @@ jobs:
 
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.4'
+          php-version: '8.4.1'
 
       - name: Install Composer Dependencies
         run: composer install --no-dev --optimize-autoloader --no-progress
 
-      # Копируем ВЕСЬ проект в laravel/
-      - name: Upload Laravel to server
+      - name: Deploy Laravel Core (protected folder)
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_SERVER }}
@@ -27,9 +26,17 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./
           server-dir: ./laravel/
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            **/tests/**
+            **/phpunit.xml
+            public/**
+            .env.example
+            README.md
 
-      # Копируем public в public_html
-      - name: Upload public folder
+      - name: Deploy Public Files to public_html
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_SERVER }}
