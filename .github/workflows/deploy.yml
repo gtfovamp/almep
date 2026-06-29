@@ -16,7 +16,7 @@ jobs:
           php-version: '8.4.1'
 
       - name: Install Composer Dependencies
-        run: composer install --no-dev --optimize-autoloader --no-progress
+        run: composer install --no-dev --optimize-autoloader --no-progress --ignore-platform-req=php
 
       - name: Deploy Laravel Core (protected folder)
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
