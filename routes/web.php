@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\TestimonialWebController;
 use App\Http\Controllers\Admin\BlogWebController;
 use App\Http\Controllers\Admin\NewsWebController;
 use App\Http\Controllers\Admin\ConsultationWebController;
+use App\Http\Controllers\Admin\ImageUploadController;
 
 Route::get('/', fn() => redirect('/admin'));
 
@@ -25,6 +26,9 @@ Route::post('/admin/logout', [AuthWebController::class, 'logout'])->name('admin.
 // ---- Protected admin panel ----
 Route::prefix('admin')->middleware('admin.session')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard');
+
+    // Async image upload (gallery + block editor)
+    Route::post('upload-image', [ImageUploadController::class, 'upload']);
 
     $resources = [
         'categories'     => CategoryWebController::class,

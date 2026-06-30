@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Consultation;
+use Illuminate\Http\Request;
 
 class ConsultationWebController extends AdminCrudController
 {
@@ -11,17 +12,13 @@ class ConsultationWebController extends AdminCrudController
     protected string $active = 'consultations';
     protected string $titleSingular = 'Заявка';
     protected string $titlePlural = 'Заявки';
-    protected string $orderBy = 'created_at';
-    protected string $orderDir = 'desc';
 
-    protected function columns(): array
+    public function index(Request $request)
     {
-        return [
-            'name'  => 'Имя',
-            'email' => 'Email',
-            'phone' => 'Телефон',
-            'created_at' => ['label' => 'Дата', 'type' => 'date'],
-        ];
+        $items = Consultation::orderByDesc('created_at')->paginate(24);
+        return view('admin.consultations.index', ['items' => $items]);
     }
-    protected function fields(): array { return []; } // read-only (view + delete)
+
+    protected function columns(): array { return []; }
+    protected function fields(): array { return []; }
 }
