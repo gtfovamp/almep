@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\AdminAuth;
+use App\Http\Middleware\AdminSessionAuth;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -21,7 +22,8 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         // Register the custom admin token guard under alias 'admin.auth'
         $middleware->alias([
-            'admin.auth' => AdminAuth::class,
+            'admin.auth'    => AdminAuth::class,      // API token (Basic Auth) guard
+            'admin.session' => AdminSessionAuth::class, // web panel session guard
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
