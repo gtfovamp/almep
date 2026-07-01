@@ -1,0 +1,169 @@
+@php
+    $currentPath = '/' . ltrim(request()->path(), '/');
+    $pathWithoutLang = preg_replace('#^/(ru|en|az)#', '', $currentPath) ?: '/';
+
+    $navColumns = [
+        [
+            ['label' => $t['nav']['home'] ?? '', 'href' => "/{$lang}", 'active' => $pathWithoutLang === '/'],
+            ['label' => $t['nav']['about'] ?? '', 'href' => "/{$lang}/about"],
+        ],
+        [
+            ['label' => $t['nav']['services'] ?? '', 'href' => "/{$lang}/services"],
+            ['label' => $t['nav']['products'] ?? '', 'href' => "/{$lang}/products"],
+        ],
+        [
+            ['label' => $t['nav']['partners'] ?? '', 'href' => "/{$lang}/partners"],
+            ['label' => $t['nav']['portfolio'] ?? '', 'href' => "/{$lang}/portfolio"],
+        ],
+        [
+            ['label' => $t['nav']['news'] ?? '', 'href' => "/{$lang}/news"],
+            ['label' => $t['nav']['reviews'] ?? '', 'href' => "/{$lang}/reviews"],
+        ],
+        [
+            ['label' => $t['nav']['contacts'] ?? '', 'href' => "/{$lang}/contacts"],
+        ],
+    ];
+@endphp
+
+<footer class="footer">
+    <div class="footer__bg"></div>
+
+    <div class="footer__inner">
+
+        <div class="footer__logo">
+            <a href="/{{ $lang }}">
+                <img src="{{ asset('assets/icons/logo.svg') }}" alt="Almep Trading" width="162" height="40" />
+            </a>
+        </div>
+
+        <div class="footer__content">
+
+            <div class="footer__nav-row">
+
+                <nav class="footer__nav">
+                    @foreach ($navColumns as $col)
+                        <div class="footer__nav-col">
+                            @foreach ($col as $link)
+                                <a href="{{ $link['href'] }}" class="footer__nav-link {{ !empty($link['active']) ? 'footer__nav-link--active' : '' }}">
+                                    @if (!empty($link['active']))
+                                        <span class="footer__nav-link-inner">
+                                            {{ $link['label'] }}
+                                            <span class="footer__nav-underline"></span>
+                                        </span>
+                                    @else
+                                        {{ $link['label'] }}
+                                    @endif
+                                </a>
+                            @endforeach
+                        </div>
+                    @endforeach
+                </nav>
+
+                <div class="footer__contacts">
+                    <div class="footer__contacts-info">
+                        <a href="tel:{{ str_replace(' ', '', $t['consultation']['phone'] ?? '') }}" class="footer__phone">
+                            {{ $t['consultation']['phone'] ?? '' }}
+                        </a>
+                        <a href="mailto:{{ $t['consultation']['email'] ?? '' }}" class="footer__email">
+                            {{ $t['consultation']['email'] ?? '' }}
+                        </a>
+                    </div>
+
+                    <div class="footer__socials">
+                        <a href="#" class="footer__social-link" aria-label="{{ $t['consultation']['social_instagram'] ?? '' }}">
+                            <img src="{{ asset('assets/icons/instagram.svg') }}" alt="{{ $t['consultation']['social_instagram'] ?? '' }}" width="35" height="35" />
+                        </a>
+                        <a href="#" class="footer__social-link" aria-label="{{ $t['consultation']['social_youtube'] ?? '' }}">
+                            <img src="{{ asset('assets/icons/youtube.svg') }}" alt="{{ $t['consultation']['social_youtube'] ?? '' }}" width="37" height="37" />
+                        </a>
+                        <a href="#" class="footer__social-link" aria-label="{{ $t['consultation']['social_facebook'] ?? '' }}">
+                            <img src="{{ asset('assets/icons/facebook.svg') }}" alt="{{ $t['consultation']['social_facebook'] ?? '' }}" width="37" height="37" />
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="footer__divider"></div>
+
+            <div class="footer__bottom">
+                <div class="footer__bottom-left">
+                    <span class="footer__copyright">{{ $t['footer']['copyright'] ?? '' }}</span>
+                    <a href="/{{ $lang }}/privacy" class="footer__privacy">{{ $t['footer']['privacy'] ?? '' }}</a>
+                </div>
+
+                <button class="footer__scroll-top" aria-label="{{ $t['footer']['scroll_top'] ?? '' }}" id="scrollTopBtn">
+                    <svg width="23" height="52" viewBox="0 0 23 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M10.5762 51.8437L10.5762 0.84375M10.5762 0.84375L0.422362 16.8438M10.5762 0.84375L22.4224 14.8437" stroke="white"/>
+                    </svg>
+                </button>
+            </div>
+
+        </div>
+    </div>
+</footer>
+
+<style>
+    .footer { position: relative; width: 100%; min-height: 604px; overflow: hidden; background: #C6C6C6; }
+    .footer__bg { position: absolute; inset: 0; background: linear-gradient(0deg, rgba(0, 0, 0, 0.71), rgba(0, 0, 0, 0.71)), url('/assets/images/footer-bg.png') center center / cover no-repeat; z-index: 0; }
+    .footer__inner { position: relative; z-index: 1; width: 100%; margin: 0 auto; padding: 118px 6vw 0; display: flex; flex-direction: column; gap: 0; }
+    .footer__logo { margin-bottom: 60px; }
+    .footer__logo img { display: block; width: 162px; height: auto; object-fit: contain; filter: brightness(0) invert(1); }
+    .footer__content { display: flex; flex-direction: column; gap: 60px; }
+    .footer__nav-row { display: flex; flex-direction: row; justify-content: space-between; align-items: flex-start; width: 100%; }
+    .footer__nav { display: flex; flex-direction: row; align-items: flex-start; gap: 60px; }
+    .footer__nav-col { display: flex; flex-direction: column; gap: 30px; }
+    .footer__nav-link { font-family: 'Montserrat', sans-serif; font-weight: 400; font-size: 16px; line-height: 110%; color: #FFFFFF; white-space: nowrap; transition: opacity 0.2s; }
+    .footer__nav-link:hover { opacity: 0.75; }
+    .footer__nav-link--active { font-weight: 500; }
+    .footer__nav-link-inner { display: inline-flex; flex-direction: column; align-items: flex-end; gap: 5px; }
+    .footer__nav-underline { display: block; width: 42px; height: 1px; background: #FFFFFF; }
+    .footer__contacts { display: flex; flex-direction: row; align-items: flex-end; gap: 40px; }
+    .footer__contacts-info { display: flex; flex-direction: column; align-items: flex-end; gap: 30px; }
+    .footer__phone, .footer__email { font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 16px; line-height: 110%; color: #FFFFFF; white-space: nowrap; transition: opacity 0.2s; }
+    .footer__phone:hover, .footer__email:hover { opacity: 0.75; }
+    .footer__socials { display: flex; flex-direction: row; align-items: center; gap: 30px; }
+    .footer__social-link { display: flex; align-items: center; justify-content: center; transition: opacity 0.2s; }
+    .footer__social-link:hover { opacity: 0.75; }
+    .footer__social-link img { object-fit: contain; filter: brightness(0) invert(1); }
+    .footer__divider { width: 100%; height: 1px; background: #FFFFFF; }
+    .footer__bottom { display: flex; flex-direction: row; justify-content: space-between; align-items: flex-end; padding-bottom: 40px; }
+    .footer__bottom-left { display: flex; flex-direction: column; gap: 30px; }
+    .footer__copyright { font-family: 'Montserrat', sans-serif; font-weight: 400; font-size: 16px; line-height: 150%; color: #F0F0F0; }
+    .footer__privacy { font-family: 'Montserrat', sans-serif; font-weight: 400; font-size: 14px; line-height: 116.4%; color: #FFFFFF; transition: opacity 0.2s; }
+    .footer__privacy:hover { opacity: 0.75; }
+    .footer__scroll-top { display: flex; align-items: center; justify-content: center; width: 51px; height: 51px; background: none; cursor: pointer; transition: background 0.2s; padding: 0; }
+    .footer__scroll-top:hover { background: rgba(255, 255, 255, 0.1); }
+
+    @media (max-width: 768px) {
+        .footer { min-height: 713px; }
+        .footer__inner { width: 100%; padding: 60px 23px 0; gap: 45px; }
+        .footer__logo { margin-bottom: 0; }
+        .footer__logo img { width: 167px; height: 41px; }
+        .footer__content { gap: 35px; }
+        .footer__nav-row { flex-direction: row; align-items: flex-start; gap: 13px; }
+        .footer__nav { flex-direction: column; gap: 25px; width: 105px; }
+        .footer__nav-col { gap: 25px; }
+        .footer__nav-link { font-size: 16px; line-height: 110%; }
+        .footer__contacts { flex-direction: column; align-items: flex-end; gap: 25px; }
+        .footer__contacts-info { gap: 20px; }
+        .footer__phone, .footer__email { font-size: 14px; line-height: 110%; font-weight: 400; }
+        .footer__socials { gap: 20px; }
+        .footer__social-link img { width: 31.71px; height: 31.71px; }
+        .footer__divider { width: 100%; }
+        .footer__bottom { flex-direction: column; align-items: flex-start; gap: 30px; padding-bottom: 60px; }
+        .footer__bottom-left { gap: 30px; }
+        .footer__copyright { font-size: 16px; line-height: 150%; }
+        .footer__privacy { font-size: 14px; line-height: 116.4%; }
+        .footer__scroll-top { display: none; }
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const scrollTopBtn = document.getElementById('scrollTopBtn');
+        scrollTopBtn?.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    });
+</script>

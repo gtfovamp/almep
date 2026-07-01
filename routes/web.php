@@ -16,8 +16,6 @@ use App\Http\Controllers\Admin\NewsWebController;
 use App\Http\Controllers\Admin\ConsultationWebController;
 use App\Http\Controllers\Admin\ImageUploadController;
 
-Route::get('/', fn() => redirect('/admin'));
-
 // ---- Auth (public) ----
 Route::get('/admin/login', [AuthWebController::class, 'showLogin'])->name('admin.login');
 Route::post('/admin/login', [AuthWebController::class, 'login'])->name('admin.login.post');
@@ -55,3 +53,5 @@ Route::prefix('admin')->middleware('admin.session')->group(function () {
     Route::get('consultations', [ConsultationWebController::class, 'index']);
     Route::delete('consultations/{id}', [ConsultationWebController::class, 'destroy']);
 });
+
+require __DIR__.'/site.php';

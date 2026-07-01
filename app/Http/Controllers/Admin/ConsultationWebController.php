@@ -13,7 +13,7 @@ class ConsultationWebController extends AdminCrudController
     protected string $titleSingular = 'Заявка';
     protected string $titlePlural = 'Заявки';
 
-    public function index(Request $request)
+    public function index()
     {
         $items = Consultation::orderByDesc('created_at')->paginate(24);
         return view('admin.consultations.index', ['items' => $items]);

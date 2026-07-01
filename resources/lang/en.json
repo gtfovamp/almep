@@ -1,0 +1,387 @@
+{
+    "nav": {
+        "home": "Home",
+        "about": "About",
+        "about_short": "About Us",
+        "structure": "Company Structure",
+        "certificates": "Certificates and Licenses",
+        "blog": "Blog",
+        "services": "Services",
+        "products": "Products",
+        "partners": "Partners",
+        "portfolio": "Portfolio",
+        "news": "News",
+        "reviews": "Reviews",
+        "contacts": "Contacts"
+    },
+    "header": {
+        "catalog": "Catalog",
+        "phone": "+994 10 241 99 10",
+        "search_placeholder": "Find product, article or category"
+    },
+    "hero": {
+        "title": "Almep Trading — Your strategic partner in professional solutions",
+        "description": "Almep Trading specializes in supply and distribution of high-quality technical and electrical solutions for business.",
+        "btn_consultation": "Request consultation",
+        "btn_catalog": "Go to catalog"
+    },
+    "partners_page": {
+        "title": "Partners",
+        "benefits_title": "Partnership Benefits",
+        "benefit_1_title": "Collaboration",
+        "benefit_1_text": "We build long-term partnerships based on trust, transparency and mutual benefit. Working together with leading manufacturers allows us to offer clients the best solutions on the market.",
+        "benefit_2_title": "Expertise",
+        "benefit_2_text": "Our experience and deep understanding of the industry allow us to select optimal products and solutions for tasks of any complexity level. We don't just supply — we consult and support.",
+        "benefit_3_title": "Global Reach",
+        "benefit_3_text": "Collaborating with international brands, we provide access to advanced technologies and world-class products that meet modern quality standards.",
+        "benefit_4_title": "Innovation",
+        "benefit_4_text": "We constantly monitor technology development and implement modern solutions so our clients receive relevant, effective and competitive products.",
+        "become_partner_title": "Become Our Partner",
+        "become_partner_subtitle": "Leave your contacts below so we can get in touch with you.",
+        "form_name": "Your name",
+        "form_email": "E-mail",
+        "form_phone": "Your phone number",
+        "form_submit": "Submit"
+    },
+    "about": {
+        "title": "Almep Trading",
+        "intro_1": "Almep Trading: More than a supplier — your strategic partner. In modern business, project success depends on supply chain reliability. At Almep Trading, we go beyond ordinary sales.",
+        "intro_2": "In modern business, project success depends on supply chain reliability. At Almep Trading, we go beyond ordinary sales.",
+        "feature_quality_title": "Quality Guarantee",
+        "feature_quality_text": "We ensure 100% product control through laboratory testing and international ISO certification.",
+        "feature_optimization_title": "Project Optimization",
+        "feature_optimization_text": "We don't just sell products — we select the best technical solutions for your budget and timeline.",
+        "partners_intro": "We trust only the best, which is why our portfolio features global leaders:",
+        "partner_berent": "Berent and Harden — the standard of professional hand tools for the most complex tasks.",
+        "partner_ekf": "EKF — advanced electrical solutions for safe and efficient energy systems.",
+        "partner_sensh": "Sensh — innovative components for industrial automation and production.",
+        "conclusion": "Almep means quality assurance, deadline compliance, and an individual approach to every technical specification.",
+        "btn_consultation": "Request consultation"
+    },
+    "about_page": {
+        "title": "About Company",
+        "video_play": "Play video",
+        "section1_text": "Almep Trading is not just a supplier, but a strategic partner for your project! In the modern world of construction and industry, success is determined not only by the availability of materials, but also by the right choice of partner. Almep Trading offers not just product sales — we become a reliable support at all stages of the project: from foundation to completion.",
+        "section2_title": "What makes us a strategic partner?",
+        "section2_intro": "We understand that each project requires unique technical solutions and strict adherence to deadlines. That's why we unite brands that have proven their quality in the global market:",
+        "section2_berent": "Berent and Harden — ergonomic and durable hand tools that won't let you down even in the most difficult conditions.",
+        "section2_sensh": "Sensh — innovative technological components that increase the efficiency of production processes.",
+        "section2_ekf": "EKF — global solutions in the field of power supply and energy efficiency, ensuring safety.",
+        "section3_title": "What do you get by working with Almep Trading?",
+        "section3_supply": "Accurate supply — timely and complete delivery of necessary equipment.",
+        "section3_expertise": "Technical expertise — professional recommendations on choosing optimal brands and solutions.",
+        "section3_quality": "Quality guarantee — compliance of products with international standards.",
+        "section3_conclusion": "For us, every client is not just a buyer, but a partner with whom we move towards a common goal. If you want to minimize risks and achieve maximum quality, Almep Trading is your best strategic choice.",
+        "btn_consultation": "Request consultation",
+        "advantage1_title": "Systematic Quality",
+        "advantage1_text": "Quality is not a random result, but a managed systematic process.",
+        "advantage2_title": "Certified Manufacturers",
+        "advantage2_text": "We cooperate only with factories that have international certificates and proven production standards.",
+        "advantage3_title": "Multi-stage Filtration",
+        "advantage3_text": "Before entering the market, our products undergo technical testing and quality control.",
+        "advantage4_title": "Warranty and Durability",
+        "advantage4_text": "Durability and sustainability are our main criteria when choosing products.",
+        "final_title": "Almep Trading",
+        "final_subtitle": "Almep Trading - full supply power from construction to industry.",
+        "final_text": "We don't just sell products, we lay the technical foundation of your project. With durable Berent and Harden tools, innovative EKF electrical systems and Sensh engineering solutions, we become your most reliable strategic partner. Quality is not an accident, but the choice of the right partner."
+    },
+    "features": {
+        "professional_title": "Professional Supplier",
+        "professional_text": "A reliable partner in high-quality solutions for construction and industrial sectors.",
+        "solutions_title": "Solution Provider",
+        "solutions_text": "We don't just sell products, we offer optimal solutions tailored to project requirements and technical specifications.",
+        "integrated_title": "Integrated Structure",
+        "integrated_text": "A flexible management system that simultaneously meets the needs of both large B2B projects and the retail market (B2C)."
+    },
+    "portfolio": {
+        "title": "Portfolio",
+        "learn_more": "Learn more",
+        "btn_consultation": "Request consultation",
+        "aria_next": "Next slide",
+        "aria_prev": "Previous slide",
+        "aria_slide": "Slide"
+    },
+    "services": {
+        "title": "Services",
+        "btn_catalog": "Go to catalog",
+        "items": [
+            {
+                "number": "01",
+                "title": "1 Year Official Warranty",
+                "description": "We provide an official 1-year warranty on all our products and completed work."
+            },
+            {
+                "number": "02",
+                "title": "Technical Consultation",
+                "description": "Engineering consultation on proper material selection and technical issues at the design stage."
+            },
+            {
+                "number": "03",
+                "title": "Installation and Commissioning",
+                "description": "Professional equipment installation with subsequent inspection and commissioning."
+            },
+            {
+                "number": "04",
+                "title": "After-Sales Service",
+                "description": "Comprehensive after-sales service: technical support, maintenance and component replacement."
+            }
+        ]
+    },
+    "mission": {
+        "mission_title": "Mission",
+        "mission_text": "To provide the Azerbaijani market with durable, safe and professional construction products",
+        "goals_title": "Goals",
+        "goals_text": "To become your long-term strategic partner, providing comprehensive supply and expert support at every stage.",
+        "stats": [
+            {
+                "number": "1",
+                "text": "World-class quality."
+            },
+            {
+                "number": "2",
+                "text": "Efficiency and stability of deliveries."
+            },
+            {
+                "number": "3",
+                "text": "Professional team and technical support."
+            }
+        ],
+        "btn_catalog": "Go to catalog"
+    },
+    "products": {
+        "title": "Products",
+        "download_catalog": "Download catalog",
+        "learn_more": "Learn more",
+        "btn_catalog": "Go to catalog",
+        "items": [
+            {
+                "title": "Tools for repair and construction",
+                "description": "Certified electrical materials and equipment for ensuring power supply and project safety.",
+                "href": "/products/tools"
+            },
+            {
+                "title": "Fastening elements",
+                "description": "Certified electrical materials and equipment for ensuring power supply and project safety.",
+                "href": "/products/fasteners"
+            },
+            {
+                "title": "Power sources",
+                "description": "Certified electrical materials and equipment for ensuring power supply and project safety.",
+                "href": "/products/power"
+            },
+            {
+                "title": "Equipment and devices",
+                "description": "Certified electrical materials and equipment for ensuring power supply and project safety.",
+                "href": "/products/equipment"
+            },
+            {
+                "title": "Consumables",
+                "description": "Certified electrical materials and equipment for ensuring power supply and project safety.",
+                "href": "/products/consumables"
+            },
+            {
+                "title": "Safety and operation materials",
+                "description": "Certified electrical materials and equipment for ensuring power supply and project safety.",
+                "href": "/products/safety"
+            }
+        ]
+    },
+    "whyus": {
+        "title": "Why choose us",
+        "features": [
+            {
+                "title": "Right choice",
+                "description": "By analyzing the technical requirements of the project, we select the optimal product."
+            },
+            {
+                "title": "Budget optimization",
+                "description": "We create effective alternatives while maintaining quality and staying within budget."
+            },
+            {
+                "title": "Time saving",
+                "description": "Thanks to fast logistics and precise planning, we minimize time loss."
+            },
+            {
+                "title": "Risk control",
+                "description": "Secure supply chain through risk management."
+            }
+        ],
+        "stats": [
+            {
+                "label": "Satisfied customers",
+                "value": "98%"
+            },
+            {
+                "label": "Professional team",
+                "value": "100%"
+            },
+            {
+                "label": "Success at work",
+                "value": "99%"
+            }
+        ],
+        "btn_consultation": "Request consultation",
+        "photo_alt": "Why choose us"
+    },
+    "partners": {
+        "title": "Partners",
+        "partner_logo": "Partner logo",
+        "all_reviews": "All reviews",
+        "btn_consultation": "Request consultation"
+    },
+    "news": {
+        "title": "News",
+        "category_company": "Company news",
+        "minutes": "minutes",
+        "minute": "minute",
+        "learn_more": "Learn more",
+        "read_news": "Read news",
+        "btn_consultation": "Request consultation",
+        "aria_next": "Next slide",
+        "aria_prev": "Previous slide",
+        "aria_slide": "Slide",
+        "date_alt": "Date",
+        "time_alt": "Reading time",
+        "detail_breadcrumb_news": "News",
+        "detail_related": "Related news",
+        "detail_read_more": "Learn more",
+        "newsletter_title": "Stay up to date",
+        "newsletter_desc": "Subscribe to news and receive updates",
+        "newsletter_placeholder": "Your E-mail",
+        "newsletter_btn": "Request consultation",
+        "newsletter_success": "Thank you! We will contact you.",
+        "newsletter_error": "Error. Please try again.",
+        "not_found": "News not found",
+        "items": [
+            {
+                "title": "Is your project ambitious? Supply must match.",
+                "excerpt": "Almep Trading is not just a supplier, but a strategic partner of your project. For us, every client is....",
+                "date": "04.02.2026",
+                "readTime": "5"
+            },
+            {
+                "title": "Build the infrastructure of the future with Almep",
+                "excerpt": "We believe that every great building or factory starts with properly selected details....",
+                "date": "04.02.2026",
+                "readTime": "5"
+            },
+            {
+                "title": "Full supply power — from construction to industry.",
+                "excerpt": "We don't just sell products, we lay the technical foundation of your project. With durable Berent and Harden tools....",
+                "date": "04.02.2026",
+                "readTime": "5"
+            },
+            {
+                "title": "New EKF equipment deliveries already in stock.",
+                "excerpt": "We are pleased to announce the arrival of a new batch of equipment from EKF. Wide range of power supply solutions....",
+                "date": "05.02.2026",
+                "readTime": "4"
+            },
+            {
+                "title": "How to properly choose cable products for industrial facility.",
+                "excerpt": "Choosing cable products is a responsible process that affects the safety and reliability of the entire facility....",
+                "date": "06.02.2026",
+                "readTime": "6"
+            },
+            {
+                "title": "Almep expands supply geography.",
+                "excerpt": "Almep Trading announces the expansion of supply geography and opening of new logistics routes....",
+                "date": "07.02.2026",
+                "readTime": "3"
+            }
+        ]
+    },
+    "blog": {
+        "title": "Blog",
+        "post_title": "Almep Trading — The support point of your project",
+        "post_text": "Behind every successful project are the right partners. We, Almep Trading, don't just supply professional tools for construction and production — we become part of your success. With Berent, Harden, Sensh and EKF brands, we make your projects faster, more reliable and more efficient...",
+        "read_more": "Read more..."
+    },
+    "reviews": {
+  "title": "Reviews",
+  "all_reviews": "All reviews",
+  "btn_consultation": "Request consultation",
+  "aria_next": "Next slide",
+  "aria_prev": "Previous slide",
+  "aria_slide": "Slide",
+  "stat_rating": "average rating",
+  "stat_reviews": "reviews",
+  "items": [
+    {
+      "text": "The best place to buy tools in Baku. Almep Trading always has quality Harden and Sensh brands in stock. Fast delivery and professional approach. Thank you for cooperation!",
+      "author": "Javid Askerov"
+    },
+    {
+      "text": "I have been using Harden and Berent tools for a long time. Very strong steel, ergonomic handles and high wear resistance. For professional work — this is the best choice for price-quality ratio.",
+      "author": "Ali Agayev"
+    },
+    {
+      "text": "We purchased a batch of Sensh hand tools. Excellent quality, the tool doesn't bend or break under high loads. Now work is faster and better quality.",
+      "author": "Jeyhun Kerimov"
+    },
+    {
+      "text": "Excellent service and wide range. We ordered EKF equipment for our facility — everything arrived on time, packed reliably. We will continue working!",
+      "author": "Elshan Mamedov"
+    },
+    {
+      "text": "Professional team that knows their product. Helped select the right tools for specific tasks. Very satisfied with quality and price.",
+      "author": "Rashad Huseyinov"
+    },
+    {
+      "text": "We have been working with Almep Trading for several years. Reliable supplier, always fulfill obligations. I recommend to all construction companies.",
+      "author": "Samir Aliyev"
+    },
+    {
+      "text": "Bought Berent tools for home workshop. Quality exceeded expectations — everything works as it should. Reasonable prices, fast delivery.",
+      "author": "Farid Ismayilov"
+    }
+  ]
+},
+"consultation": {
+  "title": "Free consultation",
+  "description": "Leave your contacts below so we can contact you for a complete consultation",
+  "placeholder_name": "Your name",
+  "placeholder_email": "E-mail",
+  "placeholder_phone": "Your phone number",
+  "btn_send": "Send",
+  "phone": "+994 10 241 99 10",
+  "email": "info@almeptrading.az",
+  "social_instagram": "Instagram",
+  "social_youtube": "YouTube",
+  "social_facebook": "Facebook"
+},
+"contacts": {
+  "title": "Contacts",
+  "address_label": "Address:",
+  "address_value": "44b, Ashig Molla Juma Street, Baku 1006",
+  "phone_label": "Phone:",
+  "phone_value": "+994 10 241 99 10",
+  "schedule_label": "Working hours:",
+  "schedule_days": "Mon–Sat,",
+  "schedule_hours": "09:00–18:00",
+  "email_label": "E-mail:",
+  "email_value": "info@almeptrading.az",
+  "btn_consultation": "Request consultation",
+  "zoom_in": "Zoom in",
+  "zoom_out": "Zoom out",
+  "company_name": "Almep Trading",
+  "office_label": "Official office",
+  "city": "Baku, Azerbaijan",
+  "popup_address": "Ashig Molla Juma, Baku"
+},
+"contacts_page": {
+  "title": "Contacts",
+  "form_title": "Contact us",
+  "form_subtitle": "Leave your contacts and we will get back to you as soon as possible",
+  "form_name": "Your name",
+  "form_phone": "Your phone number",
+  "form_email": "E-mail",
+  "form_message": "Message",
+  "form_submit": "Send message"
+},
+"footer": {
+  "copyright": "2026 © Bütün hüquqlar qorunur",
+  "privacy": "Məxfilik siyasəti",
+  "scroll_top": "Yuxarı"
+}
+}
