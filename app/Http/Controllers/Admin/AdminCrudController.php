@@ -48,7 +48,7 @@ abstract class AdminCrudController extends Controller
         $q = ($this->modelClass)::query();
         if ($this->with) $q->with($this->with);
         if ($this->orderBy) $q->orderBy($this->orderBy, $this->orderDir);
-        $items = $q->get();
+        $items = $q->paginate(25)->withQueryString();
         return view('admin.crud.index', array_merge($this->viewData(), compact('items')));
     }
 

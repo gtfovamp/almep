@@ -3,7 +3,7 @@
 
 @section('content')
     <div class="mb-6 flex items-center justify-between">
-        <p class="text-sm text-slate-500">Всего записей: <span class="font-semibold text-slate-700">{{ $items->count() }}</span></p>
+        <p class="text-sm text-slate-500">Всего записей: <span class="font-semibold text-slate-700">{{ $items->total() }}</span></p>
         @if($routeBase !== 'consultations')
             <a href="{{ url('/admin/' . $routeBase . '/create') }}"
                class="inline-flex items-center gap-2 rounded-lg bg-brand-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-700">
@@ -74,5 +74,11 @@
                 </tbody>
             </table>
         </div>
+
+        @if ($items->hasPages())
+            <div class="px-5 py-4 border-t border-slate-100">
+                {{ $items->links() }}
+            </div>
+        @endif
     </div>
 @endsection

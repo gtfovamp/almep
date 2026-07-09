@@ -246,7 +246,7 @@
          aria-modal="true" aria-hidden="true" aria-label="Меню">
         <div class="mob-menu__head">
             <a href="/{{ $lang }}" aria-label="Almep Trading">
-                <img src="{{ asset('assets/icons/logo.svg') }}" alt="Almep Trading"
+                <img src="{{ asset('assets/icons/logo-white.svg') }}" alt="Almep Trading"
                      width="130" height="45" class="mob-menu__logo" />
             </a>
             <button type="button" id="mobileMenuClose" class="mob-menu__close"
@@ -803,16 +803,23 @@
 .hdr__socials {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 10px;
     flex-shrink: 0;
 }
 .hdr__social {
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: opacity var(--tr);
+    width: 40px;
+    height: 40px;
+    border-radius: 6px;
+    transition: opacity var(--tr), border-color var(--tr);
 }
+.hdr__social img { width: 30px; height: 30px; object-fit: contain; }
 .hdr__social:hover { opacity: .7; }
+/* На главной шапка лежит поверх тёмного героя — рамки и иконки соцсетей белые */
+.hdr--home .hdr__social { border-color: rgba(255,255,255,.7); }
+.hdr--home .hdr__social img { filter: brightness(0) invert(1); }
 
 /* ─── Mobile menu backdrop ───────────────────────────────────── */
 .mob-backdrop {

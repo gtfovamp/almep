@@ -18,11 +18,23 @@ Route::prefix('{lang}')
     ->group(function () {
         Route::get('/certificates', [SiteController::class, 'certificates'])->name('site.certificates');
 
+        Route::get('/about', [SiteController::class, 'about'])->name('site.about');
+        Route::get('/structure', [SiteController::class, 'structure'])->name('site.structure');
+
+        Route::get('/services', [SiteController::class, 'services'])->name('site.services');
+
+        Route::get('/partners', [SiteController::class, 'partners'])->name('site.partners');
+
+        Route::get('/portfolio', [SiteController::class, 'portfolio'])->name('site.portfolio');
+
+        Route::get('/reviews', [SiteController::class, 'reviews'])->name('site.reviews');
+
+        Route::get('/news', [SiteController::class, 'news'])->name('site.news');
+
+        Route::get('/contacts', [SiteController::class, 'contacts'])->name('site.contacts');
+
         // TODO (следующие фазы конверсии):
         // Route::get('/', [SiteController::class, 'index'])->name('site.home');
-        // Route::get('/about', [SiteController::class, 'about'])->name('site.about');
-        // Route::get('/structure', [SiteController::class, 'structure'])->name('site.structure');
-        // Route::get('/services', [SiteController::class, 'services'])->name('site.services');
         // Route::get('/contacts', [SiteController::class, 'contacts'])->name('site.contacts');
         // Route::get('/news', [SiteController::class, 'news'])->name('site.news');
         // Route::get('/portfolio', [SiteController::class, 'portfolio'])->name('site.portfolio');
