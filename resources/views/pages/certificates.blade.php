@@ -148,7 +148,6 @@
     color: var(--text);
     margin: 0;
     text-align: center;
-
     width: 100%;
   }
 

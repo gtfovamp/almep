@@ -23,7 +23,7 @@
                 <svg width="4" height="8" viewBox="0 0 4 8" fill="none" class="breadcrumbs__separator" aria-hidden="true">
                     <path d="M1 1L3 4L1 7" stroke="#706F6F" stroke-width="1"/>
                 </svg>
-          <span class="breadcrumbs__current">{{ $t['reviews']['title'] ?? 'Отзывы' }}</span>
+          <span class="breadcrumbs__current" aria-current="page">{{ $t['reviews']['title'] ?? 'Отзывы' }}</span>
         </nav>
 
         <div class="reviews__content">
@@ -47,6 +47,10 @@
 
           @if($reviews->total() === 0)
             <div class="reviews__empty">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M4 4h16v16H4z" stroke="#A7A7A7" stroke-width="1.2"/>
+                <path d="M8 9h8M8 13h5" stroke="#A7A7A7" stroke-width="1.2" stroke-linecap="round"/>
+              </svg>
               <p>{{ $t['reviews']['no_reviews'] ?? 'Отзывы скоро появятся' }}</p>
             </div>
           @else
@@ -57,7 +61,7 @@
                   $rAuthor = $lang === 'en' ? ($review->name_en ?: $review->name) : ($lang === 'az' ? ($review->name_az ?: $review->name) : $review->name);
                 @endphp
                 <div class="reviews__card">
-                  <div class="reviews__quote">"</div>
+                  <div class="reviews__quote" aria-hidden="true">"</div>
                   <div class="reviews__card-content">
                     <div class="reviews__text-wrapper">
                       <p class="reviews__text">{{ $rText }}</p>
@@ -72,31 +76,36 @@
 
           @if($reviews->hasPages())
             @php $cur = $reviews->currentPage(); $last = $reviews->lastPage(); @endphp
-            <div class="pagination">
+            <nav class="pagination" aria-label="{{ $t['reviews']['aria_pagination'] ?? 'Пагинация' }}">
               <a href="{{ $cur > 1 ? $reviews->previousPageUrl() : '#' }}"
-                 class="pagination__arrow {{ $cur === 1 ? 'pagination__arrow--disabled' : '' }}" aria-label="{{ $t['reviews']['aria_prev'] ?? 'Previous page' }}">
-                <svg width="37" height="19" viewBox="0 0 37 19" fill="none" aria-hidden="true">
-                  <path d="M14 1L1 9.5L14 18" stroke="currentColor" stroke-width="1"/>
-                  <line x1="1" y1="9.5" x2="36.5" y2="9.5" stroke="currentColor" stroke-width="1"/>
+                 class="pagination__arrow {{ $cur === 1 ? 'pagination__arrow--disabled' : '' }}"
+                 aria-label="{{ $t['reviews']['aria_prev'] ?? 'Previous page' }}"
+                 @if($cur === 1) aria-disabled="true" tabindex="-1" @endif>
+                <svg width="28" height="14" viewBox="0 0 37 19" fill="none" aria-hidden="true">
+                  <path d="M14 1L1 9.5L14 18" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                  <line x1="1" y1="9.5" x2="36.5" y2="9.5" stroke="currentColor" stroke-width="1.4"/>
                 </svg>
               </a>
               <div class="pagination__numbers">
                 @for($pageNum = 1; $pageNum <= $last; $pageNum++)
-                  <a href="{{ $reviews->url($pageNum) }}" class="pagination__number {{ $pageNum === $cur ? 'pagination__number--active' : '' }}">{{ $pageNum }}</a>
+                  <a href="{{ $reviews->url($pageNum) }}"
+                     class="pagination__number {{ $pageNum === $cur ? 'pagination__number--active' : '' }}"
+                     @if($pageNum === $cur) aria-current="page" @endif>{{ $pageNum }}</a>
                 @endfor
               </div>
               <a href="{{ $cur < $last ? $reviews->nextPageUrl() : '#' }}"
-                 class="pagination__arrow {{ $cur === $last ? 'pagination__arrow--disabled' : '' }}" aria-label="{{ $t['reviews']['aria_next'] ?? 'Next page' }}">
-                <svg width="37" height="19" viewBox="0 0 37 19" fill="none" aria-hidden="true">
-                  <path d="M23 1L36 9.5L23 18" stroke="currentColor" stroke-width="1"/>
-                  <line x1="0.5" y1="9.5" x2="36" y2="9.5" stroke="currentColor" stroke-width="1"/>
+                 class="pagination__arrow {{ $cur === $last ? 'pagination__arrow--disabled' : '' }}"
+                 aria-label="{{ $t['reviews']['aria_next'] ?? 'Next page' }}"
+                 @if($cur === $last) aria-disabled="true" tabindex="-1" @endif>
+                <svg width="28" height="14" viewBox="0 0 37 19" fill="none" aria-hidden="true">
+                  <path d="M23 1L36 9.5L23 18" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                  <line x1="0.5" y1="9.5" x2="36" y2="9.5" stroke="currentColor" stroke-width="1.4"/>
                 </svg>
               </a>
-            </div>
+            </nav>
           @endif
 
           <div class="reviews__actions">
-            <a href="/{{ $lang }}#reviews" class="reviews__btn reviews__btn--outline">{{ $t['reviews']['all_reviews'] ?? '' }}</a>
             <a href="/{{ $lang }}#consultation" class="reviews__btn reviews__btn--primary">{{ $t['reviews']['btn_consultation'] ?? '' }}</a>
           </div>
 
@@ -117,19 +126,31 @@
     .site-main img, .site-main iframe, .site-main video { max-width: 100%; }
     .site-main *, .site-main *::before, .site-main *::after { box-sizing: border-box; }
 
-.reviews {
+  /* ── Токены страницы — те же, что и на news/about/services/partners/portfolio ── */
+  .reviews {
+    --accent: #1C508F;
+    --accent-hover: #174480;
+    --text: #000000;
+    --text-muted: #666666;
+    --breadcrumb: #2B2B2B;
+    --card-shadow-hover: 0 10px 28px rgba(28, 80, 143, 0.16);
+
+    --side-pad: var(--hdr-px, clamp(16px, 6vw, 115px));
+    --v-unit: var(--hdr-py, clamp(12px, 2.9vh, 28px));
+    --section-gap: clamp(40px, 6vh, 60px);
+
     width: 100%;
     background: #FFFFFF;
-    padding: 0 6vw;
+    padding: calc(var(--v-unit) * 1) var(--side-pad) calc(var(--v-unit) * 3.2);
   }
 
   .reviews__inner {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 50px;
     width: 100%;
     margin: 0 auto;
+    gap: var(--section-gap);
   }
 
   /* Хлебные крошки */
@@ -138,6 +159,7 @@
     flex-direction: row;
     align-items: center;
     gap: 10px;
+    flex-wrap: wrap;
   }
 
   .breadcrumbs__item {
@@ -146,30 +168,26 @@
     justify-content: center;
     width: 20px;
     height: 20px;
+    border-radius: 4px;
     transition: opacity 0.2s;
   }
 
-  .breadcrumbs__item:hover {
-    opacity: 0.7;
-  }
-
-  .breadcrumbs__separator {
-    flex-shrink: 0;
-  }
+  .breadcrumbs__item:hover { opacity: 0.7; }
+  .breadcrumbs__separator { flex-shrink: 0; }
 
   .breadcrumbs__current {
     font-family: 'Montserrat', sans-serif;
     font-weight: 400;
     font-size: 13px;
     line-height: 16px;
-    color: #2B2B2B;
+    color: var(--breadcrumb);
   }
 
   .reviews__content {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 50px;
+    gap: clamp(36px, 5vw, 50px);
     width: 100%;
   }
 
@@ -177,99 +195,115 @@
   .reviews__title {
     font-family: 'Montserrat', sans-serif;
     font-weight: 500;
-    font-size: 48px;
+    font-size: clamp(32px, 5vw, 48px);
     line-height: 110%;
     text-align: center;
-    color: #000000;
+    color: var(--text);
     margin: 0;
     width: 100%;
   }
 
-  /* Статистика */
+  /* ═══════════════════════════════════════════════
+     Статистика — плавно оборачивается, без фикс. gap
+  ═══════════════════════════════════════════════ */
   .reviews__stats {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     align-items: center;
-    gap: 145px;
     justify-content: center;
+    gap: clamp(40px, 8vw, 145px);
+    width: 100%;
   }
 
   .reviews__stat {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 25px;
+    gap: clamp(14px, 2vw, 25px);
   }
 
   .reviews__stat-value {
     font-family: 'Raleway', sans-serif;
     font-weight: 400;
-    font-size: 45px;
+    font-size: clamp(30px, 4vw, 45px);
     line-height: 110%;
     text-align: center;
-    color: #000000;
+    color: var(--text);
   }
 
   .reviews__stat-label {
     font-family: 'Montserrat', sans-serif;
     font-weight: 400;
-    font-size: 18px;
+    font-size: clamp(15px, 1.4vw, 18px);
     line-height: 130%;
     letter-spacing: -0.01em;
-    color: #000000;
+    color: var(--text);
+    text-align: center;
   }
 
-  /* Сетка отзывов */
-  .reviews__grid {
+  /* Пустое состояние */
+  .reviews__empty {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 30px;
+    gap: 16px;
     width: 100%;
+    padding: 60px 20px;
+    color: var(--text-muted);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+    text-align: center;
   }
 
-  .reviews__row {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    gap: 30px;
+  /* ═══════════════════════════════════════════════
+     Сетка отзывов — 3 колонки, плавно схлопывается
+  ═══════════════════════════════════════════════ */
+  .reviews__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(340px, 100%), 1fr));
+    gap: clamp(20px, 2.5vw, 30px);
     width: 100%;
-    justify-content: center;
   }
 
   .reviews__card {
     position: relative;
     width: 100%;
-    max-width: 450px;
-    height: 420px;
+    height: 100%;
+    min-height: clamp(340px, 30vw, 420px);
     background: #FFFFFF;
-    border: 1px solid rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(0, 0, 0, 0.15);
     border-radius: 7px;
-    flex: 1 1 450px;
     box-sizing: border-box;
-    padding: 25px;
+    padding: clamp(20px, 3vw, 25px);
     display: flex;
     flex-direction: column;
+    transition: box-shadow 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
+  }
+
+  .reviews__card:hover {
+    box-shadow: var(--card-shadow-hover);
+    border-color: rgba(28, 80, 143, 0.25);
+    transform: translateY(-3px);
   }
 
   .reviews__quote {
     font-family: 'Raleway', sans-serif;
     font-weight: 400;
-    font-size: 128px;
+    font-size: clamp(80px, 10vw, 128px);
     line-height: 110%;
-    color: #000000;
+    color: var(--text);
     user-select: none;
     pointer-events: none;
     margin: 0;
-    height: 91px;
+    height: clamp(60px, 8vw, 91px);
   }
 
   .reviews__card-content {
     display: flex;
     flex-direction: column;
-    gap: 22px;
+    gap: clamp(16px, 2vw, 22px);
     flex: 1;
-    margin-top: 0;
     height: 100%;
   }
 
@@ -282,10 +316,10 @@
   .reviews__text {
     font-family: 'Montserrat', sans-serif;
     font-weight: 400;
-    font-size: 18px;
+    font-size: clamp(15px, 1.4vw, 18px);
     line-height: 130%;
     letter-spacing: -0.01em;
-    color: #000000;
+    color: var(--text);
     margin: 0;
     overflow: hidden;
     display: -webkit-box;
@@ -305,117 +339,111 @@
   .reviews__author {
     font-family: 'Montserrat', sans-serif;
     font-weight: 500;
-    font-size: 24px;
+    font-size: clamp(18px, 1.8vw, 24px);
     line-height: 110%;
     letter-spacing: -0.01em;
-    color: #000000;
+    color: var(--text);
     margin: 0;
   }
 
-  .reviews__empty {
-    width: 100%;
-    text-align: center;
-    padding: 60px 20px;
-    color: #666;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 18px;
-  }
-
-  /* Пагинация */
+  /* ═══════════════════════════════════════════════
+     Пагинация — как на news/portfolio
+  ═══════════════════════════════════════════════ */
   .pagination {
     display: flex;
     flex-direction: row;
-    justify-content: center;
     align-items: center;
-    padding: 0px;
-    gap: 50px;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: clamp(16px, 4vw, 50px);
     width: 100%;
-    height: 43px;
+    margin-top: 10px;
   }
 
   .pagination__arrow {
-    display: flex;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    display: inline-flex;
     align-items: center;
-    justify-content: center;
-    width: 36.5px;
-    height: 19px;
-    color: #000000;
-    text-decoration: none;
+    color: var(--text);
     transition: opacity 0.2s;
+    text-decoration: none;
+    border-radius: 6px;
   }
 
-  .pagination__arrow:hover:not(.pagination__arrow--disabled) {
-    opacity: 0.7;
-  }
+  .pagination__arrow:hover { opacity: 0.7; }
 
   .pagination__arrow--disabled {
     opacity: 0.3;
+    cursor: not-allowed;
     pointer-events: none;
-    cursor: default;
   }
 
   .pagination__numbers {
     display: flex;
     flex-direction: row;
-    align-items: flex-end;
-    padding: 0px;
-    gap: 10px;
-    height: 43px;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    max-width: 100%;
   }
 
   .pagination__number {
-    box-sizing: border-box;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 43px;
-    height: 43px;
+    min-width: 40px;
+    height: 40px;
+    padding: 0 10px;
+    background: transparent;
     border: 1px solid transparent;
     border-radius: 10px;
     font-family: 'Montserrat', sans-serif;
-    font-style: normal;
     font-weight: 500;
-    font-size: 16px;
+    font-size: 15px;
     line-height: 20px;
-    color: #000000;
+    color: var(--text);
+    cursor: pointer;
+    transition: background-color 0.2s, border-color 0.2s, color 0.2s;
     text-decoration: none;
-    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
 
-  .pagination__number:hover {
-    background: #f5f5f5;
-  }
+  .pagination__number:hover:not(.pagination__number--active) { background: #f0f0f0; }
 
   .pagination__number--active {
-    border: 1px solid #1C508F;
-    color: #1C508F;
+    border-color: var(--accent);
+    color: var(--accent);
     font-weight: 700;
+    cursor: default;
   }
 
-  .pagination__number--active:hover {
-    background: transparent;
-  }
-
-  /* Кнопки */
+  /* ═══════════════════════════════════════════════
+     Кнопки внизу — было gap: 752px (баг из Figma,
+     ломал вёрстку на любом экране уже до 1500px)
+  ═══════════════════════════════════════════════ */
   .reviews__actions {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    flex-wrap: wrap;
+    justify-content: center;
     align-items: center;
-    gap: 752px;
+    gap: clamp(20px, 4vw, 40px);
     width: 100%;
   }
 
   .reviews__btn {
-    width: 330px;
-    height: 85px;
+    width: clamp(220px, 25vw, 330px);
+    height: clamp(64px, 8vw, 85px);
     border-radius: 9px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-family: 'Montserrat', sans-serif;
     font-weight: 400;
-    font-size: 18px;
+    font-size: clamp(16px, 1.4vw, 18px);
     line-height: 130%;
     text-align: center;
     letter-spacing: -0.01em;
@@ -424,8 +452,8 @@
   }
 
   .reviews__btn--outline {
-    border: 1px solid #1C508F;
-    color: #1C508F;
+    border: 1px solid var(--accent);
+    color: var(--accent);
     background: transparent;
   }
 
@@ -434,68 +462,44 @@
   }
 
   .reviews__btn--primary {
-    background: #1C508F;
+    background: var(--accent);
     box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.3);
     color: #FFFFFF;
   }
 
   .reviews__btn--primary:hover {
-    background: #174480;
+    background: var(--accent-hover);
+    transform: translateY(-2px);
   }
 
-  /* Мобильная версия */
-  @media (max-width: 768px) {
-    .reviews__inner {
-      gap: 35px;
-    }
+  /* Клавиатурная доступность */
+  .breadcrumbs__item:focus-visible,
+  .reviews__btn:focus-visible,
+  .pagination__arrow:focus-visible,
+  .pagination__number:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
 
-    .reviews__title {
-      font-size: 32px;
-    }
-
-    .reviews__stats {
-      flex-direction: column;
-      gap: 40px;
-    }
-
-    .reviews__row {
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .reviews__card {
-      max-width: 100%;
-    }
-
-    .pagination {
-      gap: 30px;
-    }
-
-    .pagination__numbers {
-      gap: 8px;
-    }
-
+  @media (prefers-reduced-motion: reduce) {
+    .reviews__card,
+    .reviews__btn,
     .pagination__number {
-      width: 38px;
-      height: 38px;
-      font-size: 14px;
+      transition: none !important;
     }
+    .reviews__card:hover,
+    .reviews__btn--primary:hover { transform: none; }
+  }
 
-    .reviews__actions {
-      flex-direction: column;
-      gap: 20px;
+  /* ── Мобильные доводки ── */
+  @media (max-width: 768px) {
+    .reviews {
+      --section-gap: clamp(32px, 8vh, 48px);
     }
-
     .reviews__btn {
       width: 100%;
       max-width: 330px;
     }
   }
-
-  /* ── Адаптивная сетка отзывов (заменяет фикс. ряды по 3) ── */
-  .reviews__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; width: 100%; }
-  @media (max-width: 1024px) { .reviews__grid { grid-template-columns: repeat(2, 1fr); gap: 24px; } }
-  @media (max-width: 640px) { .reviews__grid { grid-template-columns: 1fr; gap: 20px; } }
-
 </style>
 @endpush

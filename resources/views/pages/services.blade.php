@@ -128,9 +128,14 @@
      ОСНОВНАЯ СЕКЦИЯ
   ═══════════════════════════════════════════════ */
   .services-page {
+    /* 👇 те же токены отступов, что и на странице about-page / в шапке (--hdr-px),
+       чтобы боковые поля совпадали по сетке на всех страницах */
+    --side-pad: var(--hdr-px, clamp(16px, 6vw, 115px));
+    --v-unit: var(--hdr-py, clamp(12px, 2.9vh, 28px));
+
     width: 100%;
     background: #FFFFFF;
-    padding: 0 6vw;
+    padding: calc(var(--v-unit) * 1) var(--side-pad) calc(var(--v-unit) * 3.2);
   }
 
   .services-page__inner {
@@ -560,9 +565,10 @@
      МОБИЛЬНАЯ ВЕРСИЯ
   ═══════════════════════════════════════════════ */
   @media (max-width: 768px) {
+    /* боковые поля продолжают браться из --side-pad (clamp сам уменьшается),
+       поэтому .services-page__inner больше не переопределяет padding вручную */
     .services-page__inner {
       gap: 35px;
-      padding: 0 20px;
     }
 
     .services-page__title {

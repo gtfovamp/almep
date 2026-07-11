@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @php
-    $title = ($t['contacts_page']['title'] ?? $t['nav']['contacts'] ?? 'Контакты') . ' — Almep Trading';
+    $title = ($t['contacts']['title'] ?? $t['nav']['contacts'] ?? 'Контакты') . ' — Almep Trading';
 @endphp
 
 @section('content')
@@ -15,30 +15,28 @@
       <div class="contacts-page__inner">
 
         <!-- Хлебные крошки -->
-        <nav class="breadcrumbs">
-          <a href="/{{ $lang }}" class="breadcrumbs__item">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+        <nav class="breadcrumbs" aria-label="breadcrumb">
+          <a href="/{{ $lang }}" class="breadcrumbs__item" aria-label="{{ $t['nav']['home'] ?? 'Home' }}">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
               <path d="M2.5 7.5L10 2.5L17.5 7.5V16.25C17.5 16.5815 17.3683 16.8995 17.1339 17.1339C16.8995 17.3683 16.5815 17.5 16.25 17.5H3.75C3.41848 17.5 3.10054 17.3683 2.86612 17.1339C2.6317 16.8995 2.5 16.5815 2.5 16.25V7.5Z" stroke="#696969" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
               <path d="M7.5 17.5V10H12.5V17.5" stroke="#696969" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </a>
-          <svg width="4" height="8" viewBox="0 0 4 8" fill="none" class="breadcrumbs__separator">
+          <svg width="4" height="8" viewBox="0 0 4 8" fill="none" class="breadcrumbs__separator" aria-hidden="true">
             <path d="M1 1L3 4L1 7" stroke="#706F6F" stroke-width="1"/>
           </svg>
-          <span class="breadcrumbs__current">{{ $t['contacts']['title'] }}</span>
+          <span class="breadcrumbs__current" aria-current="page">{{ $t['contacts']['title'] }}</span>
         </nav>
 
         <!-- Основной контент -->
         <div class="contacts-page__content">
-          
+
           <!-- Левая часть: Заголовок и Информация -->
           <div class="contacts-page__left">
-            <!-- Заголовок -->
             <h1 class="contacts-page__title">{{ $t['contacts']['title'] }}</h1>
 
-            <!-- Информация -->
             <div class="contacts-page__info">
-              
+
               <!-- Адрес -->
               <div class="contacts-page__block">
                 <h2 class="contacts-page__label">
@@ -59,7 +57,7 @@
                   </svg>
                   {{ $t['contacts']['phone_label'] }}
                 </h2>
-                <a 
+                <a
                   href="tel:{{ preg_replace('/\s/', '', $t['contacts']['phone_value'] ?? '') }}"
                   class="contacts-page__value contacts-page__value--link"
                 >
@@ -76,7 +74,7 @@
                   </svg>
                   {{ $t['contacts']['email_label'] }}
                 </h2>
-                <a 
+                <a
                   href="mailto:{{ $t['contacts']['email_value'] ?? '' }}"
                   class="contacts-page__value contacts-page__value--link"
                 >
@@ -159,537 +157,465 @@
     .site-main img, .site-main iframe, .site-main video { max-width: 100%; }
     .site-main *, .site-main *::before, .site-main *::after { box-sizing: border-box; }
 
-/* ═══════════════════════════════════════════════
-     ОСНОВНАЯ СЕКЦИЯ
-  ═══════════════════════════════════════════════ */
-  .contacts-page {
-    width: 100%;
-    background: #FFFFFF;
-    padding: 0 6vw;
-  }
+    /* ── Токены страницы — те же, что и на остальных страницах сайта ── */
+    .contacts-page {
+      --accent: #1c508f;
+      --accent-hover: #174480;
+      --text: #000000;
+      --text-value: #151515;
+      --breadcrumb: #2B2B2B;
 
-  .contacts-page__inner {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 50px;
-    width: 100%;
-    margin: 0 auto;
-  }
+      --side-pad: var(--hdr-px, clamp(16px, 6vw, 115px));
+      --v-unit: var(--hdr-py, clamp(12px, 2.9vh, 28px));
+      --section-gap: clamp(40px, 6vh, 60px);
 
-  /* Хлебные крошки */
-  .breadcrumbs {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .breadcrumbs__item {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 20px;
-    height: 20px;
-    transition: opacity 0.2s;
-  }
-
-  .breadcrumbs__item:hover {
-    opacity: 0.7;
-  }
-
-  .breadcrumbs__separator {
-    flex-shrink: 0;
-  }
-
-  .breadcrumbs__current {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 400;
-    font-size: 13px;
-    line-height: 16px;
-    color: #2B2B2B;
-  }
-
-  /* ═══════════════════════════════════════════════
-     ОСНОВНОЙ КОНТЕНТ
-  ═══════════════════════════════════════════════ */
-  .contacts-page__content {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    gap: 60px;
-    width: 100%;
-  }
-
-  /* Левая часть */
-  .contacts-page__left {
-    display: flex;
-    flex-direction: column;
-    gap: 50px;
-    width: 450px;
-    flex-shrink: 0;
-  }
-
-  /* Заголовок */
-  .contacts-page__title {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 500;
-    font-size: 48px;
-    line-height: 110%;
-    color: #000000;
-    margin: 0;
-  }
-
-  /* Информация */
-  .contacts-page__info {
-    display: flex;
-    flex-direction: column;
-    gap: 40px;
-  }
-
-  .contacts-page__block {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-  }
-
-  .contacts-page__label {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 500;
-    font-size: 20px;
-    line-height: 24px;
-    color: #000000;
-    margin: 0;
-  }
-
-  .contacts-page__label svg {
-    flex-shrink: 0;
-  }
-
-  .contacts-page__value {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 130%;
-    letter-spacing: -0.01em;
-    color: #151515;
-    margin: 0;
-    text-decoration: none;
-  }
-
-  .contacts-page__value--link {
-    color: #1c508f;
-    transition: opacity 0.2s ease;
-  }
-
-  .contacts-page__value--link:hover {
-    opacity: 0.7;
-  }
-
-  .contacts-page__schedule {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-  }
-
-  /* ═══════════════════════════════════════════════
-     КАРТА
-  ═══════════════════════════════════════════════ */
-  .contacts-page__map-wrapper {
-    position: relative;
-    flex: 1;
-    height: 600px;
-    border-radius: 20px;
-    overflow: hidden;
-    box-shadow:
-      0 2px 4px rgba(28, 80, 143, 0.06),
-      0 8px 24px rgba(28, 80, 143, 0.12),
-      0 24px 64px rgba(28, 80, 143, 0.1);
-    opacity: 0;
-    transform: translateY(16px);
-    transition:
-      opacity 0.6s ease,
-      transform 0.6s ease;
-  }
-
-  .contacts-page__map-wrapper.is-loaded {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  .contacts-page__map-wrapper::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: 20px;
-    border: 1.5px solid rgba(28, 80, 143, 0.15);
-    pointer-events: none;
-    z-index: 10;
-  }
-
-  .contacts-page__map-overlay-top {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 80px;
-    background: linear-gradient(to bottom, rgba(240, 245, 255, 0.35), transparent);
-    pointer-events: none;
-    z-index: 5;
-    border-radius: 20px 20px 0 0;
-  }
-
-  .contacts-page__map-overlay-bottom {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 80px;
-    background: linear-gradient(to top, rgba(240, 245, 255, 0.3), transparent);
-    pointer-events: none;
-    z-index: 5;
-    border-radius: 0 0 20px 20px;
-  }
-
-  .contacts-page__map {
-    width: 100%;
-    height: 100%;
-    z-index: 0;
-  }
-
-  /* ═══════════════════════════════════════════════
-     КОНТРОЛЫ КАРТЫ
-  ═══════════════════════════════════════════════ */
-  .map-controls {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    z-index: 20;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background: rgba(255, 255, 255, 0.92);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-radius: 12px;
-    border: 1px solid rgba(28, 80, 143, 0.12);
-    box-shadow:
-      0 4px 16px rgba(0, 0, 0, 0.08),
-      0 1px 4px rgba(0, 0, 0, 0.06);
-    overflow: hidden;
-  }
-
-  .map-controls__btn {
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    color: #1c508f;
-    transition:
-      background 0.15s ease,
-      color 0.15s ease;
-  }
-
-  .map-controls__btn:hover {
-    background: rgba(28, 80, 143, 0.08);
-    color: #174480;
-  }
-
-  .map-controls__btn:active {
-    background: rgba(28, 80, 143, 0.15);
-  }
-
-  .map-controls__divider {
-    width: 24px;
-    height: 1px;
-    background: rgba(28, 80, 143, 0.12);
-  }
-
-  /* Бейдж локации */
-  .map-badge {
-    position: absolute;
-    bottom: 20px;
-    right: 20px;
-    z-index: 20;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    background: rgba(255, 255, 255, 0.92);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-radius: 12px;
-    border: 1px solid rgba(28, 80, 143, 0.12);
-    box-shadow:
-      0 4px 16px rgba(0, 0, 0, 0.08),
-      0 1px 4px rgba(0, 0, 0, 0.04);
-    padding: 10px 16px;
-  }
-
-  .map-badge__dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: #1c508f;
-    box-shadow: 0 0 0 3px rgba(28, 80, 143, 0.2);
-    flex-shrink: 0;
-    animation: badgePulse 2.5s ease-in-out infinite;
-  }
-
-  @keyframes badgePulse {
-    0%, 100% {
-      box-shadow: 0 0 0 3px rgba(28, 80, 143, 0.2);
+      width: 100%;
+      background: #FFFFFF;
+      padding: calc(var(--v-unit) * 1) var(--side-pad) calc(var(--v-unit) * 3.2);
     }
-    50% {
-      box-shadow: 0 0 0 6px rgba(28, 80, 143, 0.08);
-    }
-  }
 
-  .map-badge__text {
-    display: flex;
-    flex-direction: column;
-    gap: 1px;
-  }
-
-  .map-badge__title {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 600;
-    font-size: 13px;
-    color: #151515;
-    line-height: 1.3;
-  }
-
-  .map-badge__sub {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 400;
-    font-size: 11px;
-    color: #6b7280;
-    line-height: 1.3;
-  }
-
-  /* ═══════════════════════════════════════════════
-     МАРКЕР И ПОПАП
-  ═══════════════════════════════════════════════ */
-  :global(.pulse-marker) {
-    position: relative;
-    width: 60px;
-    height: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  :global(.pulse-marker__ring) {
-    position: absolute;
-    border-radius: 50%;
-    background: rgba(28, 80, 143, 0.15);
-    animation: pulseRing 2.4s ease-out infinite;
-  }
-
-  :global(.pulse-marker__ring--1) {
-    width: 60px;
-    height: 60px;
-    animation-delay: 0s;
-  }
-
-  :global(.pulse-marker__ring--2) {
-    width: 44px;
-    height: 44px;
-    animation-delay: 0.3s;
-    background: rgba(28, 80, 143, 0.2);
-  }
-
-  :global(.pulse-marker__ring--3) {
-    width: 30px;
-    height: 30px;
-    animation-delay: 0.6s;
-    background: rgba(28, 80, 143, 0.25);
-  }
-
-  @keyframes pulseRing {
-    0% {
-      transform: scale(0.7);
-      opacity: 1;
-    }
-    70% {
-      transform: scale(1.1);
-      opacity: 0.3;
-    }
-    100% {
-      transform: scale(1.2);
-      opacity: 0;
-    }
-  }
-
-  :global(.pulse-marker__core) {
-    position: absolute;
-    width: 36px;
-    height: 36px;
-    background: linear-gradient(135deg, #1c508f 0%, #2d6bb5 100%);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow:
-      0 4px 12px rgba(28, 80, 143, 0.5),
-      0 0 0 3px rgba(255, 255, 255, 0.9);
-    z-index: 2;
-  }
-
-  :global(.modern-popup-wrapper .leaflet-popup-content-wrapper) {
-    padding: 0;
-    border-radius: 16px;
-    box-shadow:
-      0 8px 32px rgba(0, 0, 0, 0.12),
-      0 2px 8px rgba(0, 0, 0, 0.08);
-    border: 1px solid rgba(28, 80, 143, 0.1);
-    overflow: hidden;
-  }
-
-  :global(.modern-popup-wrapper .leaflet-popup-content) {
-    margin: 0;
-    width: 240px !important;
-  }
-
-  :global(.modern-popup-wrapper .leaflet-popup-tip-container) {
-    margin-top: -1px;
-  }
-
-  :global(.modern-popup-wrapper .leaflet-popup-tip) {
-    box-shadow: none;
-    background: #fff;
-  }
-
-  :global(.modern-popup) {
-    font-family: 'Montserrat', sans-serif;
-    overflow: hidden;
-  }
-
-  :global(.modern-popup__header) {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 14px 16px 12px;
-    background: linear-gradient(135deg, #1c508f 0%, #2563b0 100%);
-  }
-
-  :global(.modern-popup__icon) {
-    width: 32px;
-    height: 32px;
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-  }
-
-  :global(.modern-popup__title) {
-    font-weight: 600;
-    font-size: 14px;
-    color: #ffffff;
-    line-height: 1.3;
-  }
-
-  :global(.modern-popup__sub) {
-    font-weight: 400;
-    font-size: 11px;
-    color: rgba(255, 255, 255, 0.7);
-    line-height: 1.3;
-  }
-
-  :global(.modern-popup__divider) {
-    height: 1px;
-    background: rgba(28, 80, 143, 0.08);
-  }
-
-  :global(.modern-popup__row) {
-    display: flex;
-    align-items: center;
-    gap: 9px;
-    padding: 9px 16px;
-    font-size: 12px;
-    color: #374151;
-    font-weight: 400;
-    line-height: 1.4;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.04);
-    transition: background 0.15s ease;
-  }
-
-  :global(.modern-popup__row:last-child) {
-    border-bottom: none;
-  }
-
-  :global(.modern-popup__row:hover) {
-    background: rgba(28, 80, 143, 0.04);
-  }
-
-  .contacts-page__map :global(.leaflet-control-zoom) {
-    display: none;
-  }
-
-  .contacts-page__map :global(.leaflet-control-attribution) {
-    font-size: 10px;
-    background: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(4px);
-    border-radius: 6px 0 0 0;
-    padding: 3px 6px;
-    color: #9ca3af;
-  }
-
-  .contacts-page__map :global(.leaflet-control-attribution a) {
-    color: #1c508f;
-  }
-
-  /* ═══════════════════════════════════════════════
-     МОБИЛЬНАЯ ВЕРСИЯ
-  ═══════════════════════════════════════════════ */
-  @media (max-width: 768px) {
     .contacts-page__inner {
-      gap: 35px;
-      padding: 0 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      width: 100%;
+      margin: 0 auto;
+      gap: var(--section-gap);
     }
 
+    /* Хлебные крошки */
+    .breadcrumbs {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .breadcrumbs__item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
+      border-radius: 4px;
+      transition: opacity 0.2s;
+    }
+
+    .breadcrumbs__item:hover { opacity: 0.7; }
+    .breadcrumbs__separator { flex-shrink: 0; }
+
+    .breadcrumbs__current {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 400;
+      font-size: 13px;
+      line-height: 16px;
+      color: var(--breadcrumb);
+    }
+
+    /* ═══════════════════════════════════════════════
+       ОСНОВНОЙ КОНТЕНТ — grid вместо flex с фикс. 450px,
+       чтобы левая колонка не «зажимала» карту на планшетах
+    ═══════════════════════════════════════════════ */
     .contacts-page__content {
-      flex-direction: column;
-      gap: 40px;
+      display: grid;
+      grid-template-columns: minmax(280px, 450px) 1fr;
+      align-items: start;
+      gap: clamp(32px, 5vw, 60px);
+      width: 100%;
     }
 
     .contacts-page__left {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(32px, 4vw, 50px);
       width: 100%;
-      gap: 35px;
+      min-width: 0;
     }
 
     .contacts-page__title {
-      font-size: 32px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 500;
+      font-size: clamp(32px, 5vw, 48px);
+      line-height: 110%;
+      color: var(--text);
+      margin: 0;
     }
 
     .contacts-page__info {
-      gap: 30px;
+      display: flex;
+      flex-direction: column;
+      gap: clamp(28px, 3.5vw, 40px);
     }
 
+    .contacts-page__block {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .contacts-page__label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 500;
+      font-size: clamp(17px, 1.6vw, 20px);
+      line-height: 120%;
+      color: var(--text);
+      margin: 0;
+    }
+
+    .contacts-page__label svg { flex-shrink: 0; }
+
+    .contacts-page__value {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 400;
+      font-size: clamp(15px, 1.3vw, 16px);
+      line-height: 130%;
+      letter-spacing: -0.01em;
+      color: var(--text-value);
+      margin: 0;
+      text-decoration: none;
+    }
+
+    .contacts-page__value--link {
+      color: var(--accent);
+      transition: opacity 0.2s ease;
+    }
+
+    .contacts-page__value--link:hover { opacity: 0.7; }
+
+    .contacts-page__schedule {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    /* ═══════════════════════════════════════════════
+       КАРТА
+    ═══════════════════════════════════════════════ */
     .contacts-page__map-wrapper {
+      position: relative;
       width: 100%;
-      height: 400px;
+      min-width: 0;
+      height: clamp(360px, 42vw, 600px);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow:
+        0 2px 4px rgba(28, 80, 143, 0.06),
+        0 8px 24px rgba(28, 80, 143, 0.12),
+        0 24px 64px rgba(28, 80, 143, 0.1);
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
     }
 
+    .contacts-page__map-wrapper.is-loaded {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .contacts-page__map-wrapper::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 20px;
+      border: 1.5px solid rgba(28, 80, 143, 0.15);
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    .contacts-page__map-overlay-top {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 80px;
+      background: linear-gradient(to bottom, rgba(240, 245, 255, 0.35), transparent);
+      pointer-events: none;
+      z-index: 5;
+      border-radius: 20px 20px 0 0;
+    }
+
+    .contacts-page__map-overlay-bottom {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 80px;
+      background: linear-gradient(to top, rgba(240, 245, 255, 0.3), transparent);
+      pointer-events: none;
+      z-index: 5;
+      border-radius: 0 0 20px 20px;
+    }
+
+    .contacts-page__map {
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+
+    /* ═══════════════════════════════════════════════
+       КОНТРОЛЫ КАРТЫ
+    ═══════════════════════════════════════════════ */
     .map-controls {
-      top: 10px;
-      right: 10px;
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      z-index: 20;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 12px;
+      border: 1px solid rgba(28, 80, 143, 0.12);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08), 0 1px 4px rgba(0, 0, 0, 0.06);
+      overflow: hidden;
     }
 
-    .map-badge {
-      bottom: 10px;
-      right: 10px;
-      padding: 8px 12px;
+    .map-controls__btn {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      color: #1c508f;
+      transition: background 0.15s ease, color 0.15s ease;
     }
-  }
+
+    .map-controls__btn:hover {
+      background: rgba(28, 80, 143, 0.08);
+      color: #174480;
+    }
+
+    .map-controls__btn:active { background: rgba(28, 80, 143, 0.15); }
+
+    .map-controls__divider {
+      width: 24px;
+      height: 1px;
+      background: rgba(28, 80, 143, 0.12);
+    }
+
+    /* Бейдж локации */
+    .map-badge {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 12px;
+      border: 1px solid rgba(28, 80, 143, 0.12);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08), 0 1px 4px rgba(0, 0, 0, 0.04);
+      padding: 10px 16px;
+      max-width: calc(100% - 40px);
+    }
+
+    .map-badge__dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #1c508f;
+      box-shadow: 0 0 0 3px rgba(28, 80, 143, 0.2);
+      flex-shrink: 0;
+      animation: badgePulse 2.5s ease-in-out infinite;
+    }
+
+    @keyframes badgePulse {
+      0%, 100% { box-shadow: 0 0 0 3px rgba(28, 80, 143, 0.2); }
+      50% { box-shadow: 0 0 0 6px rgba(28, 80, 143, 0.08); }
+    }
+
+    .map-badge__text {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      min-width: 0;
+    }
+
+    .map-badge__title {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 600;
+      font-size: 13px;
+      color: #151515;
+      line-height: 1.3;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .map-badge__sub {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 400;
+      font-size: 11px;
+      color: #6b7280;
+      line-height: 1.3;
+    }
+
+    /* ═══════════════════════════════════════════════
+       МАРКЕР И ПОПАП
+       (было обёрнуто в :global(...) — невалидный псевдокласс
+       для обычного <style>, из-за чего эти стили не применялись
+       вообще; здесь — как обычные глобальные правила)
+    ═══════════════════════════════════════════════ */
+    .pulse-marker {
+      position: relative;
+      width: 60px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .pulse-marker__ring {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(28, 80, 143, 0.15);
+      animation: pulseRing 2.4s ease-out infinite;
+    }
+
+    .pulse-marker__ring--1 { width: 60px; height: 60px; animation-delay: 0s; }
+    .pulse-marker__ring--2 { width: 44px; height: 44px; animation-delay: 0.3s; background: rgba(28, 80, 143, 0.2); }
+    .pulse-marker__ring--3 { width: 30px; height: 30px; animation-delay: 0.6s; background: rgba(28, 80, 143, 0.25); }
+
+    @keyframes pulseRing {
+      0% { transform: scale(0.7); opacity: 1; }
+      70% { transform: scale(1.1); opacity: 0.3; }
+      100% { transform: scale(1.2); opacity: 0; }
+    }
+
+    .pulse-marker__core {
+      position: absolute;
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, #1c508f 0%, #2d6bb5 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(28, 80, 143, 0.5), 0 0 0 3px rgba(255, 255, 255, 0.9);
+      z-index: 2;
+    }
+
+    .modern-popup-wrapper .leaflet-popup-content-wrapper {
+      padding: 0;
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08);
+      border: 1px solid rgba(28, 80, 143, 0.1);
+      overflow: hidden;
+    }
+
+    .modern-popup-wrapper .leaflet-popup-content {
+      margin: 0;
+      width: 240px !important;
+    }
+
+    .modern-popup-wrapper .leaflet-popup-tip-container { margin-top: -1px; }
+    .modern-popup-wrapper .leaflet-popup-tip { box-shadow: none; background: #fff; }
+
+    .modern-popup {
+      font-family: 'Montserrat', sans-serif;
+      overflow: hidden;
+    }
+
+    .modern-popup__header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px 12px;
+      background: linear-gradient(135deg, #1c508f 0%, #2563b0 100%);
+    }
+
+    .modern-popup__icon {
+      width: 32px;
+      height: 32px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .modern-popup__title { font-weight: 600; font-size: 14px; color: #ffffff; line-height: 1.3; }
+    .modern-popup__sub { font-weight: 400; font-size: 11px; color: rgba(255, 255, 255, 0.7); line-height: 1.3; }
+    .modern-popup__divider { height: 1px; background: rgba(28, 80, 143, 0.08); }
+
+    .modern-popup__row {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 9px 16px;
+      font-size: 12px;
+      color: #374151;
+      font-weight: 400;
+      line-height: 1.4;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+      transition: background 0.15s ease;
+    }
+
+    .modern-popup__row:last-child { border-bottom: none; }
+    .modern-popup__row:hover { background: rgba(28, 80, 143, 0.04); }
+
+    .contacts-page__map .leaflet-control-zoom { display: none; }
+
+    .contacts-page__map .leaflet-control-attribution {
+      font-size: 10px;
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(4px);
+      border-radius: 6px 0 0 0;
+      padding: 3px 6px;
+      color: #9ca3af;
+    }
+
+    .contacts-page__map .leaflet-control-attribution a { color: #1c508f; }
+
+    /* Клавиатурная доступность */
+    .breadcrumbs__item:focus-visible,
+    .contacts-page__value--link:focus-visible,
+    .map-controls__btn:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .contacts-page__map-wrapper,
+      .contacts-page__value--link,
+      .map-controls__btn {
+        transition: none !important;
+      }
+      .map-badge__dot,
+      .pulse-marker__ring {
+        animation: none !important;
+      }
+    }
+
+    /* ═══════════════════════════════════════════════
+       АДАПТИВ — плавный переход, а не только на 768px
+    ═══════════════════════════════════════════════ */
+    @media (max-width: 900px) {
+      .contacts-page__content {
+        grid-template-columns: 1fr;
+      }
+      .contacts-page__left {
+        max-width: 560px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .contacts-page {
+        --section-gap: clamp(32px, 8vh, 48px);
+      }
+      .contacts-page__content { gap: clamp(28px, 6vw, 40px); }
+      .map-controls { top: 10px; right: 10px; }
+      .map-badge { bottom: 10px; right: 10px; padding: 8px 12px; }
+    }
 </style>
 @endpush
 

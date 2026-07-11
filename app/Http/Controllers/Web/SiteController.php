@@ -69,7 +69,7 @@ class SiteController extends Controller
         $data = $this->shared($lang);
         $data['portfolioItems'] = \App\Models\Portfolio::query()
             ->orderBy('order_index')
-            ->paginate(12)
+            ->paginate(6) // было 12 → при 7 проектах пагинация не появлялась; 6 = сетка 3×2
             ->withQueryString();
 
         return view('pages.portfolio', $data);
@@ -103,6 +103,7 @@ class SiteController extends Controller
     {
         return view('pages.contacts', $this->shared($lang));
     }
+
     public function index(string $lang)
     {
         return view('pages.index', $this->shared($lang));

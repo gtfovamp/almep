@@ -99,7 +99,9 @@
         "btn_consultation": "Request consultation",
         "aria_next": "Next slide",
         "aria_prev": "Previous slide",
-        "aria_slide": "Slide"
+        "aria_slide": "Slide",
+        "subtitle": "We are proud to be part of successful projects, providing high-quality solutions and professional tools. Our portfolio reflects the diversity of industries and scales of projects we have been involved in. From construction to industrial production — we ensure reliable deliveries and technical support at every stage."
+
     },
     "services": {
         "title": "Services",
