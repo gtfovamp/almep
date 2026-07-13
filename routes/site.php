@@ -30,16 +30,16 @@ Route::prefix('{lang}')
         Route::get('/reviews', [SiteController::class, 'reviews'])->name('site.reviews');
 
         Route::get('/news', [SiteController::class, 'news'])->name('site.news');
+        // /{lang}/news/{id} — отдельный роут, идёт ПОСЛЕ /news, конфликтов нет,
+        // т.к. Laravel матчит по количеству сегментов и точному совпадению '/news'.
+        Route::get('/news/{id}', [SiteController::class, 'newsShow'])
+            ->whereNumber('id')
+            ->name('site.news.show');
 
         Route::get('/contacts', [SiteController::class, 'contacts'])->name('site.contacts');
 
         // TODO (следующие фазы конверсии):
         // Route::get('/', [SiteController::class, 'index'])->name('site.home');
-        // Route::get('/contacts', [SiteController::class, 'contacts'])->name('site.contacts');
-        // Route::get('/news', [SiteController::class, 'news'])->name('site.news');
-        // Route::get('/portfolio', [SiteController::class, 'portfolio'])->name('site.portfolio');
-        // Route::get('/partners', [SiteController::class, 'partners'])->name('site.partners');
-        // Route::get('/reviews', [SiteController::class, 'reviews'])->name('site.reviews');
     });
 
 // Редирект с корня на язык по умолчанию (аналог Astro getStaticPaths по LANGS)

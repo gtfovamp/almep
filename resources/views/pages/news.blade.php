@@ -9,36 +9,57 @@
         if ($lang === 'az') return $item->$az ?: $item->$base;
         return $item->$base;
     };
+
     $newsBlocks = function ($item) {
         $b = $item->blocks ?? null;
         if (is_string($b)) { $b = json_decode($b, true) ?: []; }
         return is_array($b) ? $b : [];
     };
-    $newsText = function ($blocks, $lang) {
+
+    // Структура блока в БД: ['type' => 'heading'|'text'|..., 'content' => ['ru'=>..,'en'=>..,'az'=>..]]
+    $newsBlockText = function (array $block, string $lang): string {
+        $content = $block['content'] ?? null;
+        if (!is_array($content)) return is_string($content) ? trim($content) : '';
+        return trim((string) ($content[$lang] ?? $content['ru'] ?? ''));
+    };
+
+    $newsText = function ($blocks, $lang) use ($newsBlockText) {
         $parts = [];
         foreach ($blocks as $b) {
             $type = $b['type'] ?? '';
             if (!in_array($type, ['paragraph', 'text', 'heading'])) continue;
-            $d = $b['data'] ?? [];
-            $parts[] = $lang === 'en' ? ($d['text_en'] ?? $d['text_ru'] ?? '')
-                     : ($lang === 'az' ? ($d['text_az'] ?? $d['text_ru'] ?? '') : ($d['text_ru'] ?? ''));
+            $txt = $newsBlockText($b, $lang);
+            if ($txt !== '') $parts[] = $txt;
         }
         return trim(implode(' ', $parts));
     };
+
     // Обрезаем аккуратно по границе слова и используем типографское многоточие,
     // а не пять точек подряд — так текст выглядит опрятнее в карточках любой ширины.
-    $newsExcerpt = function ($blocks, $lang, $max = 150) use ($newsText) {
-        $text = $newsText(array_filter($blocks, fn($b) => in_array(($b['type'] ?? ''), ['paragraph','text'])), $lang);
+    $newsExcerpt = function ($blocks, $lang, $max = 150) use ($newsBlockText) {
+        $textBlocks = array_filter($blocks, fn($b) => in_array(($b['type'] ?? ''), ['paragraph', 'text']));
+        $parts = array_filter(array_map(fn($b) => $newsBlockText($b, $lang), $textBlocks));
+        $text = trim(implode(' ', $parts));
+        if ($text === '') return '';
         if (mb_strlen($text) <= $max) return $text;
         $cut = mb_substr($text, 0, $max);
         $lastSpace = mb_strrpos($cut, ' ');
         if ($lastSpace !== false) { $cut = mb_substr($cut, 0, $lastSpace); }
         return rtrim($cut, " .,;:") . '…';
     };
-    $newsReadTime = function ($blocks, $lang) use ($newsText) {
-        $words = preg_split('/\\s+/', $newsText($blocks, $lang), -1, PREG_SPLIT_NO_EMPTY);
+
+    $newsReadTime = function ($blocks, $lang) use ($newsBlockText) {
+        $all = implode(' ', array_map(fn($b) => $newsBlockText($b, $lang), $blocks));
+        $words = preg_split('/\s+/', $all, -1, PREG_SPLIT_NO_EMPTY);
         return max(1, (int) ceil(count($words) / 200));
     };
+
+    $newsMinuteLabel = function (int $mins) use ($t) {
+        return $mins === 1
+            ? ($t['news']['minute'] ?? 'минуты')
+            : ($t['news']['minutes'] ?? 'минут');
+    };
+
     $newsDate = function ($val) {
         if (empty($val)) return '';
         try { return \Carbon\Carbon::parse($val)->format('d.m.Y'); } catch (\Throwable $e) { return ''; }
@@ -80,19 +101,21 @@
             @php
               $fTitle = $newsField($featured, $lang, 'title');
               $fBlocks = $newsBlocks($featured);
+              $fMins = $newsReadTime($fBlocks, $lang);
             @endphp
             <div class="featured-news">
+              <a href="/{{ $lang }}/news/{{ $featured->id }}" class="featured-news__stretched-link" aria-label="{{ $fTitle }}"></a>
               <div class="featured-news__image">
                 <img src="{{ $featured->cover_image_url }}" alt="{{ $fTitle }}" loading="lazy" width="690" height="390" />
               </div>
               <div class="featured-news__content">
                 <div class="featured-news__info">
-                  <span class="news-badge">{{ $t['news']['category'] ?? '' }}</span>
+                  <span class="news-badge">{{ $t['news']['category_company'] ?? '' }}</span>
                   <h2 class="featured-news__title">{{ $fTitle }}</h2>
                   <p class="featured-news__excerpt">{{ $newsExcerpt($fBlocks, $lang) }}</p>
                   <div class="news-meta">
                     <span class="news-meta__item"><svg width="24" height="24" viewBox="0 0 28 28" fill="none" aria-hidden="true"><rect x="3" y="6" width="22" height="19" rx="2" stroke="#676767" stroke-width="1.5"/><path d="M3 11H25" stroke="#676767" stroke-width="1.5"/><path d="M8 3V6" stroke="#676767" stroke-width="1.5" stroke-linecap="round"/><path d="M20 3V6" stroke="#676767" stroke-width="1.5" stroke-linecap="round"/></svg>{{ $newsDate($featured->published_at) }}</span>
-                    <span class="news-meta__item"><svg width="24" height="24" viewBox="0 0 29 29" fill="none" aria-hidden="true"><circle cx="14.5" cy="14.5" r="10" stroke="#676767" stroke-width="1.5"/><path d="M14.5 8V14.5L18.5 18.5" stroke="#676767" stroke-width="1.5" stroke-linecap="round"/></svg>{{ $newsReadTime($fBlocks, $lang) }} {{ $t['news']['min_read'] ?? 'мин' }}</span>
+                    <span class="news-meta__item"><svg width="24" height="24" viewBox="0 0 29 29" fill="none" aria-hidden="true"><circle cx="14.5" cy="14.5" r="10" stroke="#676767" stroke-width="1.5"/><path d="M14.5 8V14.5L18.5 18.5" stroke="#676767" stroke-width="1.5" stroke-linecap="round"/></svg>{{ $fMins }} {{ $newsMinuteLabel($fMins) }}</span>
                   </div>
                 </div>
                 <a href="/{{ $lang }}/news/{{ $featured->id }}" class="read-more">
@@ -116,17 +139,22 @@
           @else
             <div class="news-grid">
               @foreach($grid as $item)
-                @php $iTitle = $newsField($item, $lang, 'title'); $iBlocks = $newsBlocks($item); @endphp
+                @php
+                  $iTitle = $newsField($item, $lang, 'title');
+                  $iBlocks = $newsBlocks($item);
+                  $iMins = $newsReadTime($iBlocks, $lang);
+                @endphp
                 <article class="news-card">
+                  <a href="/{{ $lang }}/news/{{ $item->id }}" class="news-card__stretched-link" aria-label="{{ $iTitle }}"></a>
                   <div class="news-card__image">
                     <img src="{{ $item->cover_image_url }}" alt="{{ $iTitle }}" loading="lazy" width="450" height="300" />
                   </div>
                   <div class="news-card__content">
-                    <span class="news-badge">{{ $t['news']['category'] ?? '' }}</span>
+                    <span class="news-badge">{{ $t['news']['category_company'] ?? '' }}</span>
                     <h3 class="news-card__title">{{ $iTitle }}</h3>
                     <div class="news-meta">
                       <span class="news-meta__item"><svg width="20" height="20" viewBox="0 0 28 28" fill="none" aria-hidden="true"><rect x="3" y="6" width="22" height="19" rx="2" stroke="#676767" stroke-width="1.5"/><path d="M3 11H25" stroke="#676767" stroke-width="1.5"/><path d="M8 3V6" stroke="#676767" stroke-width="1.5" stroke-linecap="round"/><path d="M20 3V6" stroke="#676767" stroke-width="1.5" stroke-linecap="round"/></svg>{{ $newsDate($item->published_at) }}</span>
-                      <span class="news-meta__item"><svg width="20" height="20" viewBox="0 0 29 29" fill="none" aria-hidden="true"><circle cx="14.5" cy="14.5" r="10" stroke="#676767" stroke-width="1.5"/><path d="M14.5 8V14.5L18.5 18.5" stroke="#676767" stroke-width="1.5" stroke-linecap="round"/></svg>{{ $newsReadTime($iBlocks, $lang) }} {{ $t['news']['min_read'] ?? 'мин' }}</span>
+                      <span class="news-meta__item"><svg width="20" height="20" viewBox="0 0 29 29" fill="none" aria-hidden="true"><circle cx="14.5" cy="14.5" r="10" stroke="#676767" stroke-width="1.5"/><path d="M14.5 8V14.5L18.5 18.5" stroke="#676767" stroke-width="1.5" stroke-linecap="round"/></svg>{{ $iMins }} {{ $newsMinuteLabel($iMins) }}</span>
                     </div>
                     <p class="news-card__excerpt">{{ $newsExcerpt($iBlocks, $lang) }}</p>
                     <a href="/{{ $lang }}/news/{{ $item->id }}" class="read-more">
@@ -214,6 +242,7 @@
     flex-direction: column;
     align-items: flex-start;
     width: 100%;
+    max-width: var(--container-max);
     margin: 0 auto;
     gap: var(--section-gap);
   }
@@ -241,12 +270,28 @@
 
   .breadcrumbs__separator { flex-shrink: 0; }
 
+  .breadcrumbs__link {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 16px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+
+  .breadcrumbs__link:hover { opacity: 0.7; }
+
   .breadcrumbs__current {
     font-family: 'Montserrat', sans-serif;
     font-weight: 400;
     font-size: 13px;
     line-height: 16px;
     color: var(--breadcrumb);
+    max-width: 60vw;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   /* Latest News */
@@ -270,6 +315,7 @@
   }
 
   .featured-news {
+    position: relative;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -278,9 +324,25 @@
     width: 100%;
   }
 
+  /* Кликабельность всей карточки: невидимая ссылка растянута на всю область,
+     а видимые интерактивные элементы (например "Узнать больше") лежат выше
+     по z-index, поэтому у них остаётся собственный фокус/ссылка для a11y. */
+  .featured-news__stretched-link {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    border-radius: var(--radius-lg);
+  }
+
+  /* min-width: 0 — критично: без него флекс-элемент не может быть уже своего
+     контента, и если картинка физически огромная (например 4000px PNG),
+     она раздувает всю колонку и разваливает сетку. */
   .featured-news__image {
+    position: relative;
+    z-index: 2;
+    pointer-events: none;
     flex: 1 1 420px;
-    min-width: 300px;
+    min-width: 0;
     max-width: 100%;
     aspect-ratio: 690 / 390;
     background: #D8D8D8;
@@ -296,13 +358,15 @@
   }
 
   .featured-news__content {
+    position: relative;
+    z-index: 2;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
     gap: clamp(20px, 3vw, 30px);
     flex: 1 1 420px;
-    min-width: 300px;
+    min-width: 0;
   }
 
   .featured-news__info {
@@ -371,6 +435,8 @@
   }
 
   .read-more {
+    position: relative;
+    z-index: 3;
     display: inline-flex;
     flex-direction: row;
     align-items: center;
@@ -401,16 +467,25 @@
     width: 100%;
   }
 
-  /* Сетка карточек: сама подбирает число колонок под ширину экрана,
-     без резких «скачков» на промежуточных разрешениях. */
+  /* Сетка карточек: сама подбирает число колонок под ширину контейнера
+     (который теперь ограничен var(--container-max)), без резких «скачков»
+     на промежуточных разрешениях. */
   .news-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
+    /* auto-fill вместо auto-fit: пустые колонки НЕ схлопываются, поэтому
+       если в ряду осталась одна карточка (например, всего 2 новости —
+       одна ушла в featured, вторая одна в сетке), она не растягивается
+       на всю ширину контейнера, а остаётся в своей колонке нормального
+       размера. Число колонок при этом всё так же само подстраивается
+       под ширину экрана — адаптивность не теряется. */
+    grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr));
     gap: clamp(20px, 2.5vw, 30px);
     width: 100%;
+    min-width: 0;
   }
 
   .news-card {
+    position: relative;
     background: #FFFFFF;
     box-shadow: var(--card-shadow);
     border-radius: var(--radius-md);
@@ -418,6 +493,7 @@
     display: flex;
     flex-direction: column;
     height: 100%;
+    min-width: 0;
     transition: transform 0.25s ease, box-shadow 0.25s ease;
   }
 
@@ -426,7 +502,16 @@
     box-shadow: var(--card-shadow-hover);
   }
 
+  .news-card__stretched-link {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+
   .news-card__image {
+    position: relative;
+    z-index: 2;
+    pointer-events: none;
     width: 100%;
     aspect-ratio: 450 / 300;
     background: #D8D8D8;
@@ -444,13 +529,19 @@
   .news-card:hover .news-card__image img { transform: scale(1.05); }
 
   .news-card__content {
+    position: relative;
+    z-index: 2;
+    pointer-events: none;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     padding: clamp(18px, 2.5vw, 25px) clamp(18px, 2.5vw, 30px);
     gap: 12px;
     flex: 1;
+    min-width: 0;
   }
+
+  .news-card__content .read-more { pointer-events: auto; }
 
   .news-card__title {
     font-family: 'Montserrat', sans-serif;
@@ -572,9 +663,12 @@
 
   /* Клавиатурная доступность */
   .breadcrumbs__item:focus-visible,
+  .breadcrumbs__link:focus-visible,
   .read-more:focus-visible,
   .pagination__arrow:focus-visible,
-  .pagination__number:focus-visible {
+  .pagination__number:focus-visible,
+  .featured-news__stretched-link:focus-visible,
+  .news-card__stretched-link:focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: 3px;
   }
@@ -599,6 +693,7 @@
     .news-badge { font-size: 13px; padding: 8px 14px; }
     .news-meta__item { font-size: 13px; }
     .pagination__number { min-width: 36px; height: 36px; font-size: 14px; }
+    .breadcrumbs__current { max-width: 75vw; }
   }
 </style>
 @endpush

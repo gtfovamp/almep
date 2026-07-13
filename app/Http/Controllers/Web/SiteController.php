@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Certificate;
+use App\Models\News;
 use App\Models\Subcategory;
 use App\Support\SiteI18n;
 use Illuminate\Http\Request;
@@ -90,13 +91,38 @@ class SiteController extends Controller
     public function news(string $lang)
     {
         $data = $this->shared($lang);
-        $data['news'] = \App\Models\News::query()
+        $data['news'] = News::query()
             ->orderByDesc('published_at')
             ->orderByDesc('id')
             ->paginate(7)
             ->withQueryString();
 
         return view('pages.news', $data);
+    }
+
+    /**
+     * Страница одной новости. {id} — числовой ID, см. whereNumber в routes/site.php.
+     * Порядок сортировки "других новостей" — тот же, что и на странице списка
+     * (published_at desc, затем id desc), чтобы блок "Другие новости" визуально
+     * соответствовал тому, что человек увидел бы в самом списке.
+     */
+    public function newsShow(string $lang, int $id)
+    {
+        $data = $this->shared($lang);
+
+        $item = News::query()->findOrFail($id);
+
+        $related = News::query()
+            ->where('id', '!=', $id)
+            ->orderByDesc('published_at')
+            ->orderByDesc('id')
+            ->limit(3)
+            ->get();
+
+        $data['item'] = $item;
+        $data['related'] = $related;
+
+        return view('pages.news-show', $data);
     }
 
     public function contacts(string $lang)
