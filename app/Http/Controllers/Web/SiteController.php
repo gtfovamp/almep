@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use App\Models\Blog;
+use App\Models\Product;
 use App\Models\Category;
 use App\Models\Certificate;
 use App\Models\News;
@@ -134,4 +136,121 @@ class SiteController extends Controller
     {
         return view('pages.index', $this->shared($lang));
     }
+
+    public function blog(string $lang)
+    {
+        $data = $this->shared($lang);
+        $data['blog'] = Blog::query()
+            ->orderByDesc('published_at')
+            ->orderByDesc('id')
+            ->paginate(7)
+            ->withQueryString();
+
+        return view('pages.blog', $data);
+    }
+
+    public function blogShow(string $lang, int $id)
+    {
+        $data = $this->shared($lang);
+
+        $item = Blog::query()->findOrFail($id);
+
+        $related = Blog::query()
+            ->where('id', '!=', $id)
+            ->orderByDesc('published_at')
+            ->orderByDesc('id')
+            ->limit(3)
+            ->get();
+
+        $data['item'] = $item;
+        $data['related'] = $related;
+
+        return view('pages.blog-show', $data);
+    }
+
+    
+
+    
+
+
+    /**
+     * Каталог: сетка категорий ($mode='categories') или подкатегорий ($mode='subcategories').
+     * /{lang}/catalog            -> все категории
+     * /{lang}/catalog/{category} -> подкатегории выбранной категории
+     */
+    public function catalog(string $lang, ?int $category = null)
+    {
+        $data = $this->shared($lang);
+
+        if ($category) {
+            $cat = Category::findOrFail($category);
+            $items = Subcategory::where('category_id', $cat->id)
+                ->withCount('products')
+                ->orderBy('order_index')->orderBy('id')
+                ->get();
+            $data['mode']     = 'subcategories';
+            $data['category'] = $cat;
+            $data['items']    = $items;
+        } else {
+            $cats = Category::orderBy('order_index')->orderBy('id')->get();
+            // Кол-во товаров в категории = сумма по её подкатегориям
+            foreach ($cats as $c) {
+                $c->all_products_count = Product::whereIn(
+                    'subcategory_id',
+                    Subcategory::where('category_id', $c->id)->pluck('id')
+                )->count();
+            }
+            $data['mode']  = 'categories';
+            $data['items'] = $cats;
+        }
+
+        return view('pages.catalog', $data);
+    }
+
+    public function products(\Illuminate\Http\Request $request, string $lang)
+    {
+        $data = $this->shared($lang);
+
+        $subId  = $request->query('subcategory');
+        $typeId = $request->query('type');
+        $sort   = $request->query('sort', 'default');
+
+        // Без подкатегории — показываем каталог (категории)
+        if (!$subId) {
+            return redirect('/'.$lang.'/catalog');
+        }
+
+        $subcategory = Subcategory::with('category')->find($subId);
+
+        $query = Product::query()->with(['images', 'subcategory.category']);
+        $query->where('subcategory_id', $subId);
+        if ($typeId) $query->where('product_type_id', $typeId);
+
+        if ($sort === 'name') $query->orderBy('name');
+        else $query->orderBy('order_index')->orderBy('id');
+
+        $data['subcategory'] = $subcategory;
+        $data['products']    = $query->paginate(12)->withQueryString();
+
+        return view('pages.products', $data);
+    }
+
+    public function product(string $lang, int $id)
+    {
+        $data = $this->shared($lang);
+
+        $item = Product::with(['images', 'specifications', 'subcategory.category', 'productType'])
+            ->findOrFail($id);
+
+        $related = Product::query()->with('images')
+            ->where('subcategory_id', $item->subcategory_id)
+            ->where('id', '!=', $item->id)
+            ->orderBy('order_index')->limit(4)->get();
+
+        $data['item']    = $item;
+        $data['related'] = $related;
+
+        return view('pages.product', $data);
+    }
+
 }

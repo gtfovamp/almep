@@ -16,6 +16,10 @@ use App\Http\Controllers\Admin\NewsWebController;
 use App\Http\Controllers\Admin\ConsultationWebController;
 use App\Http\Controllers\Admin\ImageUploadController;
 
+Route::get('/{lang}', [\App\Http\Controllers\Web\SiteController::class, 'index'])
+    ->where('lang', 'ru|en|az')
+    ->name('site.home');
+
 // ---- Auth (public) ----
 Route::get('/admin/login', [AuthWebController::class, 'showLogin'])->name('admin.login');
 Route::post('/admin/login', [AuthWebController::class, 'login'])->name('admin.login.post');

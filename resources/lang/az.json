@@ -294,95 +294,154 @@
     },
     "blog": {
         "title": "Bloq",
+        "category_company": "Bloq",
+        "minutes": "dəqiqə",
+        "minute": "dəqiqə",
+        "learn_more": "Ətraflı",
+        "read_news": "Məqaləni oxu",
+        "btn_consultation": "Konsultasiya tələb edin",
+        "aria_next": "Növbəti slayd",
+        "aria_prev": "Əvvəlki slayd",
+        "aria_slide": "Slayd",
+        "date_alt": "Tarix",
+        "time_alt": "Oxuma vaxtı",
+        "detail_breadcrumb_news": "Bloq",
+        "detail_related": "Oxşar məqalələr",
+        "detail_read_more": "Ətraflı",
+        "newsletter_title": "Xəbərlərdən xəbərdar olun",
+        "newsletter_desc": "Xəbərlərə abunə olun və məlumat alın",
+        "newsletter_placeholder": "E-poçtunuz",
+        "newsletter_btn": "Konsultasiya tələb edin",
+        "newsletter_success": "Təşəkkür edirik! Sizinlə əlaqə saxlayacağıq.",
+        "newsletter_error": "Xəta. Yenidən cəhd edin.",
+        "not_found": "Məqalə tapılmadı",
         "post_title": "Almep Trading — Layihənizin dayaq nöqtəsi",
         "post_text": "Hər uğurlu layihənin arxasında düzgün tərəfdaşlar durur. Biz, Almep Trading şirkəti, sadəcə tikinti və istehsal üçün peşəkar alətlər tədarük etmirik — sizin uğurunuzun bir hissəsi oluruq. Berent, Harden, Sensh və EKF brendləri ilə layihələrinizi daha sürətli, etibarlı və səmərəli edirik...",
         "read_more": "Daha çox oxu..."
     },
     "reviews": {
-  "title": "Rəylər",
-  "all_reviews": "Bütün rəylər",
-  "btn_consultation": "Konsultasiya tələb edin",
-  "aria_next": "Növbəti slayd",
-  "aria_prev": "Əvvəlki slayd",
-  "aria_slide": "Slayd",
-  "stat_rating": "orta reytinq",
-  "stat_reviews": "rəylər",
-  "items": [
-    {
-      "text": "Bakıda alət almaq üçün ən yaxşı yer. Almep Trading-də həmişə keyfiyyətli Harden və Sensh brendləri var. Sürətli çatdırılma və peşəkar yanaşma. Əməkdaşlığa görə təşəkkür!",
-      "author": "Cavid Əsgərov"
+        "title": "Rəylər",
+        "all_reviews": "Bütün rəylər",
+        "btn_consultation": "Konsultasiya tələb edin",
+        "aria_next": "Növbəti slayd",
+        "aria_prev": "Əvvəlki slayd",
+        "aria_slide": "Slayd",
+        "stat_rating": "orta reytinq",
+        "stat_reviews": "rəylər",
+        "items": [
+            {
+                "text": "Bakıda alət almaq üçün ən yaxşı yer. Almep Trading-də həmişə keyfiyyətli Harden və Sensh brendləri var. Sürətli çatdırılma və peşəkar yanaşma. Əməkdaşlığa görə təşəkkür!",
+                "author": "Cavid Əsgərov"
+            },
+            {
+                "text": "Uzun müddətdir Harden və Berent alətlərindən istifadə edirəm. Çox möhkəm polad, erqonomik tutacaqlar və yüksək dözümlülük. Peşəkar işlər üçün — qiymət-keyfiyyət nisbətində ən yaxşı seçimdir.",
+                "author": "Əli Ağayev"
+            },
+            {
+                "text": "Sensh əl alətləri partiyasını aldıq. Keyfiyyət əladır, alət yüksək yüklərdə əyilmir və sınmır. İndi iş daha sürətli və keyfiyyətli gedir.",
+                "author": "Ceyhun Kərimov"
+            },
+            {
+                "text": "Əla servis və geniş çeşid. Obyektimiz üçün EKF avadanlığını sifariş etdik — hər şey vaxtında gəldi, etibarlı qablaşdırıldı. İşi davam etdirəcəyik!",
+                "author": "Elşan Məmmədov"
+            },
+            {
+                "text": "Məhsulunu bilən peşəkar komanda. Konkret vəzifələr üçün lazım olan alətləri seçməkdə kömək etdilər. Keyfiyyət və qiymətdən çox razıyam.",
+                "author": "Rəşad Hüseyinov"
+            },
+            {
+                "text": "Almep Trading ilə bir neçə ildir işləyirik. Etibarlı təchizatçı, həmişə öhdəliklərini yerinə yetirirlər. Bütün tikinti şirkətlərinə tövsiyə edirəm.",
+                "author": "Samir Əliyev"
+            },
+            {
+                "text": "Ev emalatxanası üçün Berent alətlərini aldım. Keyfiyyət gözləntiləri üstələdi — hər şey lazım olduğu kimi işləyir. Münasib qiymətlər, sürətli çatdırılma.",
+                "author": "Farid İsmayılov"
+            }
+        ]
     },
-    {
-      "text": "Uzun müddətdir Harden və Berent alətlərindən istifadə edirəm. Çox möhkəm polad, erqonomik tutacaqlar və yüksək dözümlülük. Peşəkar işlər üçün — qiymət-keyfiyyət nisbətində ən yaxşı seçimdir.",
-      "author": "Əli Ağayev"
+    "consultation": {
+        "title": "Pulsuz konsultasiya",
+        "description": "Tam məsləhət üçün sizinlə əlaqə saxlaya bilməyimiz üçün aşağıda əlaqə məlumatlarınızı qoyun",
+        "placeholder_name": "Adınız",
+        "placeholder_email": "E-mail",
+        "placeholder_phone": "Telefon nömrəniz",
+        "btn_send": "Göndər",
+        "phone": "+994 10 241 99 10",
+        "email": "info@almeptrading.az",
+        "social_instagram": "Instagram",
+        "social_youtube": "YouTube",
+        "social_facebook": "Facebook",
+        "close": "Bağla",
+        "eyebrow": "Almep Trading",
+        "text": "Əlaqə məlumatlarınızı qoyun, tam konsultasiya üçün sizinlə əlaqə saxlayacağıq",
+        "name_label": "Ad",
+        "name_placeholder": "Adınız",
+        "email_label": "E-mail",
+        "email_placeholder": "you@example.com",
+        "phone_label": "Telefon",
+        "phone_placeholder": "+994 __ ___ __ __",
+        "submit": "Müraciət göndər",
+        "note": "Düyməni klikləməklə şəxsi məlumatların emalına razılıq verirsiniz.",
+        "error_required": "Zəhmət olmasa bütün sahələri doldurun",
+        "success": "Təşəkkürlər! Tezliklə sizinlə əlaqə saxlayacağıq.",
+        "error": "Göndərilmədi. Yenidən cəhd edin"
     },
-    {
-      "text": "Sensh əl alətləri partiyasını aldıq. Keyfiyyət əladır, alət yüksək yüklərdə əyilmir və sınmır. İndi iş daha sürətli və keyfiyyətli gedir.",
-      "author": "Ceyhun Kərimov"
+    "contacts": {
+        "title": "Əlaqə",
+        "address_label": "Ünvan:",
+        "address_value": "44b, Aşıq Molla Cümə küçəsi, Bakı 1006",
+        "phone_label": "Telefon:",
+        "phone_value": "+994 10 241 99 10",
+        "schedule_label": "İş saatları:",
+        "schedule_days": "Bz–Şn,",
+        "schedule_hours": "09:00–18:00",
+        "email_label": "E-mail:",
+        "email_value": "info@almeptrading.az",
+        "btn_consultation": "Konsultasiya tələb edin",
+        "zoom_in": "Yaxınlaşdır",
+        "zoom_out": "Uzaqlaşdır",
+        "company_name": "Almep Trading",
+        "office_label": "Rəsmi ofis",
+        "city": "Bakı, Azərbaycan",
+        "popup_address": "Aşıq Molla Cümə, Bakı"
     },
-    {
-      "text": "Əla servis və geniş çeşid. Obyektimiz üçün EKF avadanlığını sifariş etdik — hər şey vaxtında gəldi, etibarlı qablaşdırıldı. İşi davam etdirəcəyik!",
-      "author": "Elşan Məmmədov"
+    "contacts_page": {
+        "title": "Əlaqə",
+        "form_title": "Bizimlə əlaqə saxlayın",
+        "form_subtitle": "Əlaqə məlumatlarınızı qoyun və biz sizinlə ən qısa zamanda əlaqə saxlayacağıq",
+        "form_name": "Adınız",
+        "form_phone": "Telefon nömrəniz",
+        "form_email": "E-mail",
+        "form_message": "Mesaj",
+        "form_submit": "Mesaj göndər"
     },
-    {
-      "text": "Məhsulunu bilən peşəkar komanda. Konkret vəzifələr üçün lazım olan alətləri seçməkdə kömək etdilər. Keyfiyyət və qiymətdən çox razıyam.",
-      "author": "Rəşad Hüseyinov"
+    "footer": {
+        "copyright": "2026 © All rights reserved",
+        "privacy": "Privacy Policy",
+        "scroll_top": "Back to top"
     },
-    {
-      "text": "Almep Trading ilə bir neçə ildir işləyirik. Etibarlı təchizatçı, həmişə öhdəliklərini yerinə yetirirlər. Bütün tikinti şirkətlərinə tövsiyə edirəm.",
-      "author": "Samir Əliyev"
+    "catalog": {
+        "title": "Kataloq",
+        "found": "Tapıldı",
+        "sort": "Sırala:",
+        "sort_default": "Default",
+        "sort_name": "Ada görə",
+        "article": "Art.:",
+        "out_of_stock": "Sifarişlə",
+        "aria_pagination": "Səhifələmə",
+        "aria_prev": "Əvvəlki",
+        "aria_next": "Növbəti",
+        "empty": "Bu kateqoriyada hələ məhsul yoxdur.",
+        "back": "Kataloqa qayıt",
+        "subcategories": "Alt kateqoriyalar",
+        "items": "məhsul"
     },
-    {
-      "text": "Ev emalatxanası üçün Berent alətlərini aldım. Keyfiyyət gözləntiləri üstələdi — hər şey lazım olduğu kimi işləyir. Münasib qiymətlər, sürətli çatdırılma.",
-      "author": "Farid İsmayılov"
+    "product": {
+        "prev": "Əvvəlki şəkil",
+        "next": "Növbəti şəkil",
+        "copy": "Artikulu kopyala",
+        "request": "Konsultasiya istə",
+        "specs": "Xüsusiyyətlər:",
+        "related": "Oxşar məhsullar"
     }
-  ]
-},
-"consultation": {
-  "title": "Pulsuz məsləhət",
-  "description": "Tam məsləhət üçün sizinlə əlaqə saxlaya bilməyimiz üçün aşağıda əlaqə məlumatlarınızı qoyun",
-  "placeholder_name": "Adınız",
-  "placeholder_email": "E-mail",
-  "placeholder_phone": "Telefon nömrəniz",
-  "btn_send": "Göndər",
-  "phone": "+994 10 241 99 10",
-  "email": "info@almeptrading.az",
-  "social_instagram": "Instagram",
-  "social_youtube": "YouTube",
-  "social_facebook": "Facebook"
-},
-"contacts": {
-  "title": "Əlaqə",
-  "address_label": "Ünvan:",
-  "address_value": "44b, Aşıq Molla Cümə küçəsi, Bakı 1006",
-  "phone_label": "Telefon:",
-  "phone_value": "+994 10 241 99 10",
-  "schedule_label": "İş saatları:",
-  "schedule_days": "Bz–Şn,",
-  "schedule_hours": "09:00–18:00",
-  "email_label": "E-mail:",
-  "email_value": "info@almeptrading.az",
-  "btn_consultation": "Konsultasiya tələb edin",
-  "zoom_in": "Yaxınlaşdır",
-  "zoom_out": "Uzaqlaşdır",
-  "company_name": "Almep Trading",
-  "office_label": "Rəsmi ofis",
-  "city": "Bakı, Azərbaycan",
-  "popup_address": "Aşıq Molla Cümə, Bakı"
-},
-"contacts_page": {
-  "title": "Əlaqə",
-  "form_title": "Bizimlə əlaqə saxlayın",
-  "form_subtitle": "Əlaqə məlumatlarınızı qoyun və biz sizinlə ən qısa zamanda əlaqə saxlayacağıq",
-  "form_name": "Adınız",
-  "form_phone": "Telefon nömrəniz",
-  "form_email": "E-mail",
-  "form_message": "Mesaj",
-  "form_submit": "Mesaj göndər"
-},
-"footer": {
-  "copyright": "2026 © All rights reserved",
-  "privacy": "Privacy Policy",
-  "scroll_top": "Back to top"
-}
 }

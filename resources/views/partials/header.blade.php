@@ -237,146 +237,165 @@
             </a>
         </div>
     </div>
+</header>
 
-    {{-- ╔══════════════════════════════════════════════════════╗ --}}
-    {{-- ║  MOBILE MENU                                          ║ --}}
-    {{-- ╚══════════════════════════════════════════════════════╝ --}}
-    <div id="mobileMenuBackdrop" class="mob-backdrop" aria-hidden="true"></div>
-    <nav id="mobileMenu" class="mob-menu" role="dialog"
-         aria-modal="true" aria-hidden="true" aria-label="Меню">
-        <div class="mob-menu__head">
-            <a href="/{{ $lang }}" aria-label="Almep Trading">
-                <img src="{{ asset('assets/icons/logo-white.svg') }}" alt="Almep Trading"
-                     width="130" height="45" class="mob-menu__logo" />
-            </a>
-            <button type="button" id="mobileMenuClose" class="mob-menu__close"
-                    aria-label="{{ $t['header']['close'] ?? 'Закрыть' }}">
-                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
-                    <path d="M1 1l16 16M17 1L1 17" stroke="#2B2B2B"
-                          stroke-width="1.8" stroke-linecap="round"/>
-                </svg>
-            </button>
+{{--
+    ═══════════════════════════════════════════════════════════════
+    ВАЖНО: mobile-menu backdrop, mobile-menu и catalog popup
+    вынесены ЗА пределы <header>.
+
+    Причина: у .hdr--home задан backdrop-filter (для эффекта
+    размытия фона на главной). backdrop-filter (как и filter,
+    transform, perspective) создаёт новый containing block для
+    всех потомков с position:fixed. Если эти оверлеи находятся
+    ВНУТРИ header, они позиционируются и обрезаются относительно
+    самого header (высота ~76-150px), а не относительно viewport —
+    из-за этого попап каталога и мобильное меню визуально "зажаты"
+    в рамках шапки и почти не видны на фоне hero-секции.
+
+    Вынос за пределы header возвращает им нормальное
+    position:fixed относительно окна браузера.
+    ═══════════════════════════════════════════════════════════════
+--}}
+
+{{-- ╔══════════════════════════════════════════════════════╗ --}}
+{{-- ║  MOBILE MENU                                          ║ --}}
+{{-- ╚══════════════════════════════════════════════════════╝ --}}
+<div id="mobileMenuBackdrop" class="mob-backdrop" aria-hidden="true"></div>
+<nav id="mobileMenu" class="mob-menu" role="dialog"
+     aria-modal="true" aria-hidden="true" aria-label="Меню">
+    <div class="mob-menu__head">
+        <a href="/{{ $lang }}" aria-label="Almep Trading">
+            <img src="{{ asset('assets/icons/logo-white.svg') }}" alt="Almep Trading"
+                 width="130" height="45" class="mob-menu__logo" />
+        </a>
+        <button type="button" id="mobileMenuClose" class="mob-menu__close"
+                aria-label="{{ $t['header']['close'] ?? 'Закрыть' }}">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+                <path d="M1 1l16 16M17 1L1 17" stroke="#2B2B2B"
+                      stroke-width="1.8" stroke-linecap="round"/>
+            </svg>
+        </button>
+    </div>
+    <div class="mob-menu__body">
+        {{-- Mobile search --}}
+        <div class="mob-menu__search-wrap">
+            <input type="search" id="mobileSearchInput"
+                   class="mob-menu__search-input"
+                   placeholder="{{ $t['header']['search_placeholder'] ?? 'Поиск…' }}"
+                   autocomplete="off" />
+            <img src="{{ asset('assets/icons/search.svg') }}" alt="" width="20" height="20"
+                 class="mob-menu__search-icon" aria-hidden="true" />
         </div>
-        <div class="mob-menu__body">
-            {{-- Mobile search --}}
-            <div class="mob-menu__search-wrap">
-                <input type="search" id="mobileSearchInput"
-                       class="mob-menu__search-input"
-                       placeholder="{{ $t['header']['search_placeholder'] ?? 'Поиск…' }}"
-                       autocomplete="off" />
-                <img src="{{ asset('assets/icons/search.svg') }}" alt="" width="20" height="20"
-                     class="mob-menu__search-icon" aria-hidden="true" />
-            </div>
 
-            <ul class="mob-menu__list" role="list">
-                @foreach ($navLinks as $link)
-                    @php $isActive = $link['active'] ?? false; @endphp
-                    @if (!empty($link['dropdown']))
-                        <li role="listitem">
-                            <details class="mob-menu__details"
-                                @if($isActive || collect($aboutSubLinks)->contains('active', true)) open @endif>
-                                <summary class="mob-menu__link mob-menu__summary {{ $isActive ? 'is-active' : '' }}">
-                                    {{ $link['label'] }}
-                                    <svg class="mob-menu__chevron" width="12" height="7"
-                                         viewBox="0 0 12 7" fill="none" aria-hidden="true">
-                                        <path d="M1 1l5 5 5-5" stroke="currentColor"
-                                              stroke-width="1.6" stroke-linecap="round"/>
-                                    </svg>
-                                </summary>
-                                <ul class="mob-menu__sublist" role="list">
-                                    @foreach ($aboutSubLinks as $sub)
-                                        <li role="listitem">
-                                            <a href="{{ $sub['href'] }}"
-                                               class="mob-menu__sublink {{ $sub['active'] ? 'is-active' : '' }}"
-                                               @if($sub['active']) aria-current="page" @endif>
-                                                {{ $sub['label'] }}
-                                            </a>
-                                        </li>
-                                    @endforeach
-                                </ul>
-                            </details>
-                        </li>
-                    @else
-                        <li role="listitem">
-                            <a href="{{ $link['href'] }}"
-                               class="mob-menu__link {{ $isActive ? 'is-active' : '' }}"
-                               @if($isActive) aria-current="page" @endif>
+        <ul class="mob-menu__list" role="list">
+            @foreach ($navLinks as $link)
+                @php $isActive = $link['active'] ?? false; @endphp
+                @if (!empty($link['dropdown']))
+                    <li role="listitem">
+                        <details class="mob-menu__details"
+                            @if($isActive || collect($aboutSubLinks)->contains('active', true)) open @endif>
+                            <summary class="mob-menu__link mob-menu__summary {{ $isActive ? 'is-active' : '' }}">
                                 {{ $link['label'] }}
-                            </a>
-                        </li>
-                    @endif
-                @endforeach
-            </ul>
+                                <svg class="mob-menu__chevron" width="12" height="7"
+                                     viewBox="0 0 12 7" fill="none" aria-hidden="true">
+                                    <path d="M1 1l5 5 5-5" stroke="currentColor"
+                                          stroke-width="1.6" stroke-linecap="round"/>
+                                </svg>
+                            </summary>
+                            <ul class="mob-menu__sublist" role="list">
+                                @foreach ($aboutSubLinks as $sub)
+                                    <li role="listitem">
+                                        <a href="{{ $sub['href'] }}"
+                                           class="mob-menu__sublink {{ $sub['active'] ? 'is-active' : '' }}"
+                                           @if($sub['active']) aria-current="page" @endif>
+                                            {{ $sub['label'] }}
+                                        </a>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </details>
+                    </li>
+                @else
+                    <li role="listitem">
+                        <a href="{{ $link['href'] }}"
+                           class="mob-menu__link {{ $isActive ? 'is-active' : '' }}"
+                           @if($isActive) aria-current="page" @endif>
+                            {{ $link['label'] }}
+                        </a>
+                    </li>
+                @endif
+            @endforeach
+        </ul>
 
-            <button type="button"
-                    class="js-catalog-trigger mob-menu__catalog-btn"
-                    aria-haspopup="dialog" aria-controls="catalogPopup">
-                {{ $t['header']['catalog'] ?? 'Каталог' }}
-            </button>
+        <button type="button"
+                class="js-catalog-trigger mob-menu__catalog-btn"
+                aria-haspopup="dialog" aria-controls="catalogPopup">
+            {{ $t['header']['catalog'] ?? 'Каталог' }}
+        </button>
 
-            <hr class="mob-menu__hr" />
+        <hr class="mob-menu__hr" />
 
-            @if ($phoneRaw)
-                <a href="tel:{{ $phoneClean }}" class="mob-menu__phone">{{ $phoneRaw }}</a>
-            @endif
+        @if ($phoneRaw)
+            <a href="tel:{{ $phoneClean }}" class="mob-menu__phone">{{ $phoneRaw }}</a>
+        @endif
 
-            <div class="mob-menu__langs" role="group" aria-label="Язык">
-                <span class="mob-menu__lang is-active" aria-current="location">{{ $currentLangLabel }}</span>
-                @foreach ($otherLangs as $l)
-                    <a href="/{{ $l['code'] }}{{ $pathWithoutLang ?: '/' }}"
-                       class="mob-menu__lang" hreflang="{{ $l['code'] }}">
-                        {{ $l['label'] }}
-                    </a>
-                @endforeach
-            </div>
-
-            <div class="mob-menu__socials" role="list" aria-label="Социальные сети">
-                <a href="{{ $socials['instagram'] }}" class="mob-menu__social"
-                   target="_blank" rel="noopener noreferrer" aria-label="Instagram" role="listitem">
-                    <img src="{{ asset('assets/icons/instagram.svg') }}" alt="Instagram" width="26" height="26"/>
+        <div class="mob-menu__langs" role="group" aria-label="Язык">
+            <span class="mob-menu__lang is-active" aria-current="location">{{ $currentLangLabel }}</span>
+            @foreach ($otherLangs as $l)
+                <a href="/{{ $l['code'] }}{{ $pathWithoutLang ?: '/' }}"
+                   class="mob-menu__lang" hreflang="{{ $l['code'] }}">
+                    {{ $l['label'] }}
                 </a>
-                <a href="{{ $socials['youtube'] }}" class="mob-menu__social"
-                   target="_blank" rel="noopener noreferrer" aria-label="YouTube" role="listitem">
-                    <img src="{{ asset('assets/icons/youtube.svg') }}" alt="YouTube" width="26" height="26"/>
-                </a>
-                <a href="{{ $socials['facebook'] }}" class="mob-menu__social"
-                   target="_blank" rel="noopener noreferrer" aria-label="Facebook" role="listitem">
-                    <img src="{{ asset('assets/icons/facebook.svg') }}" alt="Facebook" width="26" height="26"/>
-                </a>
-            </div>
+            @endforeach
         </div>
-    </nav>
 
-    {{-- ╔══════════════════════════════════════════════════════╗ --}}
-    {{-- ║  CATALOG POPUP  (логика из файла 1)                   ║ --}}
-    {{-- ╚══════════════════════════════════════════════════════╝ --}}
-    <div id="catalogPopup" class="cat-popup"
-         role="dialog" aria-modal="true" aria-hidden="true"
-         aria-label="{{ $t['header']['catalog'] ?? 'Каталог' }}">
-        <div class="cat-popup__shell">
-            <aside class="cat-popup__sidebar" id="catSidebar"></aside>
-            <div class="cat-popup__divider"></div>
-            <section class="cat-popup__content" id="catContent">
-                <div class="cat-popup__content-head">
-                    <h2 class="cat-popup__title" id="catTitle"></h2>
-                    <button type="button" id="catalogClose"
-                            class="cat-popup__close" aria-label="Закрыть каталог">
-                        <svg width="20" height="20" viewBox="0 0 16 16"
-                             fill="none" aria-hidden="true">
-                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                  d="M4.11 2.697L2.698 4.11 6.586 8l-3.89
-                                     3.89 1.415 1.413L8 9.414l3.89 3.89
-                                     1.413-1.415L9.414 8l3.89-3.89-1.415
-                                     -1.413L8 6.586l-3.89-3.89z"
-                                  fill="#003F8D"/>
-                        </svg>
-                    </button>
-                </div>
-                <div class="cat-popup__grid" id="catGrid"></div>
-            </section>
+        <div class="mob-menu__socials" role="list" aria-label="Социальные сети">
+            <a href="{{ $socials['instagram'] }}" class="mob-menu__social"
+               target="_blank" rel="noopener noreferrer" aria-label="Instagram" role="listitem">
+                <img src="{{ asset('assets/icons/instagram.svg') }}" alt="Instagram" width="26" height="26"/>
+            </a>
+            <a href="{{ $socials['youtube'] }}" class="mob-menu__social"
+               target="_blank" rel="noopener noreferrer" aria-label="YouTube" role="listitem">
+                <img src="{{ asset('assets/icons/youtube.svg') }}" alt="YouTube" width="26" height="26"/>
+            </a>
+            <a href="{{ $socials['facebook'] }}" class="mob-menu__social"
+               target="_blank" rel="noopener noreferrer" aria-label="Facebook" role="listitem">
+                <img src="{{ asset('assets/icons/facebook.svg') }}" alt="Facebook" width="26" height="26"/>
+            </a>
         </div>
     </div>
-</header>
+</nav>
+
+{{-- ╔══════════════════════════════════════════════════════╗ --}}
+{{-- ║  CATALOG POPUP  (логика из файла 1)                   ║ --}}
+{{-- ╚══════════════════════════════════════════════════════╝ --}}
+<div id="catalogPopup" class="cat-popup"
+     role="dialog" aria-modal="true" aria-hidden="true"
+     aria-label="{{ $t['header']['catalog'] ?? 'Каталог' }}">
+    <div class="cat-popup__shell">
+        <aside class="cat-popup__sidebar" id="catSidebar"></aside>
+        <div class="cat-popup__divider"></div>
+        <section class="cat-popup__content" id="catContent">
+            <div class="cat-popup__content-head">
+                <h2 class="cat-popup__title" id="catTitle"></h2>
+                <button type="button" id="catalogClose"
+                        class="cat-popup__close" aria-label="Закрыть каталог">
+                    <svg width="20" height="20" viewBox="0 0 16 16"
+                         fill="none" aria-hidden="true">
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                              d="M4.11 2.697L2.698 4.11 6.586 8l-3.89
+                                 3.89 1.415 1.413L8 9.414l3.89 3.89
+                                 1.413-1.415L9.414 8l3.89-3.89-1.415
+                                 -1.413L8 6.586l-3.89-3.89z"
+                              fill="#003F8D"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="cat-popup__grid" id="catGrid"></div>
+        </section>
+    </div>
+</div>
 
 {{-- ═══════════════════════════════════════════════════════════ --}}
 {{--  CSS                                                        --}}

@@ -101,7 +101,6 @@
         "aria_prev": "Previous slide",
         "aria_slide": "Slide",
         "subtitle": "We are proud to be part of successful projects, providing high-quality solutions and professional tools. Our portfolio reflects the diversity of industries and scales of projects we have been involved in. From construction to industrial production — we ensure reliable deliveries and technical support at every stage."
-
     },
     "services": {
         "title": "Services",
@@ -295,95 +294,154 @@
     },
     "blog": {
         "title": "Blog",
+        "category_company": "Blog",
+        "minutes": "minutes",
+        "minute": "minute",
+        "learn_more": "Learn more",
+        "read_news": "Read post",
+        "btn_consultation": "Request consultation",
+        "aria_next": "Next slide",
+        "aria_prev": "Previous slide",
+        "aria_slide": "Slide",
+        "date_alt": "Date",
+        "time_alt": "Reading time",
+        "detail_breadcrumb_news": "Blog",
+        "detail_related": "Related posts",
+        "detail_read_more": "Learn more",
+        "newsletter_title": "Stay up to date",
+        "newsletter_desc": "Subscribe to news and receive updates",
+        "newsletter_placeholder": "Your E-mail",
+        "newsletter_btn": "Request consultation",
+        "newsletter_success": "Thank you! We will contact you.",
+        "newsletter_error": "Error. Please try again.",
+        "not_found": "Post not found",
         "post_title": "Almep Trading — The support point of your project",
         "post_text": "Behind every successful project are the right partners. We, Almep Trading, don't just supply professional tools for construction and production — we become part of your success. With Berent, Harden, Sensh and EKF brands, we make your projects faster, more reliable and more efficient...",
         "read_more": "Read more..."
     },
     "reviews": {
-  "title": "Reviews",
-  "all_reviews": "All reviews",
-  "btn_consultation": "Request consultation",
-  "aria_next": "Next slide",
-  "aria_prev": "Previous slide",
-  "aria_slide": "Slide",
-  "stat_rating": "average rating",
-  "stat_reviews": "reviews",
-  "items": [
-    {
-      "text": "The best place to buy tools in Baku. Almep Trading always has quality Harden and Sensh brands in stock. Fast delivery and professional approach. Thank you for cooperation!",
-      "author": "Javid Askerov"
+        "title": "Reviews",
+        "all_reviews": "All reviews",
+        "btn_consultation": "Request consultation",
+        "aria_next": "Next slide",
+        "aria_prev": "Previous slide",
+        "aria_slide": "Slide",
+        "stat_rating": "average rating",
+        "stat_reviews": "reviews",
+        "items": [
+            {
+                "text": "The best place to buy tools in Baku. Almep Trading always has quality Harden and Sensh brands in stock. Fast delivery and professional approach. Thank you for cooperation!",
+                "author": "Javid Askerov"
+            },
+            {
+                "text": "I have been using Harden and Berent tools for a long time. Very strong steel, ergonomic handles and high wear resistance. For professional work — this is the best choice for price-quality ratio.",
+                "author": "Ali Agayev"
+            },
+            {
+                "text": "We purchased a batch of Sensh hand tools. Excellent quality, the tool doesn't bend or break under high loads. Now work is faster and better quality.",
+                "author": "Jeyhun Kerimov"
+            },
+            {
+                "text": "Excellent service and wide range. We ordered EKF equipment for our facility — everything arrived on time, packed reliably. We will continue working!",
+                "author": "Elshan Mamedov"
+            },
+            {
+                "text": "Professional team that knows their product. Helped select the right tools for specific tasks. Very satisfied with quality and price.",
+                "author": "Rashad Huseyinov"
+            },
+            {
+                "text": "We have been working with Almep Trading for several years. Reliable supplier, always fulfill obligations. I recommend to all construction companies.",
+                "author": "Samir Aliyev"
+            },
+            {
+                "text": "Bought Berent tools for home workshop. Quality exceeded expectations — everything works as it should. Reasonable prices, fast delivery.",
+                "author": "Farid Ismayilov"
+            }
+        ]
     },
-    {
-      "text": "I have been using Harden and Berent tools for a long time. Very strong steel, ergonomic handles and high wear resistance. For professional work — this is the best choice for price-quality ratio.",
-      "author": "Ali Agayev"
+    "consultation": {
+        "title": "Free consultation",
+        "description": "Leave your contacts below so we can contact you for a complete consultation",
+        "placeholder_name": "Your name",
+        "placeholder_email": "E-mail",
+        "placeholder_phone": "Your phone number",
+        "btn_send": "Send",
+        "phone": "+994 10 241 99 10",
+        "email": "info@almeptrading.az",
+        "social_instagram": "Instagram",
+        "social_youtube": "YouTube",
+        "social_facebook": "Facebook",
+        "close": "Close",
+        "eyebrow": "Almep Trading",
+        "text": "Leave your contacts and we will get in touch for a full consultation",
+        "name_label": "Name",
+        "name_placeholder": "Your name",
+        "email_label": "E-mail",
+        "email_placeholder": "you@example.com",
+        "phone_label": "Phone",
+        "phone_placeholder": "+994 __ ___ __ __",
+        "submit": "Send request",
+        "note": "By clicking the button, you agree to the processing of personal data.",
+        "error_required": "Please fill in all fields",
+        "success": "Thank you! We will contact you shortly.",
+        "error": "Failed to send. Please try again"
     },
-    {
-      "text": "We purchased a batch of Sensh hand tools. Excellent quality, the tool doesn't bend or break under high loads. Now work is faster and better quality.",
-      "author": "Jeyhun Kerimov"
+    "contacts": {
+        "title": "Contacts",
+        "address_label": "Address:",
+        "address_value": "44b, Ashig Molla Juma Street, Baku 1006",
+        "phone_label": "Phone:",
+        "phone_value": "+994 10 241 99 10",
+        "schedule_label": "Working hours:",
+        "schedule_days": "Mon–Sat,",
+        "schedule_hours": "09:00–18:00",
+        "email_label": "E-mail:",
+        "email_value": "info@almeptrading.az",
+        "btn_consultation": "Request consultation",
+        "zoom_in": "Zoom in",
+        "zoom_out": "Zoom out",
+        "company_name": "Almep Trading",
+        "office_label": "Official office",
+        "city": "Baku, Azerbaijan",
+        "popup_address": "Ashig Molla Juma, Baku"
     },
-    {
-      "text": "Excellent service and wide range. We ordered EKF equipment for our facility — everything arrived on time, packed reliably. We will continue working!",
-      "author": "Elshan Mamedov"
+    "contacts_page": {
+        "title": "Contacts",
+        "form_title": "Contact us",
+        "form_subtitle": "Leave your contacts and we will get back to you as soon as possible",
+        "form_name": "Your name",
+        "form_phone": "Your phone number",
+        "form_email": "E-mail",
+        "form_message": "Message",
+        "form_submit": "Send message"
     },
-    {
-      "text": "Professional team that knows their product. Helped select the right tools for specific tasks. Very satisfied with quality and price.",
-      "author": "Rashad Huseyinov"
+    "footer": {
+        "copyright": "2026 © Bütün hüquqlar qorunur",
+        "privacy": "Məxfilik siyasəti",
+        "scroll_top": "Yuxarı"
     },
-    {
-      "text": "We have been working with Almep Trading for several years. Reliable supplier, always fulfill obligations. I recommend to all construction companies.",
-      "author": "Samir Aliyev"
+    "catalog": {
+        "title": "Catalog",
+        "found": "Found",
+        "sort": "Sort:",
+        "sort_default": "Default",
+        "sort_name": "By name",
+        "article": "Art.:",
+        "out_of_stock": "On order",
+        "aria_pagination": "Pagination",
+        "aria_prev": "Previous",
+        "aria_next": "Next",
+        "empty": "No products in this category yet.",
+        "back": "Back to catalog",
+        "subcategories": "Subcategories",
+        "items": "items"
     },
-    {
-      "text": "Bought Berent tools for home workshop. Quality exceeded expectations — everything works as it should. Reasonable prices, fast delivery.",
-      "author": "Farid Ismayilov"
+    "product": {
+        "prev": "Previous image",
+        "next": "Next image",
+        "copy": "Copy article",
+        "request": "Request consultation",
+        "specs": "Specifications:",
+        "related": "Related products"
     }
-  ]
-},
-"consultation": {
-  "title": "Free consultation",
-  "description": "Leave your contacts below so we can contact you for a complete consultation",
-  "placeholder_name": "Your name",
-  "placeholder_email": "E-mail",
-  "placeholder_phone": "Your phone number",
-  "btn_send": "Send",
-  "phone": "+994 10 241 99 10",
-  "email": "info@almeptrading.az",
-  "social_instagram": "Instagram",
-  "social_youtube": "YouTube",
-  "social_facebook": "Facebook"
-},
-"contacts": {
-  "title": "Contacts",
-  "address_label": "Address:",
-  "address_value": "44b, Ashig Molla Juma Street, Baku 1006",
-  "phone_label": "Phone:",
-  "phone_value": "+994 10 241 99 10",
-  "schedule_label": "Working hours:",
-  "schedule_days": "Mon–Sat,",
-  "schedule_hours": "09:00–18:00",
-  "email_label": "E-mail:",
-  "email_value": "info@almeptrading.az",
-  "btn_consultation": "Request consultation",
-  "zoom_in": "Zoom in",
-  "zoom_out": "Zoom out",
-  "company_name": "Almep Trading",
-  "office_label": "Official office",
-  "city": "Baku, Azerbaijan",
-  "popup_address": "Ashig Molla Juma, Baku"
-},
-"contacts_page": {
-  "title": "Contacts",
-  "form_title": "Contact us",
-  "form_subtitle": "Leave your contacts and we will get back to you as soon as possible",
-  "form_name": "Your name",
-  "form_phone": "Your phone number",
-  "form_email": "E-mail",
-  "form_message": "Message",
-  "form_submit": "Send message"
-},
-"footer": {
-  "copyright": "2026 © Bütün hüquqlar qorunur",
-  "privacy": "Məxfilik siyasəti",
-  "scroll_top": "Yuxarı"
-}
 }
