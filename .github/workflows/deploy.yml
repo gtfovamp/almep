@@ -30,6 +30,9 @@ jobs:
           timeout: 60000
           local-dir: ./
           server-dir: ./laravel/
+          state-name: .ftp-deploy-sync-state-laravel.json
+          dry-run: false
+          dangerous-clean-slate: false
           exclude: |
             **/.git*
             **/.git*/**
@@ -52,3 +55,6 @@ jobs:
           timeout: 60000
           local-dir: ./public/
           server-dir: ./public_html/
+          state-name: .ftp-deploy-sync-state-public.json
+          dry-run: false
+          dangerous-clean-slate: false
