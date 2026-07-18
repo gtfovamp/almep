@@ -29,9 +29,9 @@
         </div>
 
         <div class="hero__actions">
-            <a href="/{{ $lang }}/contacts" class="hero__btn hero__btn--primary">
+            <button type="button" class="hero__btn hero__btn--primary" data-open-consultation>
                 {{ $btnConsult }}
-            </a>
+            </button>
             <a href="/{{ $lang }}/products" class="hero__btn hero__btn--ghost">
                 {{ $btnCatalog }}
             </a>

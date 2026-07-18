@@ -51,6 +51,7 @@
         'facebook'  => $t['social']['facebook']  ?? 'https://facebook.com',
     ];
 @endphp
+@include('partials.consultation-modal')
 
 <header
     class="hdr {{ $isHomePage ? 'hdr--home' : 'hdr--dark' }}"
@@ -431,16 +432,7 @@
     background: #fff;
     border-bottom: 1px solid var(--line);
 }
-.hdr--home {
-    background: rgba(10, 20, 35, .55);
-}
-@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
-    .hdr--home {
-        background: rgba(10, 20, 35, .38);
-        -webkit-backdrop-filter: blur(10px) saturate(140%);
-        backdrop-filter: blur(10px) saturate(140%);
-    }
-}
+
 
 /* ─── Top row ───────────────────────────────────────────────── */
 .hdr__top {

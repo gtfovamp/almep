@@ -30,15 +30,10 @@
     aria-labelledby="consultationModalTitle"
     hidden
 >
+    {{-- ... вёрстка модалки до формы без изменений ... --}}
     <div class="consultation-modal__overlay" data-consultation-close></div>
-
     <div class="consultation-modal__panel">
-        <button
-            type="button"
-            class="consultation-modal__close"
-            data-consultation-close
-            aria-label="{{ $t['consultation']['close'] ?? 'Закрыть' }}"
-        >
+        <button type="button" class="consultation-modal__close" data-consultation-close aria-label="{{ $t['consultation']['close'] ?? 'Закрыть' }}">
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
                 <path d="M1 1L17 17M17 1L1 17" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
             </svg>
@@ -57,26 +52,16 @@
                 <div class="consultation-form__row">
                     <label class="consultation-form__field">
                         <span class="consultation-form__label">{{ $t['consultation']['name_label'] ?? 'Ваше имя' }}</span>
-                        <input
-                            type="text"
-                            name="name"
-                            required
-                            autocomplete="name"
-                            class="consultation-form__input"
-                            placeholder="{{ $t['consultation']['name_placeholder'] ?? 'Ваше имя' }}"
-                        />
+                        <input type="text" name="name" required autocomplete="name"
+                               class="consultation-form__input"
+                               placeholder="{{ $t['consultation']['name_placeholder'] ?? 'Ваше имя' }}" />
                     </label>
 
                     <label class="consultation-form__field">
                         <span class="consultation-form__label">{{ $t['consultation']['email_label'] ?? 'E-mail' }}</span>
-                        <input
-                            type="email"
-                            name="email"
-                            required
-                            autocomplete="email"
-                            class="consultation-form__input"
-                            placeholder="{{ $t['consultation']['email_placeholder'] ?? 'E-mail' }}"
-                        />
+                        <input type="email" name="email" required autocomplete="email"
+                               class="consultation-form__input"
+                               placeholder="{{ $t['consultation']['email_placeholder'] ?? 'E-mail' }}" />
                     </label>
 
                     <label class="consultation-form__field">
@@ -87,7 +72,8 @@
                             required
                             autocomplete="tel"
                             class="consultation-form__input"
-                            placeholder="{{ $t['consultation']['phone_placeholder'] ?? 'Ваш номер телефона' }}"
+                            placeholder="+994 50 123 45 67"
+                            data-phone-mask
                         />
                     </label>
                 </div>
@@ -109,8 +95,7 @@
 
 @push('styles')
 <style>
-  /* ── Токены — те же значения, что и на остальных страницах сайта ── */
-  .consultation-modal {
+    .consultation-modal {
     --accent: #1C508F;
     --accent-dark: #123863;
     --radius-lg: 8px;
@@ -403,18 +388,117 @@
 @push('scripts')
 <script>
 (function () {
+  function setupPhoneMask(input) {
+    if (!input) return;
+    function formatPhone(value) {
+      var cleaned = value.replace(/[^\d+]/g, '');
+      if (!cleaned.startsWith('+')) {
+        if (cleaned.startsWith('994')) {
+          cleaned = '+' + cleaned;
+        } else {
+          if (cleaned.length > 0) {
+            cleaned = '+994' + cleaned;
+          }
+        }
+      }
+
+      var digits = cleaned.replace(/^\+994/, '').replace(/\D/g, '');
+      digits = digits.substring(0, 9);
+
+      var formatted = '+994';
+      if (digits.length > 0) {
+        formatted += ' ' + digits.substring(0, 2);
+      }
+      if (digits.length > 2) {
+        formatted += ' ' + digits.substring(2, 5);
+      }
+      if (digits.length > 5) {
+        formatted += ' ' + digits.substring(5, 7);
+      }
+      if (digits.length > 7) {
+        formatted += ' ' + digits.substring(7, 9);
+      }
+
+      return formatted.trim();
+    }
+
+    function getCursorPosition(formatted, oldFormatted, oldCursor) {
+      
+      var oldRaw = oldFormatted.replace(/[^\d+]/g, '');
+      var newRaw = formatted.replace(/[^\d+]/g, '');
+      if (oldCursor === 0) return 0;
+
+      var prefixOld = oldFormatted.substring(0, oldCursor);
+      var digitsBefore = prefixOld.replace(/[^\d]/g, '').length;
+
+      var count = 0;
+      for (var i = 0; i < formatted.length; i++) {
+        if (/\d/.test(formatted[i]) || formatted[i] === '+') {
+          count++;
+        }
+        if (count === digitsBefore + 1) {
+          return i + 1;
+        }
+      }
+      return formatted.length; 
+    }
+
+    input.addEventListener('input', function (e) {
+      var oldValue = input.value;
+      var oldCursor = input.selectionStart;
+      var formatted = formatPhone(oldValue);
+
+      if (formatted !== oldValue) {
+        input.value = formatted;
+        var newCursor = getCursorPosition(formatted, oldValue, oldCursor);
+        input.setSelectionRange(newCursor, newCursor);
+      }
+    });
+
+    input.addEventListener('blur', function () {
+      if (input.value.trim() === '+994') {
+        input.value = '';
+      }
+    });
+
+    input.addEventListener('paste', function (e) {
+      setTimeout(function () {
+        var formatted = formatPhone(input.value);
+        if (formatted !== input.value) {
+          input.value = formatted;
+        }
+        // Ставим курсор в конец
+        var len = formatted.length;
+        input.setSelectionRange(len, len);
+      }, 0);
+    });
+
+    input.addEventListener('focus', function () {
+      if (input.value.trim() === '') {
+        input.value = '+994 ';
+        input.setSelectionRange(5, 5);
+      }
+    });
+  }
+
+  // ──────────────────────────────────────────────
+  // 2. Основная логика модального окна
+  // ──────────────────────────────────────────────
   var modal = document.getElementById('consultationModal');
   if (!modal) return;
 
   var form = document.getElementById('consultationForm');
   var statusEl = form.querySelector('[data-consultation-status]');
   var submitBtn = form.querySelector('.consultation-form__submit');
+  var phoneInput = form.querySelector('[data-phone-mask]');
   var lastFocused = null;
+
+  // Инициализация маски
+  setupPhoneMask(phoneInput);
 
   function open() {
     lastFocused = document.activeElement;
     modal.hidden = false;
-    // requestAnimationFrame — чтобы transition сыграл, а не "прыгнул" сразу в открытое состояние
     requestAnimationFrame(function () { modal.classList.add('is-open'); });
     document.body.classList.add('consultation-modal-open');
     var firstInput = form.querySelector('input');
@@ -459,13 +543,21 @@
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     if (form.classList.contains('is-submitting')) return;
-
     clearStatus();
+
     var data = new FormData(form);
+    var rawPhone = data.get('phone') ? data.get('phone').toString().trim() : '';
+    var cleanPhone = rawPhone.replace(/[^\d+]/g, '');
+    var phoneRegex = /^\+994\d{9}$/;
+    if (!phoneRegex.test(cleanPhone)) {
+      setStatus('error', '{{ $t['consultation']['error_phone'] ?? 'Введите корректный номер в формате +994 XX XXX XX XX' }}');
+      return;
+    }
+
     var payload = {
       name: (data.get('name') || '').toString().trim(),
       email: (data.get('email') || '').toString().trim(),
-      phone: (data.get('phone') || '').toString().trim(),
+      phone: cleanPhone,
     };
 
     if (!payload.name || !payload.email || !payload.phone) {

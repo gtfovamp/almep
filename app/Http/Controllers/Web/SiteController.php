@@ -8,6 +8,7 @@ use App\Models\Product;
 use App\Models\Category;
 use App\Models\Certificate;
 use App\Models\News;
+use App\Models\Portfolio;
 use App\Models\Subcategory;
 use App\Support\SiteI18n;
 use Illuminate\Http\Request;
@@ -132,9 +133,50 @@ class SiteController extends Controller
         return view('pages.contacts', $this->shared($lang));
     }
 
+    /**
+     * Главная страница.
+     * Помимо общих данных ($t, $lang, $catalogData) подтягиваем сюда всё,
+     * что нужно секциям на главной, которые сами по данным в БД не ходят:
+     * - partials.portfolio ожидает $portfolioItems (см. комментарий в самом партиале);
+     * - partials.news ожидает $news (см. комментарий в шапке партиала);
+     * - partials.blog ожидает $blog — один featured-пост (см. комментарий в партиале);
+     * - partials.reviews ожидает $reviews (см. комментарий в шапке партиала).
+     * Всё — БЕЗ пагинации, т.к. на главной это клиентские слайдеры / один блок,
+     * а не отдельные страницы со списком.
+     */
     public function index(string $lang)
     {
-        return view('pages.index', $this->shared($lang));
+        $data = $this->shared($lang);
+
+        $data['portfolioItems'] = Portfolio::query()
+            ->orderBy('order_index')
+            ->limit(9)
+            ->get();
+
+        $data['partners'] = \App\Models\Partner::query()
+            ->orderBy('order_index')
+            ->get();
+
+        $data['news'] = News::query()
+            ->orderByDesc('published_at')
+            ->orderByDesc('id')
+            ->limit(9)
+            ->get();
+
+        // Featured-пост для partials.blog
+        $data['blog'] = Blog::query()
+            ->orderByDesc('published_at')
+            ->orderByDesc('id')
+            ->first();
+
+        // Отзывы для partials.reviews
+        $data['reviews'] = \App\Models\Testimonial::query()
+            ->where('approved', 1)
+            ->orderByDesc('id')
+            ->limit(9)
+            ->get();
+
+        return view('pages.index', $data);
     }
 
     public function blog(string $lang)
@@ -167,11 +209,6 @@ class SiteController extends Controller
 
         return view('pages.blog-show', $data);
     }
-
-    
-
-    
-
 
     /**
      * Каталог: сетка категорий ($mode='categories') или подкатегорий ($mode='subcategories').

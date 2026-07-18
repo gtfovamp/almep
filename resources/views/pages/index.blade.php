@@ -9,15 +9,17 @@
     </div>
     @includeIf('partials.hero', ['t'=>$t,'lang'=>$lang])
     @includeIf('partials.about', ['t'=>$t,'lang'=>$lang])
-    @includeIf('partials.whyus', ['t'=>$t,'lang'=>$lang])
-    @includeIf('partials.services', ['t'=>$t,'lang'=>$lang])
-    @includeIf('partials.products', ['t'=>$t,'lang'=>$lang])
-    @includeIf('partials.catalog', ['t'=>$t,'lang'=>$lang])
-    @includeIf('partials.partners', ['t'=>$t,'lang'=>$lang])
     @includeIf('partials.portfolio', ['t'=>$t,'lang'=>$lang])
+    @includeIf('partials.services', ['t'=>$t,'lang'=>$lang])
+    @includeIf('partials.missions', ['t'=>$t,'lang'=>$lang])
+    @includeIf('partials.products', ['t'=>$t,'lang'=>$lang])
+    @includeIf('partials.whyus', ['t'=>$t,'lang'=>$lang])
+    @includeIf('partials.partners', ['t'=>$t,'lang'=>$lang])
     @includeIf('partials.news', ['t'=>$t,'lang'=>$lang])
+    @includeIf('partials.blog', ['t'=>$t,'lang'=>$lang])
     @includeIf('partials.reviews', ['t'=>$t,'lang'=>$lang])
-    @includeIf('partials.contacts', ['t'=>$t,'lang'=>$lang])
+    @includeIf('partials.consultation', ['t'=>$t,'lang'=>$lang])
+    @includeIf('partials.address', ['t'=>$t,'lang'=>$lang])
     @include('partials.footer', ['t' => $t, 'lang' => $lang])
 </main>
 @endsection
