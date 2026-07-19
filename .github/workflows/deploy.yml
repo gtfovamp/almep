@@ -27,7 +27,8 @@ jobs:
           protocol: ftps
           port: 21
           passive: true
-          timeout: 60000
+          timeout: 120000
+          log-level: verbose
           local-dir: ./
           server-dir: ./laravel/
           state-name: .ftp-deploy-sync-state-laravel.json
@@ -52,7 +53,8 @@ jobs:
           protocol: ftps
           port: 21
           passive: true
-          timeout: 60000
+          timeout: 120000
+          log-level: verbose
           local-dir: ./public/
           server-dir: ./public_html/
           state-name: .ftp-deploy-sync-state-public.json
