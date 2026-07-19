@@ -1,0 +1,22 @@
+---
+deployment:
+  tasks:
+    # Пути назначения
+    - export LARAVELPATH=/home/almeptrading/laravel
+    - export PUBLICPATH=/home/almeptrading/public_html
+
+    # Синхронизируем весь проект (кроме public/) в защищённую папку
+    - /usr/bin/rsync -a --delete --exclude='.git' --exclude='public' --exclude='.env' --exclude='storage' ./ $LARAVELPATH/
+
+    # Синхронизируем содержимое public/ в public_html
+    - /usr/bin/rsync -a --delete ./public/ $PUBLICPATH/
+
+    # Права на storage и bootstrap/cache (обязательно для Laravel)
+    - /bin/chmod -R 775 $LARAVELPATH/storage
+    - /bin/chmod -R 775 $LARAVELPATH/bootstrap/cache
+
+    # Прогоняем composer и очищаем кэш конфигурации (если composer доступен в PATH)
+    - cd $LARAVELPATH && /opt/cpanel/composer/bin/composer install --no-dev --optimize-autoloader --no-progress --no-interaction || true
+    - cd $LARAVELPATH && php artisan config:cache || true
+    - cd $LARAVELPATH && php artisan route:cache || true
+    - cd $LARAVELPATH && php artisan migrate --force || true
