@@ -1,0 +1,44 @@
+name: Build Laravel Artifact (manual deploy)
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch: {}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4.1'
+
+      - name: Install Composer Dependencies
+        run: composer install --no-dev --optimize-autoloader --no-progress --ignore-platform-req=php
+
+      - name: Package laravel core (everything except public/)
+        run: |
+          mkdir -p build/laravel
+          rsync -a --exclude='public' --exclude='.git' --exclude='node_modules' --exclude='tests' ./ build/laravel/
+          cd build && zip -r ../laravel-core.zip laravel
+
+      - name: Package public files
+        run: |
+          mkdir -p build/public_html
+          rsync -a ./public/ build/public_html/
+          cd build && zip -r ../public-html.zip public_html
+
+      - name: Upload laravel-core artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: laravel-core
+          path: laravel-core.zip
+
+      - name: Upload public-html artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: public-html
+          path: public-html.zip
